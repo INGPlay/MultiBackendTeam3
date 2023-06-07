@@ -39,3 +39,9 @@ out/
 
 # api key
 **/keys.properties
+
+# config
+**/application.properties
+
+# Init Query
+**/*.sql
