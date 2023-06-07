@@ -32,6 +32,10 @@ public class TourCodeService {
     private final RestTemplate restTemplate;
     private final JSONParser jsonParser;
 
+    private String getTourKey(){
+        return messageSource.getMessage("keys.tour.info.encode", null, null);
+    }
+
     @Transactional
     public void InitAreaCode() {
         List<CodeResponse> largeCodeResponses = requestCodeURI(getAreaCodeURI());
@@ -139,10 +143,6 @@ public class TourCodeService {
         log.info("{}", uri);
 
         return uri;
-    }
-
-    public String getTourKey(){
-        return messageSource.getMessage("keys.tour.info.encode", null, null);
     }
 
     /**
