@@ -10,7 +10,7 @@ CREATE TABLE testtable (
 
 CREATE TABLE AREA_LARGE (
     large_id NUMBER,
-    large_code NUMBER NOT NULL,
+    large_code VARCHAR2(5) NOT NULL,
     large_name VARCHAR2(30) NOT NULL,
     CONSTRAINT area_large_pk PRIMARY KEY(large_id),
     CONSTRAINT area_large_uniq UNIQUE(large_code, large_name)
@@ -18,7 +18,7 @@ CREATE TABLE AREA_LARGE (
 
 CREATE TABLE AREA_SMALL(
     small_id NUMBER,
-    small_code NUMBER NOT NULL,
+    small_code VARCHAR2(5) NOT NULL,
     small_name VARCHAR2(30) NOT NULL,
     large_id_fk NUMBER NOT NULL,
     CONSTRAINT area_small_pk PRIMARY KEY (small_id),
@@ -45,3 +45,4 @@ CREATE SEQUENCE small_id_seq
     MINVALUE 1
     NOCYCLE;
 --
+

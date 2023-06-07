@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class AreaCodeResponse {
-    private Long code;
+public class CodeResponse {
+    private String code;
     private String name;
 }

@@ -17,12 +17,12 @@ class AreaMapperTest {
 
     @Test
     void insertAreaLarge() {
-        areaMapper.insertAreaLarge(new InsertAreaLargeDto(1L, "서울"));
+        areaMapper.insertAreaLarge(new InsertAreaLargeDto("1", "서울"));
     }
 
     @Test
     void insertAreaSmall() {
-        areaMapper.insertAreaLarge(new InsertAreaLargeDto(1L, "서울"));
-        areaMapper.insertAreaSmall(new InsertAreaSmallDto(1L, 1L, "서울시"));
+        areaMapper.insertAreaLarge(new InsertAreaLargeDto("1", "서울"));
+        areaMapper.insertAreaSmall(new InsertAreaSmallDto("1", "1", "서울시"));
     }
 }

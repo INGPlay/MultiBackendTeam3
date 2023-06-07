@@ -2,7 +2,7 @@ package multi.backend.project.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.apiController.response.AreaCodeResponse;
+import multi.backend.project.apiController.response.CodeResponse;
 import multi.backend.project.domain.area.InsertAreaLargeDto;
 import multi.backend.project.domain.area.InsertAreaSmallDto;
 import multi.backend.project.mapper.AreaMapper;
@@ -34,17 +34,17 @@ public class AreaService {
 
     @Transactional
     public void InitAreaCode() {
-        List<AreaCodeResponse> largeAreaCodeResponses = getLargeAreaCodeResponses();
+        List<CodeResponse> largeCodeResponses = requestCodeURI(getAreaCodeURI());
 
-        largeAreaCodeResponses.forEach(largeAreaResponse -> {
+        largeCodeResponses.forEach(largeAreaResponse -> {
             InsertAreaLargeDto insertAreaLargeDto = new InsertAreaLargeDto(
                     largeAreaResponse.getCode(),
                     largeAreaResponse.getName()
             );
             areaMapper.insertAreaLarge(insertAreaLargeDto);
 
-            List<AreaCodeResponse> smallAreaCodeResponses = getSmallAreaCodeResponses(largeAreaResponse.getCode());
-            smallAreaCodeResponses.forEach(smallAreaResponse -> {
+            List<CodeResponse> smallCodeResponses = requestCodeURI(getAreaCodeURI(largeAreaResponse.getCode()));
+            smallCodeResponses.forEach(smallAreaResponse -> {
                 InsertAreaSmallDto insertAreaSmallDto = new InsertAreaSmallDto(
                         largeAreaResponse.getCode(),
                         smallAreaResponse.getCode(),
@@ -56,11 +56,44 @@ public class AreaService {
     }
 
     /**
-     * 도 단위의 지역 코드 및 이름 반환
+     *
+     * @param uri
      * @return
      */
-    private List<AreaCodeResponse> getLargeAreaCodeResponses(){
+    public List<CodeResponse> requestCodeURI(URI uri) {
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
 
+        List<CodeResponse> codeRespons = new ArrayList<>();
+        try {
+//            log.info(forEntity.getBody());
+            JSONObject parse = (JSONObject)jsonParser.parse(forEntity.getBody());
+            JSONObject response = (JSONObject)parse.get("response");
+            JSONObject body = (JSONObject)response.get("body");
+
+            JSONObject items = (JSONObject)body.get("items");
+            JSONArray itemArray = (JSONArray)items.get("item");
+
+//            log.info("{}", itemArray);
+
+            for (int i = 0; i < itemArray.size(); i++){
+                JSONObject row = (JSONObject) itemArray.get(i);
+
+//                Long rnum = (Long) row.get("rnum");
+                String code = (String) row.get("code");
+                String name = (String) row.get("name");
+
+                CodeResponse codeResponse = new CodeResponse(code, name);
+                codeRespons.add(codeResponse);
+                log.info("{}, {}", code, name);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return codeRespons;
+    }
+
+    public URI getAreaCodeURI(){
         // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
         // build(true)로 인코딩을 막음
         URI uri = UriComponentsBuilder
@@ -78,18 +111,16 @@ public class AreaService {
 
         log.info("{}", uri);
 
-        List<AreaCodeResponse> areaCodeResponses = getAreaCodeResponses(uri);
-
-        return areaCodeResponses;
+        return uri;
     }
 
+
     /**
-     * 시 단위의 지역 코드 및 이름 반환
-     * @param areaCode 도단위 지역코드
+     * 시군구 단위
+     * @param areaCode
      * @return
      */
-    private List<AreaCodeResponse> getSmallAreaCodeResponses(Long areaCode){
-
+    public URI getAreaCodeURI(String areaCode){
         // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
         // build(true)로 인코딩을 막음
         URI uri = UriComponentsBuilder
@@ -107,50 +138,100 @@ public class AreaService {
 
         log.info("{}", uri);
 
-        List<AreaCodeResponse> areaCodeResponses = getAreaCodeResponses(uri);
+        return uri;
+    }
 
-        return areaCodeResponses;
+    public String getTourKey(){
+        return messageSource.getMessage("keys.tour.info.encode", null, null);
     }
 
     /**
      *
-     * @param uri
      * @return
      */
-    private List<AreaCodeResponse> getAreaCodeResponses(URI uri) {
-        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
+    public URI getServiceCodeURI(){
+        // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
+        // build(true)로 인코딩을 막음
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr")
+                .path("/B551011/KorService1/categoryCode1")
+                .queryParam("serviceKey", getTourKey())
+//                .queryParam("numOfRows", 100)
+//                .queryParam("pageNo", 1)
+                .queryParam("MobileOS", "ETC")
+                .queryParam("MobileApp", "TestApp")
+                .queryParam("_type", "json")
+                .encode(StandardCharsets.UTF_8)
+                .build(true).toUri();
 
-        List<AreaCodeResponse> areaCodeResponses = new ArrayList<>();
-        try {
-//            log.info(forEntity.getBody());
-            JSONObject parse = (JSONObject)jsonParser.parse(forEntity.getBody());
-            JSONObject response = (JSONObject)parse.get("response");
-            JSONObject body = (JSONObject)response.get("body");
+        log.info("{}", uri);
 
-            JSONObject items = (JSONObject)body.get("items");
-            JSONArray itemArray = (JSONArray)items.get("item");
-
-//            log.info("{}", itemArray);
-
-            for (int i = 0; i < itemArray.size(); i++){
-                JSONObject row = (JSONObject) itemArray.get(i);
-
-//                Long rnum = (Long) row.get("rnum");
-                Long code = Long.parseLong((String) row.get("code"));
-                String name = (String) row.get("name");
-
-                AreaCodeResponse areaCodeResponse = new AreaCodeResponse(code, name);
-                areaCodeResponses.add(areaCodeResponse);
-                log.info("{}, {}", code, name);
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return areaCodeResponses;
+        return uri;
     }
 
-    private String getTourKey(){
-        return messageSource.getMessage("keys.tour.info.encode", null, null);
+    public URI getServiceCodeURI(String cat1){
+        // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
+        // build(true)로 인코딩을 막음
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr")
+                .path("/B551011/KorService1/categoryCode1")
+                .queryParam("serviceKey", getTourKey())
+//                .queryParam("numOfRows", 100)
+//                .queryParam("pageNo", 1)
+                .queryParam("MobileOS", "ETC")
+                .queryParam("MobileApp", "TestApp")
+                .queryParam("_type", "json")
+                .queryParam("cat1", cat1)
+                .encode(StandardCharsets.UTF_8)
+                .build(true).toUri();
+
+        log.info("{}", uri);
+
+        return uri;
+    }
+
+    public URI getServiceCodeURI(String cat1, String cat2){
+        // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
+        // build(true)로 인코딩을 막음
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr")
+                .path("/B551011/KorService1/categoryCode1")
+                .queryParam("serviceKey", getTourKey())
+//                .queryParam("numOfRows", 100)
+//                .queryParam("pageNo", 1)
+                .queryParam("MobileOS", "ETC")
+                .queryParam("MobileApp", "TestApp")
+                .queryParam("_type", "json")
+                .queryParam("cat1", cat1)
+                .queryParam("cat2", cat2)
+                .encode(StandardCharsets.UTF_8)
+                .build(true).toUri();
+
+        log.info("{}", uri);
+
+        return uri;
+    }
+
+    public URI getServiceCodeURI(String cat1, String cat2, String cat3){
+        // UriComponentsBuilder.encode() 에서 일부 특수문자(+, \, ...)가 인코딩이 안됨
+        // build(true)로 인코딩을 막음
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr")
+                .path("/B551011/KorService1/categoryCode1")
+                .queryParam("serviceKey", getTourKey())
+//                .queryParam("numOfRows", 100)
+//                .queryParam("pageNo", 1)
+                .queryParam("MobileOS", "ETC")
+                .queryParam("MobileApp", "TestApp")
+                .queryParam("_type", "json")
+                .queryParam("cat1", cat1)
+                .queryParam("cat2", cat2)
+                .queryParam("cat3", cat3)
+                .encode(StandardCharsets.UTF_8)
+                .build(true).toUri();
+
+        log.info("{}", uri);
+
+        return uri;
     }
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 public class InsertAreaSmallDto {
-    private Long largeCode;
-    private Long smallCode;
+    private String largeCode;
+    private String smallCode;
     private String smallName;
 }
