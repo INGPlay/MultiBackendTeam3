@@ -2,7 +2,7 @@ package multi.backend.project.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.service.AreaService;
+import multi.backend.project.service.TourCodeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class TestApiController {
-    private final AreaService areaService;
+    private final TourCodeService tourCodeService;
 
     @GetMapping("/tour")
     public String tourApi(){
 
-        areaService.InitAreaCode();
+        tourCodeService.InitAreaCode();
 
         return "콘솔창에 오류가 안떴다면 ok";
     }
