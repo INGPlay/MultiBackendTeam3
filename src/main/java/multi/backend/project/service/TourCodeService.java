@@ -67,7 +67,7 @@ public class TourCodeService {
     public List<CodeResponse> requestCodeURI(URI uri) {
         ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
 
-        List<CodeResponse> codeRespons = new ArrayList<>();
+        List<CodeResponse> codeResponses = new ArrayList<>();
         try {
 //            log.info(forEntity.getBody());
             JSONObject parse = (JSONObject)jsonParser.parse(forEntity.getBody());
@@ -87,14 +87,14 @@ public class TourCodeService {
                 String name = (String) row.get("name");
 
                 CodeResponse codeResponse = new CodeResponse(code, name);
-                codeRespons.add(codeResponse);
+                codeResponses.add(codeResponse);
                 log.info("{}, {}", code, name);
             }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return codeRespons;
+        return codeResponses;
     }
 
     public URI getAreaCodeURI(){
