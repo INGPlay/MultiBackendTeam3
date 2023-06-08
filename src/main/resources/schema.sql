@@ -1,6 +1,8 @@
 drop table testtable;
 drop table area_small;
 drop table area_large;
+Drop SEQUENCE large_id_seq;
+Drop SEQUENCE small_id_seq;
 
 CREATE TABLE testtable (
     test_id NUMBER(10) NOT NULL,
@@ -27,7 +29,7 @@ CREATE TABLE AREA_SMALL(
 
 
 -- Sequence 생성 및 삭제
-Drop SEQUENCE large_id_seq;
+
 
 CREATE SEQUENCE large_id_seq
     START WITH 1
@@ -37,7 +39,7 @@ CREATE SEQUENCE large_id_seq
 --
 
 -- Sequence 생성 및 삭제
-Drop SEQUENCE small_id_seq;
+
 
 CREATE SEQUENCE small_id_seq
     START WITH 1
