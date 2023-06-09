@@ -1,4 +1,4 @@
-package multi.backend.project.apiController;
+package multi.backend.project.security.apiController;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

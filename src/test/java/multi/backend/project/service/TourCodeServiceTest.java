@@ -1,7 +1,8 @@
 package multi.backend.project.service;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.apiController.response.CodeResponse;
+import multi.backend.project.pathMap.apiController.response.CodeResponse;
+import multi.backend.project.pathMap.service.TourCodeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

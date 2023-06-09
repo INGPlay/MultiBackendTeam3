@@ -1,8 +1,8 @@
-package multi.backend.project.service;
+package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.domain.wheather.WheatherResponse;
+import multi.backend.project.pathMap.domain.wheather.WheatherResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

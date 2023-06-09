@@ -1,4 +1,4 @@
-package multi.backend.project.config;
+package multi.backend.project.pathMap.config;
 
 import org.json.simple.parser.JSONParser;
 import org.springframework.boot.json.JsonParser;

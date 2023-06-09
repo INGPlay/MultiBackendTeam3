@@ -1,11 +1,11 @@
-package multi.backend.project.service;
+package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.domain.tour.ContentType;
-import multi.backend.project.domain.tour.LocationBaseDto;
-import multi.backend.project.domain.tour.PageDto;
-import multi.backend.project.domain.tour.TourInfoResponse;
+import multi.backend.project.pathMap.domain.tour.ContentType;
+import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
+import multi.backend.project.pathMap.domain.tour.PageDto;
+import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

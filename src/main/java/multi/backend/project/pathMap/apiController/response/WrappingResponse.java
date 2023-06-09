@@ -1,4 +1,4 @@
-package multi.backend.project.apiController.response;
+package multi.backend.project.pathMap.apiController.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,8 @@
 package multi.backend.project.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.domain.TestDto;
+import multi.backend.project.pathMap.domain.TestDto;
+import multi.backend.project.pathMap.mapper.TestMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,7 +1,8 @@
 package multi.backend.project.service;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.domain.wheather.WheatherResponse;
+import multi.backend.project.pathMap.domain.wheather.WheatherResponse;
+import multi.backend.project.pathMap.service.WheatherService;
 import org.json.simple.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.URI;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest

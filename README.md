@@ -1,5 +1,7 @@
 # MultiBackendTeam3
 
+## 초기화
+
 - keys.properties
 ```properties
 ## api 키를 저장하는 파일
@@ -32,5 +34,14 @@ spring.datasource.password=project
 그런다음 .gitignore 마지막 줄에 다음을 추가 
 
 ```properties
+# config
 **/application.properties
+
+# Init Query
+**/*.sql
 ```
+
+## 경로
+ㄴ controller : Root 경로에서 테스트하기 위한 컨트롤러 하나 있음  
+ㄴ pathMap : 경로 맵 페이지 관련  
+ㄴ security : 로그인 및 관리자 페이지 관련  

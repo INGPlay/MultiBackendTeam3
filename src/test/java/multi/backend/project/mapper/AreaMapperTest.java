@@ -1,13 +1,12 @@
 package multi.backend.project.mapper;
 
-import multi.backend.project.domain.area.InsertAreaLargeDto;
-import multi.backend.project.domain.area.InsertAreaSmallDto;
+import multi.backend.project.pathMap.domain.area.InsertAreaLargeDto;
+import multi.backend.project.pathMap.domain.area.InsertAreaSmallDto;
+import multi.backend.project.pathMap.mapper.AreaMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

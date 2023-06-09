@@ -1,4 +1,4 @@
-package multi.backend.project.domain.area;
+package multi.backend.project.pathMap.domain.area;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package multi.backend.project.domain.wheather;
+package multi.backend.project.pathMap.domain.wheather;
 
 import lombok.Getter;
 import lombok.Setter;

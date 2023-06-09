@@ -1,11 +1,11 @@
-package multi.backend.project.service;
+package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.apiController.response.CodeResponse;
-import multi.backend.project.domain.area.InsertAreaLargeDto;
-import multi.backend.project.domain.area.InsertAreaSmallDto;
-import multi.backend.project.mapper.AreaMapper;
+import multi.backend.project.pathMap.apiController.response.CodeResponse;
+import multi.backend.project.pathMap.domain.area.InsertAreaLargeDto;
+import multi.backend.project.pathMap.domain.area.InsertAreaSmallDto;
+import multi.backend.project.pathMap.mapper.AreaMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

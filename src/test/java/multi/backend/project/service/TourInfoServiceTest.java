@@ -1,10 +1,11 @@
 package multi.backend.project.service;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.domain.tour.ContentType;
-import multi.backend.project.domain.tour.LocationBaseDto;
-import multi.backend.project.domain.tour.PageDto;
-import multi.backend.project.domain.tour.TourInfoResponse;
+import multi.backend.project.pathMap.domain.tour.ContentType;
+import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
+import multi.backend.project.pathMap.domain.tour.PageDto;
+import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
+import multi.backend.project.pathMap.service.TourInfoService;
 import org.json.simple.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

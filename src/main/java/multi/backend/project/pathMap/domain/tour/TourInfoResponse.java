@@ -1,4 +1,4 @@
-package multi.backend.project.domain.tour;
+package multi.backend.project.pathMap.domain.tour;
 
 import lombok.Getter;
 import lombok.Setter;

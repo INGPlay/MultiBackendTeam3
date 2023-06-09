@@ -1,7 +1,7 @@
-package multi.backend.project.mapper;
+package multi.backend.project.pathMap.mapper;
 
-import multi.backend.project.domain.area.InsertAreaLargeDto;
-import multi.backend.project.domain.area.InsertAreaSmallDto;
+import multi.backend.project.pathMap.domain.area.InsertAreaLargeDto;
+import multi.backend.project.pathMap.domain.area.InsertAreaSmallDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,6 +1,6 @@
-package multi.backend.project.mapper;
+package multi.backend.project.pathMap.mapper;
 
-import multi.backend.project.domain.TestDto;
+import multi.backend.project.pathMap.domain.TestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
