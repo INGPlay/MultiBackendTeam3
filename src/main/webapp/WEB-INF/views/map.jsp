@@ -10,12 +10,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script type="text/javascript" src='//dapi.kakao.com/v2/maps/sdk.js?appkey=<spring:message code="keys.kakao.map" javaScriptEscape="true" />&libraries=services'></script>
+
+	<style>
+		.mapContainer{
+			position:absolute;
+			width: 100%;
+			height: 100%;
+		}
+
+		#map{
+			width: 100%;
+			height: 100%;
+		}
+	</style>
 
 </head>
 <body>
 
-	<div id="map" style="width:500px;height:400px;"></div>
+	<!-- Map이 표시될 자리 -->
+	<div class="mapContainer">
+		<div id="map"></div>
+	</div>
+
+
 	<script>
 		let container = document.getElementById('map');
 		let options = {
@@ -57,6 +77,5 @@
 			// })
 		});
 	</script>
-
 </body>
 </html>
