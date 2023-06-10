@@ -6,6 +6,7 @@ import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
 import multi.backend.project.pathMap.domain.tour.PageDto;
 import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
 import multi.backend.project.pathMap.service.TourInfoService;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,7 @@ class TourInfoServiceTest {
     }
 
     @Test
-    void requestTourInfoResponseLocationBased(){
+    void requestTourInfoResponseLocationBased() throws NotFoundException {
         LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
         PageDto pageDto = new PageDto(10, 1);
 

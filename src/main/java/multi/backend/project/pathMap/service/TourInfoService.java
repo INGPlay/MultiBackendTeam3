@@ -6,6 +6,7 @@ import multi.backend.project.pathMap.domain.tour.ContentType;
 import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
 import multi.backend.project.pathMap.domain.tour.PageDto;
 import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -94,7 +95,7 @@ public class TourInfoService {
         return uri;
     }
 
-    public List<TourInfoResponse> requestTourInfo(URI uri){
+    public List<TourInfoResponse> requestTourInfo(URI uri) throws NotFoundException {
         JSONArray tourInfos = requestItemArray(uri);
 
 
@@ -111,7 +112,7 @@ public class TourInfoService {
         return tourInfoResponses;
     }
 
-    private JSONArray requestItemArray(URI uri){
+    private JSONArray requestItemArray(URI uri) throws NotFoundException {
         ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
 
         try {
@@ -125,13 +126,9 @@ public class TourInfoService {
 
             return itemArray;
 
-        } catch (ParseException e){
-            e.printStackTrace();
-        } catch (ClassCastException e){
-            log.info("item 이 없음");
+        }  catch (Exception e){
+            throw new NotFoundException("찾은 관광정보가 없습니다.");
         }
-
-        return null;
     }
 
     private TourInfoResponse jsonToTourResponse(JSONObject tourInfo) {

@@ -16,11 +16,7 @@
 
 
 	<style>
-		/* 지도 전체 */
-		.mapContainer{
-			/* width: 100%;
-			height: 100%; */
-		}
+		/* 지도 관련 */
 
 		#map{
 			width: 100%;
@@ -158,71 +154,130 @@
 
 			let map = new kakao.maps.Map(container, options);
 
-			// 지도를 클릭한 위치에 표출할 마커입니다
-			let marker = new kakao.maps.Marker({ 
-				// 지도 중심좌표에 마커를 생성합니다 
-				position: map.getCenter() 
-			}); 
+			let markInfoList = [];
+			
+			// 드래그가 끝났을 때
+			kakao.maps.event.addListener(map, 'dragend', function() {
 
-			// 지도에 마커를 표시합니다
-			marker.setMap(map);
-
-
-			let tempList = [];
-			// 지도에 클릭 이벤트를 등록합니다
-			// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-			kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-				
-				// 클릭한 위도, 경도 정보를 가져옵니다 
-				var pos = mouseEvent.latLng; 
-				
-				// 마커 위치를 클릭한 위치로 옮깁니다
-				marker.setPosition(pos);
-				
-				let temp = {"경도(X)" : pos.getLng(), "위도(Y)" : pos.getLat()} 
+				let pos = map.getCenter()
+				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
 				
 				let params = {
 						"posX":pos.getLng(),
 						"posY":pos.getLat(),
-						"radius":10000,
-						"pageSize":100,
+						"radius":getRadius(map.getLevel()),
+						"pageSize":1000,			// 값이 너무 크면 느려질 수 있음
 						"pageNo":1
 					}
 				
+				markBasedLocation(params, markInfoList);
+			});
+
+			// 확대 수준이 변경된다면
+			kakao.maps.event.addListener(map, 'zoom_changed', function() {
+
+				let pos = map.getCenter()
+				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+
+				let params = {
+						"posX":pos.getLng(),
+						"posY":pos.getLat(),
+						"radius":getRadius(map.getLevel()),
+						"pageSize":1000,
+						"pageNo":1
+					}
+					
+				markBasedLocation(params, markInfoList);
+			});
+
+			// 지도 확대에 따라 동적으로 범위 조절
+			function getRadius(mapLevel){
+
+				let result = 0;
+				if (mapLevel < 4) {
+					result = 1000;
+				}
+				else if (mapLevel < 5){
+					result = 2000;
+				} else if (mapLevel < 6){
+					result = 3000;
+				} else if (mapLevel < 7){
+					result = 6000;
+				} else if (mapLevel < 8){
+					result = 12000;
+				} else {
+					result = 20000;
+				}
+
+				return result;
+			}
+
+
+			function markBasedLocation(params, markInfoList){
+
 				$.ajax({
 					url : "/api/tour/location",
 					type : "GET",
 					data : params,
 					contentType: "application/json",
 					dataType : "json"
-				}).done((data) => {
-					alert(data["response"][0]["title"])
+				}).done((response) => {
+					// 이전의 마크 초기화
+					markInfoList.forEach(markInfo => {
+						let mark = markInfo["mark"]
+						mark.setMap(null)
+					})
 					
-					let response = data["response"]
-					response.forEach(element => {
-						marking(map, element["posX"], element["posY"])
+					// 새로운 마크 표시
+					response.forEach(info => {
+
+						// 동기
+						// let mark = marking(map, info["posX"], info["posY"], function(){
+						// 	alert(info["title"])
+						// })
+
+						// 비동기
+						promiseMarking(map, info["posX"], info["posY"], function(){
+							alert(info["title"])
+						})
+						.then((marker) => {
+							let markInfo = {
+								"mark" : marker,
+								"info" : info
+							}
+							markInfoList.push(markInfo)
+						})
+						.catch((error) => console.log("Error"))
+
+
+
 					});
 
-				}).fail((exception) => {
-					
-					alert(exception)
+				}).fail((error) => {
+					// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+					let response = error["responseJSON"];
+					console.log(response["message"])
 				})
-				
-				// tempList.push(temp);
 
-				// tempList.forEach(function(f){
-				// 	console.log(f["위도"] + " " + f["경도"])
-				// })
-			});
+			}
 
-			function marking(map, posX, posY){
+			function promiseMarking(map, posX, posY, callback){
+				return new Promise(function(resolve, reject){
+					resolve(marking(map, posX, posY, callback));
+				})
+			}
+
+			function marking(map, posX, posY, callback){
 				var marker = new kakao.maps.Marker({
 					map: map,
 					position: new kakao.maps.LatLng(posY, posX)
 				});
 
+				kakao.maps.event.addListener(marker, "click", callback);
+
 				return marker
 			}
+
 		</script>
 	</main>
 
