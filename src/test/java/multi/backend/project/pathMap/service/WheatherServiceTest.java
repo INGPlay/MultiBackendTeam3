@@ -1,4 +1,4 @@
-package multi.backend.project.service;
+package multi.backend.project.pathMap.service;
 
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.wheather.WheatherResponse;

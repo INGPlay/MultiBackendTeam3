@@ -174,14 +174,39 @@
 			kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
 				
 				// 클릭한 위도, 경도 정보를 가져옵니다 
-				var latlng = mouseEvent.latLng; 
+				var pos = mouseEvent.latLng; 
 				
 				// 마커 위치를 클릭한 위치로 옮깁니다
-				marker.setPosition(latlng);
+				marker.setPosition(pos);
 				
-				let temp = {"위도" : latlng.getLat(), "경도" : latlng.getLng()} 
+				let temp = {"경도(X)" : pos.getLng(), "위도(Y)" : pos.getLat()} 
 				
-				alert(temp["위도"] + " " + temp["경도"]);
+				let params = {
+						"posX":pos.getLng(),
+						"posY":pos.getLat(),
+						"radius":10000,
+						"pageSize":100,
+						"pageNo":1
+					}
+				
+				$.ajax({
+					url : "/api/tour/location",
+					type : "GET",
+					data : params,
+					contentType: "application/json",
+					dataType : "json"
+				}).done((data) => {
+					alert(data["response"][0]["title"])
+					
+					let response = data["response"]
+					response.forEach(element => {
+						marking(map, element["posX"], element["posY"])
+					});
+
+				}).fail((exception) => {
+					
+					alert(exception)
+				})
 				
 				// tempList.push(temp);
 
@@ -189,6 +214,15 @@
 				// 	console.log(f["위도"] + " " + f["경도"])
 				// })
 			});
+
+			function marking(map, posX, posY){
+				var marker = new kakao.maps.Marker({
+					map: map,
+					position: new kakao.maps.LatLng(posY, posX)
+				});
+
+				return marker
+			}
 		</script>
 	</main>
 

@@ -6,6 +6,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
-public class WrappingResponse {
-    private Object response;
+public class WrappingResponse<T> {
+    private T response;
 }

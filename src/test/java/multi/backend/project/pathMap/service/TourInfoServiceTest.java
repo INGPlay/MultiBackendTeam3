@@ -1,4 +1,4 @@
-package multi.backend.project.service;
+package multi.backend.project.pathMap.service;
 
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.tour.ContentType;
@@ -6,7 +6,6 @@ import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
 import multi.backend.project.pathMap.domain.tour.PageDto;
 import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
 import multi.backend.project.pathMap.service.TourInfoService;
-import org.json.simple.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,18 +29,7 @@ class TourInfoServiceTest {
         LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
         PageDto pageDto = new PageDto(10, 1);
 
-        log.info("{}", tourInfoService.getTourInfoBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT));
-    }
-
-    @Test
-    void requestJSONArray(){
-        LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
-        PageDto pageDto = new PageDto(10, 1);
-
-        URI uri = tourInfoService.getTourInfoBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT);
-
-        JSONArray jsonArray = tourInfoService.requestItemArray(uri);
-        log.info("{}", jsonArray);
+        log.info("{}", tourInfoService.getTourInfoURIBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT));
     }
 
     @Test
@@ -49,7 +37,7 @@ class TourInfoServiceTest {
         LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
         PageDto pageDto = new PageDto(10, 1);
 
-        URI uri = tourInfoService.getTourInfoBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT);
+        URI uri = tourInfoService.getTourInfoURIBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT);
 
         List<TourInfoResponse> tourInfoResponses = tourInfoService.requestTourInfo(uri);
 
@@ -60,7 +48,7 @@ class TourInfoServiceTest {
                     r.getAddr2(),
                     r.getDist(),
                     r.getContentId(),
-                    r.getContentType().getName(),
+                    r.getContentType(),
                     r.getTel(),
                     r.getPosX(),
                     r.getPosY(),

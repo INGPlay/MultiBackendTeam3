@@ -53,7 +53,7 @@ public class TourInfoService {
         return uri;
     }
 
-    public URI getTourInfoBasedLocation(LocationBaseDto locationBaseDto, PageDto pageDto){
+    public URI getTourInfoURIBasedLocation(LocationBaseDto locationBaseDto, PageDto pageDto){
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr")
                 .path("/B551011/KorService1/locationBasedList1")
@@ -73,7 +73,7 @@ public class TourInfoService {
         return uri;
     }
 
-    public URI getTourInfoBasedLocation(LocationBaseDto locationBaseDto, PageDto pageDto, ContentType contentType){
+    public URI getTourInfoURIBasedLocation(LocationBaseDto locationBaseDto, PageDto pageDto, ContentType contentType){
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr")
                 .path("/B551011/KorService1/locationBasedList1")
@@ -94,26 +94,6 @@ public class TourInfoService {
         return uri;
     }
 
-    public JSONArray requestItemArray(URI uri){
-        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
-
-        try {
-            JSONObject parse = (JSONObject) jsonParser.parse(forEntity.getBody());
-
-            JSONObject response = (JSONObject) parse.get("response");
-            JSONObject body = (JSONObject) response.get("body");
-            JSONObject items = (JSONObject) body.get("items");
-            JSONArray itemArray = (JSONArray) items.get("item");
-
-            return itemArray;
-
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public List<TourInfoResponse> requestTourInfo(URI uri){
         JSONArray tourInfos = requestItemArray(uri);
 
@@ -129,6 +109,29 @@ public class TourInfoService {
         }
 
         return tourInfoResponses;
+    }
+
+    private JSONArray requestItemArray(URI uri){
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
+
+        try {
+            JSONObject parse = (JSONObject) jsonParser.parse(forEntity.getBody());
+
+
+            JSONObject response = (JSONObject) parse.get("response");
+            JSONObject body = (JSONObject) response.get("body");
+            JSONObject items = (JSONObject) body.get("items");
+            JSONArray itemArray = (JSONArray) items.get("item");
+
+            return itemArray;
+
+        } catch (ParseException e){
+            e.printStackTrace();
+        } catch (ClassCastException e){
+            log.info("item 이 없음");
+        }
+
+        return null;
     }
 
     private TourInfoResponse jsonToTourResponse(JSONObject tourInfo) {
@@ -159,31 +162,31 @@ public class TourInfoService {
      * - 쇼핑 : 38
      * - 음식점 : 39
      */
-    public ContentType getContentTypeById(String id){
+    private String getContentTypeById(String id){
         switch (id){
             case "12" :
-                return ContentType.TOUR_SPOT;
+                return ContentType.TOUR_SPOT.getName();
 
             case "14" :
-                return ContentType.CURTURE_SITE;
+                return ContentType.CURTURE_SITE.getName();
 
             case "15" :
-                return ContentType.FESTIVAL;
+                return ContentType.FESTIVAL.getName();
 
             case "25" :
-                return ContentType.TOUR_COURSE;
+                return ContentType.TOUR_COURSE.getName();
 
             case "28" :
-                return ContentType.LEPORTS;
+                return ContentType.LEPORTS.getName();
 
             case "32" :
-                return ContentType.ACCOMODATION;
+                return ContentType.ACCOMODATION.getName();
 
             case "38" :
-                return ContentType.SHOPPING;
+                return ContentType.SHOPPING.getName();
 
             case "39" :
-                return ContentType.RESTAURANT;
+                return ContentType.RESTAURANT.getName();
 
             default:
                 return null;
