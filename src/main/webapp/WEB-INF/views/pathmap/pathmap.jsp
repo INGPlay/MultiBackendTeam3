@@ -167,7 +167,7 @@
 						"posX":pos.getLng(),
 						"posY":pos.getLat(),
 						"radius":getRadius(map.getLevel()),
-						"pageSize":1000,			// 값이 너무 크면 느려질 수 있음
+						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
 						"pageNo":1
 					}
 				

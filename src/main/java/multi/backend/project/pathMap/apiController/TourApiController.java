@@ -37,6 +37,7 @@ public class TourApiController {
         );
 
         URI tourInfoUri = tourInfoService.getTourInfoURIBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT);
+        log.info("위치기반 정보요청 URI : {}", tourInfoUri);
 
         List<TourInfoResponse> tourInfoResponses = tourInfoService.requestTourInfo(tourInfoUri);
 
