@@ -146,6 +146,7 @@
 		</div>
 
 		<script>
+			// 초기화
 			let container = document.getElementById('map');
 			let options = {
 				center: new kakao.maps.LatLng(33.450701, 126.570667),
@@ -154,7 +155,7 @@
 
 			let map = new kakao.maps.Map(container, options);
 
-			let markInfoList = [];
+			let markInfoMap = new Map();
 			
 			// 드래그가 끝났을 때
 			kakao.maps.event.addListener(map, 'dragend', function() {
@@ -170,7 +171,7 @@
 						"pageNo":1
 					}
 				
-				markBasedLocation(params, markInfoList);
+				markBasedLocation(params, markInfoMap);
 			});
 
 			// 확대 수준이 변경된다면
@@ -183,11 +184,11 @@
 						"posX":pos.getLng(),
 						"posY":pos.getLat(),
 						"radius":getRadius(map.getLevel()),
-						"pageSize":1000,
+						"pageSize":500,
 						"pageNo":1
 					}
 					
-				markBasedLocation(params, markInfoList);
+				markBasedLocation(params, markInfoMap);
 			});
 
 			// 지도 확대에 따라 동적으로 범위 조절
@@ -212,8 +213,8 @@
 				return result;
 			}
 
-
-			function markBasedLocation(params, markInfoList){
+			// 위치에 따른 마킹
+			function markBasedLocation(params, markInfoMap){
 
 				$.ajax({
 					url : "/api/tour/location",
@@ -222,36 +223,52 @@
 					contentType: "application/json",
 					dataType : "json"
 				}).done((response) => {
-					// 이전의 마크 초기화
-					markInfoList.forEach(markInfo => {
-						let mark = markInfo["mark"]
-						mark.setMap(null)
-					})
-					
-					// 새로운 마크 표시
+
+					let responseInfoMap = new Map()
 					response.forEach(info => {
+						responseInfoMap.set(info["contentId"], info)
+					})
 
-						// 동기
-						// let mark = marking(map, info["posX"], info["posY"], function(){
-						// 	alert(info["title"])
-						// })
+					let responseInfoIdList = Array.from(responseInfoMap.keys())
+					let markInfoIdList = Array.from(markInfoMap.keys())
 
-						// 비동기
+					// 새로 생성 될 거
+					let createIdList = responseInfoIdList.filter(id => {
+						return !markInfoIdList.includes(id)
+					})		// (responseInfoIdSet - markInfoIdSet)
+
+					// 삭제 될 거
+					let removeIdList = markInfoIdList.filter(id => {
+						return !responseInfoIdList.includes(id)
+					})		// (markInfoIdSet - responseInfoIdSet)
+
+					// 삭제할 마크 안보이게
+					removeIdList.forEach(id => {
+						let markInfo = markInfoMap.get(id)
+						markInfo["mark"].setMap(null)
+						markInfoMap.delete(id)
+					})
+
+					// 새로운 마크 표시
+					createIdList.forEach(id => {
+						let info = responseInfoMap.get(id);
+
 						promiseMarking(map, info["posX"], info["posY"], function(){
 							alert(info["title"])
 						})
-						.then((marker) => {
+						.then(marker => {
 							let markInfo = {
 								"mark" : marker,
 								"info" : info
 							}
-							markInfoList.push(markInfo)
+							markInfoMap.set(id, markInfo);
 						})
-						.catch((error) => console.log("Error"))
-
-
-
-					});
+						.catch(error => {
+							console.log("Error");
+						})
+					})
+					
+					
 
 				}).fail((error) => {
 					// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
