@@ -61,8 +61,8 @@
             <!-- -------------------------------------------------- -->
             <select name="pageSize" style="padding:5px" onchange="">
                 <option value="" selected>추천순</option>
-                <option value="" > 조회순 </option>
-
+                <option value="" > 조회순1 </option>
+                
             </select>
         </form>
     </div>
