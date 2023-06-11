@@ -48,21 +48,15 @@
 <div class="row my-3">
     <div class="col-9 text-center">
         <!-- 검색 폼 시작 ---------------------------------------------- -->
-        <form name="searchF" action="list" onsubmit="a">
+        <form name="searchF" action="/edit" method="get" onsubmit="a">
             <button class="btn btn-outline-primary">작성</button>
         </form>
     </div>
     <div class="col-3 text-left">
         <form name="psF" action="list">
-            <!-- -------------------------------------------------- -->
-            <input type="hidden" name="cpage" value="${paging.cpage}">
-            <input type="hidden" name="findType" value="${paging.findType}">
-            <input type="hidden" name="findKeyword" value="${paging.findKeyword}">
-            <!-- -------------------------------------------------- -->
             <select name="pageSize" style="padding:5px" onchange="">
                 <option value="" selected>추천순</option>
-                <option value="" > 조회순1 </option>
-                
+                <option value="" > 조회순</option>
             </select>
         </form>
     </div>
@@ -72,11 +66,13 @@
     <div class='col-10 offset-1'>
         <table class="table table-condensed table-striped">
             <thead>
-            <th width="10%">글번호</th>
+            <th width="10%">작성번호</th>
             <th width="40%">제목</th>
-            <th width="20%">글쓴이</th>
-            <th width="20%">날짜</th>
+            <th width="20%">내용</th>
+            <th width="20%">생성 날짜</th>
+            <th width="20%">수정 날짜</th>
             <th width="10%">조회수</th>
+            <th width="10%">추천수</th>
             </thead>
             <tbody>
 
