@@ -155,41 +155,54 @@
 
 			let map = new kakao.maps.Map(container, options);
 
-			let markInfoMap = new Map();
-			
-			// 드래그가 끝났을 때
-			kakao.maps.event.addListener(map, 'dragend', function() {
+			// 최대 확대수준
+			map.setMaxLevel(11)
 
-				let pos = map.getCenter()
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-				
-				let params = {
+			// 줌 컨트롤
+			let zoomControl = new kakao.maps.ZoomControl();
+			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+			
+			// {contentId : info}
+			let markInfoMap = new Map();
+
+			let pos = map.getCenter()
+			let params = {
 						"posX":pos.getLng(),
 						"posY":pos.getLat(),
 						"radius":getRadius(map.getLevel()),
 						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
 						"pageNo":1
 					}
+			
+			// 리스터 함수
+			// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
+			/*
+			kakao.maps.event.addListener(map, 'dragend', function() {
+
+				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
 				
 				markBasedLocation(params, markInfoMap);
 			});
+			*/
 
-			// 확대 수준이 변경된다면
+			// 확대 수준이 변경된다면 -> 너무 많은 Api 요청이 필요함
+			/*
 			kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
-				let pos = map.getCenter()
 				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-
-				let params = {
-						"posX":pos.getLng(),
-						"posY":pos.getLat(),
-						"radius":getRadius(map.getLevel()),
-						"pageSize":500,
-						"pageNo":1
-					}
 					
 				markBasedLocation(params, markInfoMap);
 			});
+			*/
+
+			// 맵을 클릭한다면
+			kakao.maps.event.addListener(map, "click", function(mouseEvent){
+				let pos = mouseEvent.latLng;
+
+				map.panTo(pos)
+				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+				markBasedLocation(params, markInfoMap);
+			})
 
 			// 지도 확대에 따라 동적으로 범위 조절
 			function getRadius(mapLevel){
@@ -229,6 +242,7 @@
 						responseInfoMap.set(info["contentId"], info)
 					})
 
+					// map의 키를 array로 변환
 					let responseInfoIdList = Array.from(responseInfoMap.keys())
 					let markInfoIdList = Array.from(markInfoMap.keys())
 
@@ -245,7 +259,7 @@
 					// 삭제할 마크 안보이게
 					removeIdList.forEach(id => {
 						let markInfo = markInfoMap.get(id)
-						markInfo["mark"].setMap(null)
+						markInfo["marker"].setMap(null)
 						markInfoMap.delete(id)
 					})
 
@@ -254,11 +268,19 @@
 						let info = responseInfoMap.get(id);
 
 						promiseMarking(map, info["posX"], info["posY"], function(){
-							alert(info["title"])
+
+							let content = `\
+							<div> \
+								<h4>${info["addr1"]} ${info["addr2"]}</h4> \
+								<p>${info["tel"]}</p> \
+							</div> \
+							`;
+
+							responseinfoWindow(map, info["posX"], info["posY"], content)
 						})
 						.then(marker => {
 							let markInfo = {
-								"mark" : marker,
+								"marker" : marker,
 								"info" : info
 							}
 							markInfoMap.set(id, markInfo);
@@ -267,7 +289,6 @@
 							console.log("Error");
 						})
 					})
-					
 					
 
 				}).fail((error) => {
@@ -278,6 +299,7 @@
 
 			}
 
+			// callback -> 클릭할 경우 발생하는 함수
 			function promiseMarking(map, posX, posY, callback){
 				return new Promise(function(resolve, reject){
 					resolve(marking(map, posX, posY, callback));
@@ -293,6 +315,15 @@
 				kakao.maps.event.addListener(marker, "click", callback);
 
 				return marker
+			}
+
+			function responseinfoWindow(map, posX, posY, response){
+				let infoWindow = new kakao.maps.InfoWindow({
+					map: map,
+					position: new kakao.maps.LatLng(posY, posX),
+					content: content,
+					removable: true
+				})
 			}
 
 		</script>
