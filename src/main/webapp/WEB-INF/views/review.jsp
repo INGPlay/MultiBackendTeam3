@@ -48,7 +48,7 @@
 <div class="row my-3">
     <div class="col-9 text-center">
         <!-- 검색 폼 시작 ---------------------------------------------- -->
-        <form name="searchF" action="/edit" method="get" onsubmit="a">
+        <form name="searchF" action="/review/edit" method="get" onsubmit="a">
             <button class="btn btn-outline-primary">작성</button>
         </form>
     </div>
