@@ -40,102 +40,30 @@
 	</style>
 
 </head>
-<body>
+<body style="height: 100%;">
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
 	<main class="flex-row-reverse">
 
 		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
-			<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
-			<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
-			<span class="fs-5 fw-semibold">List group</span>
-			</a>
-			<div class="list-group list-group-flush border-bottom scrollarea">
-			<a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small>Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-		
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
+			<div class="input-group input-group-lg">
+				<span class="input-group-text" id="inputGroup-sizing-lg">Home</span>
+
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
+					id = "pathmapTitle">
+			</div>
+
+			<!-- 패스맵 리스트 -->
+			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
+
+			</div>
+
+			<div class="mt-auto d-flex justify-content-center" id="submitUserSelectList">
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
+						style="width: 100%; justify-content: center; background-color:skyblue;">
+					<!-- 패스맵 제목이 될 곳 -->
+					<span class="fs-5 fw-semibold">완료</span>
+				</button>
 			</div>
 		</div>
 
@@ -146,39 +74,61 @@
 		</div>
 
 		<script>
-			// 초기화
-			let container = document.getElementById('map');
+			// 변수 초기화
+			const container = document.getElementById('map');
 			let options = {
 				center: new kakao.maps.LatLng(33.450701, 126.570667),
 				level: 3
 			};
 
-			let map = new kakao.maps.Map(container, options);
+			const map = new kakao.maps.Map(container, options);
 
 			// 최대 확대수준
 			map.setMaxLevel(11)
 
 			// 줌 컨트롤
-			let zoomControl = new kakao.maps.ZoomControl();
+			const zoomControl = new kakao.maps.ZoomControl();
 			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 			
 			// {contentId : info}
 			let markInfoMap = new Map();
 
-			let pos = map.getCenter()
-			let params = {
+			// 유저가 선택한 장소 리스트
+			const userSelectList = [];
+
+			// testData
+			userSelectList.push({
+				"title" : "temp",
+				"addr1" : "제주시 제주도",
+				"addr2" : "제주",
+				"contentId" : 12345,
+				"contentType" : "식당",
+				"dist" : "11111.1111",
+				"firstImageURI" : "",
+				"firstImageURI2" : "",
+				"posX" : 126.570667,
+				"posY" : 33.450701,
+				"tel" : "010-1010-1010"
+			})
+
+			// 초기화 함수
+			viewUserSelectList();
+			
+			// 리스너 함수
+			// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
+			/*
+			kakao.maps.event.addListener(map, 'dragend', function() {
+
+				// 위치 갱신
+				let pos = map.getCenter()
+				let params = {
 						"posX":pos.getLng(),
 						"posY":pos.getLat(),
 						"radius":getRadius(map.getLevel()),
 						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
 						"pageNo":1
 					}
-			
-			// 리스터 함수
-			// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
-			/*
-			kakao.maps.event.addListener(map, 'dragend', function() {
-
+					
 				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
 				
 				markBasedLocation(params, markInfoMap);
@@ -189,6 +139,16 @@
 			/*
 			kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
+				// 위치 갱신
+				let pos = map.getCenter()
+				let params = {
+						"posX":pos.getLng(),
+						"posY":pos.getLat(),
+						"radius":getRadius(map.getLevel()),
+						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+						"pageNo":1
+					}
+
 				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
 					
 				markBasedLocation(params, markInfoMap);
@@ -197,7 +157,16 @@
 
 			// 맵을 클릭한다면
 			kakao.maps.event.addListener(map, "click", function(mouseEvent){
+
+				// 위치 갱신
 				let pos = mouseEvent.latLng;
+				let params = {
+						"posX":pos.getLng(),
+						"posY":pos.getLat(),
+						"radius":getRadius(map.getLevel()),
+						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+						"pageNo":1
+					}
 
 				map.panTo(pos)
 				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
@@ -266,15 +235,36 @@
 					// 새로운 마크 표시
 					createIdList.forEach(id => {
 						let info = responseInfoMap.get(id);
-
 						promiseMarking(map, info["posX"], info["posY"], function(){
 
-							let content = `\
+							let content = "\
+								<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
+									<div class='d-flex flex-row align-items-center'> \
+										<div class='flex-shrink-0'> \
+											<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
+										</div> \
+										<div class='flex-grow-1 ms-1'>\
+											<p class='h5 fw-bold'>" + info["title"] + "</p> \
+											<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
+											<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
+											<div class = 'd-flex flex-row-reverse'> \
+												<button onclick='addUserSelectList(" + JSON.stringify(info) + ")'>추가</button> \
+											</div> \
+										</div> \
+									</div> \
+								</div> \
+							"; 
+							
+							// 백틱 템플릿은 왠지 모르게 안된다
+							/*
+							`\
 							<div> \
-								<h4>${info["addr1"]} ${info["addr2"]}</h4> \
+								<h5>${info["title"]}</h5>
+								<p>${info["addr1"]} ${info["addr2"]}</p> \
 								<p>${info["tel"]}</p> \
 							</div> \
 							`;
+							*/
 
 							responseinfoWindow(map, info["posX"], info["posY"], content)
 						})
@@ -317,7 +307,9 @@
 				return marker
 			}
 
-			function responseinfoWindow(map, posX, posY, response){
+			// 인포윈도우를 띄움
+			function responseinfoWindow(map, posX, posY, content){
+
 				let infoWindow = new kakao.maps.InfoWindow({
 					map: map,
 					position: new kakao.maps.LatLng(posY, posX),
@@ -326,6 +318,122 @@
 				})
 			}
 
+			// 인포윈도우에서 추가를 선택했을 때 실행
+			function addUserSelectList(info){
+				
+				if (isNotDuplicated(info)){
+					userSelectList.push(info);
+				}
+				console.log(userSelectList)
+				viewUserSelectList()
+
+				// 함수 내 함수
+				function isNotDuplicated(newInfo){
+					for (let info of userSelectList){
+						if (info["contentId"] === newInfo["contentId"]){
+							return false;
+						}
+					}
+
+					return true;
+				}
+			}
+
+			function viewUserSelectList(){
+				
+				let userSelectListView = document.getElementById("userSelectListView")
+				userSelectListView.innerHTML = "";
+
+				for (let i = 0 ; i < userSelectList.length; i++){
+
+					let info = userSelectList[i]
+					// 가져올 때는 .userSelectContainer로 가져오기
+					let listTemplate = " \
+						<a href='#' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+							<div class='d-flex flex-row align-items-center'> \
+							\
+								<div class='flex-shrink-0'> \
+									<img src='"+ info["firstImageURI2"] +"' style='width:160px; height:auto;'> \
+								</div> \
+								\
+								<div class='flex-grow-1 ms-1'> \
+									<div class='d-flex w-100 align-items-center justify-content-between'> \
+										<strong class='mb-1'>" + info["title"] + "</strong> \
+										<small>" + info["contentType"] + "</small> \
+									</div> \
+									<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
+									\
+									<div class = 'd-flex flex-row-reverse'> \
+										<button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button>\
+										"
+
+					if (i > 0){
+						listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+					} 
+					if (i < userSelectList.length - 1){
+						listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
+					}
+
+					listTemplate += " \
+									</div> \
+								</div> \
+							</div> \
+						</a> \
+					"
+					
+					userSelectListView.innerHTML += listTemplate
+				}
+
+			}
+
+			// userSelectList의 특정 인덱스의 값을 삭제
+			function deleteUserSelectByIndex(index){
+				userSelectList.splice(index, 1)
+				viewUserSelectList()
+			}
+
+			function upUserSelect(index){
+				let temp = userSelectList[index]
+				userSelectList[index] = userSelectList[index -1]
+				userSelectList[index-1] = temp
+
+				viewUserSelectList()
+			}
+
+			function downUserSelect(index){
+				let temp = userSelectList[index]
+				userSelectList[index] = userSelectList[index + 1]
+				userSelectList[index+1] = temp
+
+				viewUserSelectList()
+			}
+
+			function submitUserSelectList(){
+				let title = document.getElementById('pathmapTitle').value;
+				alert(title)
+
+				let data = {
+					"title" : JSON.stringify(title),
+					"request" : JSON.stringify(userSelectList)
+				}
+
+				console.log("제출")
+				
+				$.ajax({
+					url: "/pathmap",
+					type: 'POST',
+					dataType: "json",
+					data : data
+				})
+				.done(function(response) {
+					console.log(response)
+					window.location.replace("/");
+				})
+				.fail(function(error) {
+					console.log("Error : " + error)
+				});
+			}
+			document.getElementById("submitUserSelectList").addEventListener("click", submitUserSelectList)
 		</script>
 	</main>
 
