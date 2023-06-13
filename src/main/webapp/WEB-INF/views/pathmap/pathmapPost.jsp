@@ -91,6 +91,15 @@
 			const zoomControl = new kakao.maps.ZoomControl();
 			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+			// 선그리기
+			const polyline = new kakao.maps.Polyline({
+				map: map,
+				strokeWeight: 5, // 선의 두께 입니다
+				strokeColor: '#FFAE00', // 선의 색깔입니다
+				strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+				strokeStyle: 'solid' // 선의 스타일입니다
+			});
+
 			// 유저가 선택한 장소 리스트
 			const userSelectList = [];
 
@@ -118,7 +127,7 @@
 					console.log(infoList)
 
 					// 초기화 함수
-					monitorUserSelectList();
+					updatePage();
 
 				}).fail(error => {
 					alert("error")
@@ -160,7 +169,6 @@
 				if (isNotDuplicated(info)){
 					userSelectList.push(info);
 				}
-				console.log(userSelectList)
 				viewUserSelectList()
 
 				// 함수 내 함수
@@ -176,8 +184,7 @@
 			}
 
 
-			function monitorUserSelectList(){
-				console.log(userSelectList)
+			function updatePage(){
 				markUserSelectList();
 				viewUserSelectList();
 				setMapBounds()
@@ -310,6 +317,12 @@
 
 			// 등록된 좌표 중간에서 다 보여주도록 함
 			function setMapBounds(){
+
+				// 아무것도 없이 바운드 설정하면 지도 깨짐
+				if (userSelectList.length <= 0){
+					return;
+				}
+
 				let bounds = new kakao.maps.LatLngBounds(); 
 				userSelectList.forEach(info => {
 					bounds.extend(
@@ -320,26 +333,15 @@
 				map.setBounds(bounds)
 			}
 
+			function setPolyLine(){
 
-							// 선그리기
-			// let pathLine = new kakao.maps.Polyline({
-			// 	map: map,
-			// 	strokeWeight: 2,
-			// 	strokeColor: '#FF00FF',
-			// 	strokeOpacity: 0.8,
-			// 	strokeStyle: 'dashed'
-			// });
-			// function setPolyLine(){
+				const linePath = []
+				userSelectList.forEach(info => {
+					linePath.push(new kakao.maps.LatLng(info["posY"], info["posX"]))
+				})
 
-
-			// 	posList = userSelectList.map(info => {
-			// 		return kakao.maps.LatLng(info["posY"], info["posX"])
-			// 	})
-
-			// 	console.log(posList)
-
-			// 	pathLine.setPath(posList)
-			// }
+				polyline.setPath(linePath)
+			}
 		</script>
 	</main>
 
