@@ -69,7 +69,6 @@ public class reviewController {
         return "redirect:/review/list";
     }
 
-//   게시글 보기
     @GetMapping("/view")
     public String reviewForm(Model m, HttpServletRequest seq){
         String id = seq.getParameter("review_id");
@@ -90,7 +89,6 @@ public class reviewController {
     return "review/edit";
     }
 
-//  삭제
     @PostMapping("/delete")
     public String deleteReview(Model m , HttpServletRequest seq){
         String id = seq.getParameter("review_id");
@@ -102,8 +100,6 @@ public class reviewController {
         return "redirect:/review/list";
     }
 
-
-//  수정
     @PostMapping("/update")
     public String updateReview(Model m, @ModelAttribute reviewVO vo, HttpServletRequest seq){
         System.out.println("불어온 vo");
