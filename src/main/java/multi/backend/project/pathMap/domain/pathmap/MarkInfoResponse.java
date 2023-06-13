@@ -1,12 +1,11 @@
-package multi.backend.project.pathMap.domain.tour;
+package multi.backend.project.pathMap.domain.pathmap;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MarkInfoRequest {
-    private Long pathId;
+public class MarkInfoResponse {
     private String title;
 
     private String addr1;

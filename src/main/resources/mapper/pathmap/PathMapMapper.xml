@@ -38,4 +38,27 @@
         </foreach>
     </insert>
 
+    <select id="selectPathInfoList" resultType="multi.backend.project.pathMap.domain.pathmap.PathInfoResponse">
+        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS
+        FROM PATH p JOIN MEMBERUSER m
+        ON p.USER_ID = m.USER_ID
+    </select>
+
+    <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse">
+        SELECT
+        MARK_TITLE,
+        MARK_ADDR1,
+        MARK_ADDR2,
+        MARK_CONTENTID,
+        MARK_CONTENTTYPE,
+        MARK_FIRSTIMAGEURI,
+        MARK_FIRSTIMAGEURI2,
+        MARK_POSX,
+        MARK_POSY,
+        MARK_TEL,
+        MARK_PLACEORDER
+        FROM MARK
+        WHERE MARK.PATH_ID = ${pathId}
+    </select>
+
 </mapper>

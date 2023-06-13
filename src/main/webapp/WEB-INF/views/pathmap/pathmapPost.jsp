@@ -49,8 +49,9 @@
 			<div class="input-group input-group-lg">
 				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
 
+				<!-- 제목 -->
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
-					id = "pathmapTitle">
+					id = "pathmapTitle" disabled>
 			</div>
 
 			<!-- 패스맵 리스트 -->
@@ -61,8 +62,8 @@
 			<div class="mt-auto d-flex justify-content-center" id="submitUserSelectList">
 				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
 						style="width: 100%; justify-content: center; background-color:skyblue;">
-					<!-- 패스맵 제목이 될 곳 -->
-					<span class="fs-5 fw-semibold">완료</span>
+					<!-- Submit -->
+					<span class="fs-5 fw-semibold">댓글?</span>
 				</button>
 			</div>
 		</div>
@@ -89,204 +90,39 @@
 			// 줌 컨트롤
 			const zoomControl = new kakao.maps.ZoomControl();
 			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-			
-			// {contentId : info}
-			let markInfoMap = new Map();
 
 			// 유저가 선택한 장소 리스트
 			const userSelectList = [];
 
-			// testData
-			userSelectList.push({
-				"title" : "temp",
-				"addr1" : "제주시 제주도",
-				"addr2" : "제주",
-				"contentId" : 12345,
-				"contentType" : "식당",
-				"dist" : "11111.1111",
-				"firstImageURI" : "",
-				"firstImageURI2" : "",
-				"posX" : 126.570667,
-				"posY" : 33.450701,
-				"tel" : "010-1010-1010"
-			})
+			// 백에서 받는 pathId
+			const pathId = ${pathId}
 
-			// 초기화 함수
-			viewUserSelectList();
-			
-			// 리스너 함수
-			// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
-			/*
-			kakao.maps.event.addListener(map, 'dragend', function() {
+			// path의 mark 가져오기
+			initUserSelectList(pathId);
 
-				// 위치 갱신
-				let pos = map.getCenter()
-				let params = {
-						"posX":pos.getLng(),
-						"posY":pos.getLat(),
-						"radius":getRadius(map.getLevel()),
-						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-						"pageNo":1
-					}
-					
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-				
-				markBasedLocation(params, markInfoMap);
-			});
-			*/
-
-			// 확대 수준이 변경된다면 -> 너무 많은 Api 요청이 필요함
-			/*
-			kakao.maps.event.addListener(map, 'zoom_changed', function() {
-
-				// 위치 갱신
-				let pos = map.getCenter()
-				let params = {
-						"posX":pos.getLng(),
-						"posY":pos.getLat(),
-						"radius":getRadius(map.getLevel()),
-						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-						"pageNo":1
-					}
-
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-					
-				markBasedLocation(params, markInfoMap);
-			});
-			*/
-
-			// 맵을 클릭한다면
-			kakao.maps.event.addListener(map, "click", function(mouseEvent){
-
-				// 위치 갱신
-				let pos = mouseEvent.latLng;
-				let params = {
-						"posX":pos.getLng(),
-						"posY":pos.getLat(),
-						"radius":getRadius(map.getLevel()),
-						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-						"pageNo":1
-					}
-
-				map.panTo(pos)
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-				markBasedLocation(params, markInfoMap);
-			})
-
-			// 지도 확대에 따라 동적으로 범위 조절
-			function getRadius(mapLevel){
-
-				let result = 0;
-				if (mapLevel < 4) {
-					result = 1000;
-				}
-				else if (mapLevel < 5){
-					result = 2000;
-				} else if (mapLevel < 6){
-					result = 3000;
-				} else if (mapLevel < 7){
-					result = 6000;
-				} else if (mapLevel < 8){
-					result = 12000;
-				} else {
-					result = 20000;
-				}
-
-				return result;
-			}
-
-			// 위치에 따른 마킹
-			function markBasedLocation(params, markInfoMap){
-
+			function initUserSelectList(pathId){
 				$.ajax({
-					url : "/api/tour/location",
+					url : "/api/pathmap/" + pathId,
 					type : "GET",
-					data : params,
 					contentType: "application/json",
-					dataType : "json"
-				}).done((response) => {
+				}).done(response => {
+					let title = response["title"]
+					let infoList = response["infoList"]
 
-					let responseInfoMap = new Map()
-					response.forEach(info => {
-						responseInfoMap.set(info["contentId"], info)
-					})
+					document.getElementById("pathmapTitle").value = title
 
-					// map의 키를 array로 변환
-					let responseInfoIdList = Array.from(responseInfoMap.keys())
-					let markInfoIdList = Array.from(markInfoMap.keys())
-
-					// 새로 생성 될 거
-					let createIdList = responseInfoIdList.filter(id => {
-						return !markInfoIdList.includes(id)
-					})		// (responseInfoIdSet - markInfoIdSet)
-
-					// 삭제 될 거
-					let removeIdList = markInfoIdList.filter(id => {
-						return !responseInfoIdList.includes(id)
-					})		// (markInfoIdSet - responseInfoIdSet)
-
-					// 삭제할 마크 안보이게
-					removeIdList.forEach(id => {
-						let markInfo = markInfoMap.get(id)
-						markInfo["marker"].setMap(null)
-						markInfoMap.delete(id)
-					})
-
-					// 새로운 마크 표시
-					createIdList.forEach(id => {
-						let info = responseInfoMap.get(id);
-						promiseMarking(map, info["posX"], info["posY"], function(){
-
-							let content = "\
-								<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
-									<div class='d-flex flex-row align-items-center'> \
-										<div class='flex-shrink-0'> \
-											<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
-										</div> \
-										<div class='flex-grow-1 ms-1'>\
-											<p class='h5 fw-bold'>" + info["title"] + "</p> \
-											<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
-											<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-											<div class = 'd-flex flex-row-reverse'> \
-												<button onclick='addUserSelectList(" + JSON.stringify(info) + ")'>추가</button> \
-											</div> \
-										</div> \
-									</div> \
-								</div> \
-							"; 
-							
-							// 백틱 템플릿은 왠지 모르게 안된다
-							/*
-							`\
-							<div> \
-								<h5>${info["title"]}</h5>
-								<p>${info["addr1"]} ${info["addr2"]}</p> \
-								<p>${info["tel"]}</p> \
-							</div> \
-							`;
-							*/
-
-							responseinfoWindow(map, info["posX"], info["posY"], content)
-						})
-						.then(marker => {
-							let markInfo = {
-								"marker" : marker,
-								"info" : info
-							}
-							markInfoMap.set(id, markInfo);
-						})
-						.catch(error => {
-							console.log("Error");
-						})
+					infoList.forEach(info => {
+						userSelectList.push(info)
 					})
 					
+					console.log(infoList)
 
-				}).fail((error) => {
-					// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
-					let response = error["responseJSON"];
-					console.log(response["message"])
+					// 초기화 함수
+					monitorUserSelectList();
+
+				}).fail(error => {
+					alert("error")
 				})
-
 			}
 
 			// callback -> 클릭할 경우 발생하는 함수
@@ -297,7 +133,7 @@
 			}
 
 			function marking(map, posX, posY, callback){
-				var marker = new kakao.maps.Marker({
+				let marker = new kakao.maps.Marker({
 					map: map,
 					position: new kakao.maps.LatLng(posY, posX)
 				});
@@ -339,8 +175,60 @@
 				}
 			}
 
+
+			function monitorUserSelectList(){
+				console.log(userSelectList)
+				markUserSelectList();
+				viewUserSelectList();
+				setMapBounds()
+				setPolyLine()
+			}
+
+			function markUserSelectList(){
+				userSelectList.forEach(info => {
+					console.log("좌표: " + info["posX"] + ", " + info["posY"])
+					promiseMarking(map, info["posX"], info["posY"], function(){
+
+							let content = "\
+								<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
+									<div class='d-flex flex-row align-items-center'> \
+										<div class='flex-shrink-0'> \
+											<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
+										</div> \
+										<div class='flex-grow-1 ms-1'>\
+											<p class='h5 fw-bold'>" + info["title"] + "</p> \
+											<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
+											<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
+										</div> \
+									</div> \
+								</div> \
+							"; 
+
+							// 백틱 템플릿은 왠지 모르게 안된다
+							/*
+							`\
+							<div> \
+								<h5>${info["title"]}</h5>
+								<p>${info["addr1"]} ${info["addr2"]}</p> \
+								<p>${info["tel"]}</p> \
+							</div> \
+							`;
+							*/
+
+							responseinfoWindow(map, info["posX"], info["posY"], content)
+						})
+						.then(marker => {
+
+							// 임시
+						})
+						.catch(error => {
+							console.log("Error");
+						})
+					})
+			}
+
 			function viewUserSelectList(){
-				
+
 				let userSelectListView = document.getElementById("userSelectListView")
 				userSelectListView.innerHTML = "";
 
@@ -362,20 +250,6 @@
 										<small>" + info["contentType"] + "</small> \
 									</div> \
 									<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
-									\
-									<div class = 'd-flex flex-row-reverse'> \
-										<button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button>\
-										"
-
-					if (i > 0){
-						listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
-					} 
-					if (i < userSelectList.length - 1){
-						listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
-					}
-
-					listTemplate += " \
-									</div> \
 								</div> \
 							</div> \
 						</a> \
@@ -412,7 +286,7 @@
 				let title = document.getElementById('pathmapTitle').value;
 
 				let data = {
-					"title" : title,
+					"title" : JSON.stringify(title),
 					"request" : JSON.stringify(userSelectList)
 				}
 
@@ -433,6 +307,39 @@
 					console.log("Error : " + error)
 				});
 			})
+
+			// 등록된 좌표 중간에서 다 보여주도록 함
+			function setMapBounds(){
+				let bounds = new kakao.maps.LatLngBounds(); 
+				userSelectList.forEach(info => {
+					bounds.extend(
+						new kakao.maps.LatLng(info["posY"], info["posX"])
+					)
+				})
+
+				map.setBounds(bounds)
+			}
+
+
+							// 선그리기
+			// let pathLine = new kakao.maps.Polyline({
+			// 	map: map,
+			// 	strokeWeight: 2,
+			// 	strokeColor: '#FF00FF',
+			// 	strokeOpacity: 0.8,
+			// 	strokeStyle: 'dashed'
+			// });
+			// function setPolyLine(){
+
+
+			// 	posList = userSelectList.map(info => {
+			// 		return kakao.maps.LatLng(info["posY"], info["posX"])
+			// 	})
+
+			// 	console.log(posList)
+
+			// 	pathLine.setPath(posList)
+			// }
 		</script>
 	</main>
 
