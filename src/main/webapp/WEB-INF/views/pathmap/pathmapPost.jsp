@@ -23,6 +23,11 @@
 			height: 100%;
 		}
 
+		/* 커스텀 바 */
+		.custom_typecontrol {position:absolute;top:10px;left:10px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_typecontrol span {display:block;width:115px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		.radius_border{border:1px solid #919191;border-radius:5px;}  
+
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
 		  font-size: 1.125rem;
@@ -71,7 +76,13 @@
 
 		<!-- Map이 표시될 자리 -->
 		<div class="mapContainer flex-fill">
+			<!-- 맵 -->
 			<div id="map"></div>
+
+			<!-- 맵 컨트롤 -->
+			<div class="custom_typecontrol radius_border" style="background-color: skyblue;"> 
+				<span id="boundButton" class="fw-semibold">한눈에 보기</span>
+			</div>
 		</div>
 
 		<script>
@@ -151,6 +162,9 @@
 
 				return marker
 			}
+
+			// 한눈에 보기 버튼
+			document.getElementById("boundButton").addEventListener("click", setMapBounds)
 
 			// 인포윈도우를 띄움
 			function responseinfoWindow(map, posX, posY, content){

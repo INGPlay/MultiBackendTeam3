@@ -23,8 +23,10 @@
 			height: 100%;
 		}
 
-		.custom_typecontrol {position:absolute;top:10px;right:10px;overflow:hidden;width:130px;height:30px;margin:0;padding:0;z-index:1;font-size:12px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
-		.custom_typecontrol span {display:block;width:65px;height:30px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		/* 커스텀 바 */
+		.custom_typecontrol {position:absolute;top:10px;left:10px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_typecontrol span {display:block;width:115px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		.radius_border{border:1px solid #919191;border-radius:5px;}  
 
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
@@ -77,9 +79,10 @@
 			<div id="map"></div>
 
 			<!-- 맵 컨트롤 -->
-			<div class="custom_typecontrol"> 
-				<span id="boundButton" style="position: absolute;"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+			<div class="custom_typecontrol radius_border" style="background-color: skyblue;"> 
+				<span id="boundButton" class="fw-semibold">한눈에 보기</span>
 			</div>
+
 		</div>
 
 	</main>
@@ -194,7 +197,7 @@
 		})
 
 		// 한눈에 보기 버튼
-		// document.getElementById("boundButton").addEventListener("click", setMapBounds)
+		document.getElementById("boundButton").addEventListener("click", setMapBounds)
 
 		// 지도 확대에 따라 동적으로 범위 조절
 		function getRadius(mapLevel){
