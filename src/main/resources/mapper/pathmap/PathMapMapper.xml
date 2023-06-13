@@ -21,7 +21,7 @@
         )
         <foreach collection = "markInfoRequests" item="item" separator=" UNION ALL ">
             select
-                mark_sequence.nextval,
+                ${item.markId},
                 ${item.pathId},
                 #{item.title},
                 #{item.addr1},
@@ -37,4 +37,5 @@
             from dual
         </foreach>
     </insert>
+
 </mapper>

@@ -408,9 +408,8 @@
 				viewUserSelectList()
 			}
 
-			function submitUserSelectList(){
+			document.getElementById("submitUserSelectList").addEventListener("click", () => {
 				let title = document.getElementById('pathmapTitle').value;
-				alert(title)
 
 				let data = {
 					"title" : JSON.stringify(title),
@@ -420,20 +419,20 @@
 				console.log("제출")
 				
 				$.ajax({
-					url: "/pathmap",
+					url: "/api/pathmap",
 					type: 'POST',
 					dataType: "json",
 					data : data
 				})
 				.done(function(response) {
-					console.log(response)
+					// { "response" : "OK" }
+					console.log(response["response"])
 					window.location.replace("/");
 				})
 				.fail(function(error) {
 					console.log("Error : " + error)
 				});
-			}
-			document.getElementById("submitUserSelectList").addEventListener("click", submitUserSelectList)
+			})
 		</script>
 	</main>
 

@@ -22,8 +22,11 @@ public interface PathMapMapper {
             ")")
     void insertPathMap(Long pathId, String username, String title);
 
-    @Select("SELECT MARK_SEQUENCE.NEXTVAL FROM DUAL")
+    @Select("SELECT PATH_SEQUENCE.NEXTVAL FROM DUAL")
     Long getPathmapNextval();
+
+    @Select("SELECT COUNT(mark_id) from Mark")
+    Long getMarkCount();
 
     // XML 파일
     void insertMarksBatch(List<Map<String, Object>> markInfoRequests);

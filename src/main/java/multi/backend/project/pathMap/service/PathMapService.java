@@ -38,12 +38,15 @@ public class PathMapService {
     private void insertMarks(Long pathId, String requestJson) throws ParseException {
         JSONArray request = (JSONArray) jsonParser.parse(requestJson);
 
+        Long markCount = pathMapMapper.getMarkCount();
+
         List<Map<String, Object>> markInfoRequests = new ArrayList<>();
         for (int i = 0; i < request.size(); i++){
             JSONObject info = (JSONObject) request.get(i);
 
             HashMap<String, Object> markInfoRequest = new HashMap<>();
             markInfoRequest.put("pathId", pathId);
+            markInfoRequest.put("markId", ++markCount);
             markInfoRequest.put("title", (String) info.get("title"));
             markInfoRequest.put("addr1", (String) info.get("addr1"));
             markInfoRequest.put("addr2", (String) info.get("addr2"));
