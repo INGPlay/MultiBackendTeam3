@@ -39,9 +39,9 @@
 <div class="row">
 
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
-        <h2>Review Edit</h2>
+        <h2>Review view</h2>
         <p>
-            <a href="write">글쓰기</a>| <a href="list">글목록</a>
+            <a href="#" onclick="edit()">글수정</a>| <a href="list">글목록</a>
         <p>
 
         <form name="bf" id="bf" role="form" method="post">
@@ -57,47 +57,35 @@
                 <tr>
                     <td style="width:20%"><b>제목</b></td>
                     <td style="width:80%">
-                        <input type="text" name="review_title" id="review_title" class="form-control" value="${vo.review_title}">
+                        <input type="text" name="review_title" id="review_title" class="form-control" value="${vo.review_title}" readonly>
                     </td>
-                </tr>
 
+                </tr>
                 <tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
                         <input type="text" name="user_id" id="user_id" value="${vo.user_id}" readonly />
                     </td>
                 </tr>
+
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
-                        <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control">${vo.review_content}</textarea>
+                        <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
                 </tr>
 
-                <tr>
-                    <td colspan="2" class="text-center">
-                        <button id="update" onclick = "edit('update')" class="btn btn-success">글수정</button>
-                        <button id="delete" onclick = "edit('delete')" class="btn btn-warning">삭제</button>
-
-                    </td>
-
-                </tr>
             </table>
         </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
 </body>
 <script>
-    const edit = function(mode){
-        if(mode =='update'){
-            bf.action="/review/update";
-        }
-        else if (mode == 'delete'){
-            bf.action="/review/delete";
-
-            alert("해당 게시글을 삭제합니다");
-
-        }
+    const edit = function(){
+        var review_id =$('#review_id').val();
+        //alert(1)
+        bf.method='post';
+        bf.action='edit'
         bf.submit();
     }
 </script>

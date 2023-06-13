@@ -1,6 +1,6 @@
 package multi.backend.project.review.Controller;
 
-
+import lombok.extern.log4j.Log4j2;
 import multi.backend.project.review.Service.reviewServiceImpl;
 import multi.backend.project.review.VO.reviewVO;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RequestMapping("/review")
-
+@Log4j2
 @org.springframework.stereotype.Controller
 public class reviewController {
 
@@ -33,7 +33,7 @@ public class reviewController {
 
 
 //  게시글 전체 출력
-    @GetMapping("list")
+    @GetMapping("/list")
     public String listReview(Model m){
         //HttpSession session =  req.getSession();
         int totalCount =  this.service.getTotalCount(); // 전체 게시글 수
@@ -69,19 +69,28 @@ public class reviewController {
         return "redirect:/review/list";
     }
 
+//   게시글 보기
+    @GetMapping("/view")
+    public String reviewForm(Model m, HttpServletRequest seq){
+        String id = seq.getParameter("review_id");
+        reviewVO vo = service.selectReviewOne(Integer.valueOf(id));
+        m.addAttribute("vo",vo);
+        return "review/review_view";
+    }
+
+
 
 
 //    게시글 수정&삭제 폼 이동
-    @GetMapping("/edit")
-    public String editForm(Model m, HttpServletRequest seq){
-        String id = seq.getParameter("review_id");
-        // System.out.println(id); => 정상적으로 값을 받아옴을 확인
-        reviewVO vo = service.selectReviewOne(Integer.valueOf(id));
-        //System.out.println(vo.toString());
+    @PostMapping("/edit")
+    public String editForm(Model m , @ModelAttribute reviewVO vo){
+        //System.out.println("수정폼 이동");
         m.addAttribute("vo",vo);
+
     return "review/edit";
     }
 
+//  삭제
     @PostMapping("/delete")
     public String deleteReview(Model m , HttpServletRequest seq){
         String id = seq.getParameter("review_id");
@@ -93,6 +102,8 @@ public class reviewController {
         return "redirect:/review/list";
     }
 
+
+//  수정
     @PostMapping("/update")
     public String updateReview(Model m, @ModelAttribute reviewVO vo, HttpServletRequest seq){
         System.out.println("불어온 vo");

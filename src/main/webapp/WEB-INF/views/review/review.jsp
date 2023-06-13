@@ -107,7 +107,7 @@
 						</span>/
                     <c:out value=""/>
                     pages
-                    <form action="/review/edit" method="get" id="hidden" hidden="hidden">
+                    <form action="/review/view" method="get" id="hidden" hidden="hidden">
                         <input id="review_id" name="review_id" value="">
                     </form>
                 </td>
