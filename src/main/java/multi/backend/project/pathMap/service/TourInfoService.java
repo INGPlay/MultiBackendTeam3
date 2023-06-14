@@ -2,6 +2,7 @@ package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.domain.area.KeywordDto;
 import multi.backend.project.pathMap.domain.tour.ContentType;
 import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
 import multi.backend.project.pathMap.domain.tour.PageDto;
@@ -10,14 +11,15 @@ import org.apache.ibatis.javassist.NotFoundException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,37 @@ public class TourInfoService {
         return uri;
     }
 
+    public URI getTourInfoURIBasedKeyword(KeywordDto keywordDto, PageDto pageDto, ContentType contentType){
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr")
+                .path("/B551011/KorService1/searchKeyword1")
+                .queryParam("serviceKey", getTourKey())
+                .queryParam("numOfRows", pageDto.getPageSize())
+                .queryParam("pageNo", pageDto.getPageNo())
+                .queryParam("MobileOS", "ETC")
+                .queryParam("MobileApp", "TestApp")
+                .queryParam("_type", "json")
+                .queryParam("arrange", "R")     // O - 제목순, Q - 수정일순, R - 생성일순
+                .queryParam("contentTypeId", contentType.getCode())
+                .queryParam("keyword", URLEncoder.encode(keywordDto.getKeyword(), StandardCharsets.UTF_8));
+
+        if (StringUtils.hasText(keywordDto.getLargeCode())){
+            uriBuilder = uriBuilder.queryParam("areaCode", keywordDto.getLargeCode());
+
+            if (StringUtils.hasText(keywordDto.getSmallCode())){
+                uriBuilder = uriBuilder.queryParam("sigunguCode", keywordDto.getSmallCode());
+            }
+            
+        }
+
+        URI uri = uriBuilder
+                .encode(StandardCharsets.UTF_8)
+                .build(true).toUri();
+
+        return uri;
+    }
+
+
     public List<TourInfoResponse> requestTourInfo(URI uri) throws NotFoundException {
         JSONArray tourInfos = requestItemArray(uri);
 
@@ -137,7 +170,9 @@ public class TourInfoService {
         tourInfoResponse.setTitle((String) tourInfo.get("title"));
         tourInfoResponse.setAddr1((String) tourInfo.get("addr1"));
         tourInfoResponse.setAddr2((String) tourInfo.get("addr2"));
-        tourInfoResponse.setDist(Double.parseDouble((String) tourInfo.get("dist")) );
+        if (StringUtils.hasText((String) tourInfo.get("dist"))){
+            tourInfoResponse.setDist(Double.parseDouble((String) tourInfo.get("dist")) );
+        }
         tourInfoResponse.setTel((String) tourInfo.get("tel"));
         tourInfoResponse.setFirstImageURI((String) tourInfo.get("firstimage"));
         tourInfoResponse.setFirstImageURI2((String) tourInfo.get("firstimage2"));

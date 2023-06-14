@@ -28,6 +28,7 @@ public class PathMapService {
     private final JSONParser jsonParser;
 
 
+    // 동적 쿼리 예정
     @Transactional
     public List<PathInfoResponse> getPathInfoList(){
         return pathMapMapper.selectPathInfoList();

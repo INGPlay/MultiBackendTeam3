@@ -11,4 +11,5 @@ public class TourInfoLocationRequest {
     private Integer radius;
     private Integer pageSize;
     private Integer pageNo;
+    private String contentTypeCode;
 }

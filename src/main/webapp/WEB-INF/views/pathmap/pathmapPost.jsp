@@ -22,9 +22,12 @@
 			width: 100%;
 			height: 100%;
 		}
+		.mapContainer{
+			position: relative;
+		}
 
 		/* 커스텀 바 */
-		.custom_typecontrol {position:absolute;top:10px;left:10px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_typecontrol {position:absolute;top:10px;right:45px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_typecontrol span {display:block;width:115px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 		.radius_border{border:1px solid #919191;border-radius:5px;}  
 
