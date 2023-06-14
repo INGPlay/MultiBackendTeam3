@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="multi.backend.project.review.Mapper.reviewMapper">
 
+    <!--  게시글 추가  -->
     <insert id="insertReview" parameterType="reviewVO">
         <selectKey keyProperty="review_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Sequence.nextval) from dual
@@ -10,5 +11,39 @@
             values(#{review_id}, #{user_id},#{review_title},#{review_content},SYSDATE,SYSDATE,0,0)
     </insert>
 
+    <!-- 총 게시글 수 가져오기-->
+    <select id="getTotalCount" resultType="_int">
+        select count(review_id) from review
+    </select>
+
+    <!-- 모든 게시글 가져오기   -->
+    <select id="selectReviewAll" resultType="reviewVO">
+        select review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends
+        from review
+    </select>
+
+    <!-- 특정 게시글 가져오기   -->
+    <select id="selectReviewOne" resultType="reviewVO" parameterType="_int">
+        select * from review where review_id=#{id}
+    </select>
+
+    <!--  특정 게시글 삭제하기  -->
+    <delete id="deleteReview" parameterType="_int">
+        delete from review where review_id=#{id}
+    </delete>
+
+    <!-- 특정 게시글 수정하기-->
+    <update id="updateReview" parameterType="reviewVO">
+        update review set REVIEW_TITLE=#{review_title}, REVIEW_CONTENT=#{review_content}, UPDATE_DATE = SYSDATE
+        where REVIEW_ID=#{review_id}
+    </update>
+
+    <select id="getListWithPaging" resultType="reviewVO">
+       <![CDATA[
+        select review_id,user_id, review_title, review_content, create_date, update_date, review_views,review_recommends
+        from (select rownum rn, review_id,user_id, review_title, review_content, create_date, update_date, review_views,review_recommends
+              from review where rownum <= #{pageNum} * #{amount}) where rn> (#{pageNum}-1)* #{amount}
+        ]]>
+    </select>
 </mapper>
 
