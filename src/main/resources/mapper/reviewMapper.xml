@@ -38,9 +38,12 @@
         where REVIEW_ID=#{review_id}
     </update>
 
-
-
-
-
+    <select id="getListWithPaging" resultType="reviewVO">
+       <![CDATA[
+        select review_id,user_id, review_title, review_content, create_date, update_date, review_views,review_recommends
+        from (select rownum rn, review_id,user_id, review_title, review_content, create_date, update_date, review_views,review_recommends
+              from review where rownum <= #{pageNum} * #{amount}) where rn> (#{pageNum}-1)* #{amount}
+        ]]>
+    </select>
 </mapper>
 

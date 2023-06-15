@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
 <!DOCTYPE html>
@@ -94,26 +95,42 @@
                         </tr>
                     </c:forEach>
                 </c:if>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="3"  style="text-align:right">
 
-                </td>
-                <td colspan="2">
-                    총 게시글수: <span class="text-primary"> 개</span><br>
-                    <span class="text-danger">
-							<c:out value=""/>
-						</span>/
-                    <c:out value=""/>
-                    pages
-                    <form action="/review/view" method="get" id="hidden" hidden="hidden">
-                        <input id="review_id" name="review_id" value="">
-                    </form>
-                </td>
-            </tr>
-            </tfoot>
+            </tbody>
+
+
         </table>
+        <tr>
+            <form action="/review/view" method="get" id="hidden" hidden="hidden">
+                <input type="text" id="review_id" name="review_id" value="">
+            </form>
+
+            <form id="actionForm" action="/review/list" method="get" hidden="hidden">
+                <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
+                <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
+            </form>
+        </tr>
+        <div class="pull-left">
+            <ul class="pagination">
+                <c:if test="${pageMaker.prev}">
+                    <li class="paginate_button previous">
+                        <a href="${pageMaker.startPage -1}">Previous</a>
+                    </li>
+                </c:if>
+
+                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                    <li class="paginate_button">
+                        <a href="${num}"> ${num}</a>
+                    </li>
+                </c:forEach>
+
+                <c:if test="${pageMaker.next}">
+                    <li class="paginate_button next">
+                        <a href="${pageMaker.endPage +1}">Next</a>
+                    </li>
+                </c:if>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -125,27 +142,31 @@
 
 <script>
     $(()=>{
+        var actionForm = $("#actionForm");
         $(document).on('click', 'tr', function(event) {
+
             var id = $(this).attr('id');
+            //alert(id);
 
             if(typeof id == "undefined" || id == "" || id ==null){
-                return;
+                return false;
             }
             else{
                 $('#review_id').val(id);
+                //console.log($('#review_id').val());
+
 
                 return $('#hidden').submit() ;
 
             }
 
-
-
-
-
+        });
+        $(".paginate_button a").on("click",function(e){
+            e.preventDefault();
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
         });
     })
-
-
 </script>
 
 
