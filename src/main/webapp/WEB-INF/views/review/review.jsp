@@ -85,7 +85,7 @@
                     <c:forEach var="vo" items="${list}">
                         <tr id="${vo.review_id}">
                                 <td width="10%"><c:out value="${vo.review_id}"/></td>
-                                <td width="10%"><c:out value="${vo.user_id}"/></td>
+                                <td width="10%"><c:out value="${vo.user_name}"/></td>
                                 <td width="20%"><c:out value="${vo.review_title}"/></td>
                                 <td width="20%"><c:out value="${vo.review_content}"/></td>
                                 <td width="10%"><c:out value="${vo.create_date}"/></td>

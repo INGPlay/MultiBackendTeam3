@@ -17,6 +17,12 @@ public interface reviewMapper {
 //    1. insert ( 게시글 추가하기 )
     int insertReview(reviewVO vo);
 
+//    1_2. insert 하기 위해 user 존재 여부 확인
+    int isUser(String user_name);
+
+//    1_3 insert를 위한 user_id 가져오기
+    int getUserId(String user_name);
+
 //    2. Read (전체 게시판 목록 가져오기)
     List<reviewVO> selectReviewAll();
 

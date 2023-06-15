@@ -22,6 +22,17 @@ public class reviewServiceImpl implements reviewService {
     }
 
     @Override
+    public int isUser(String user_name) {
+        return mapper.isUser(user_name);
+    }
+
+    @Override
+    public int getUserId(String user_name) {
+        return mapper.getUserId(user_name);
+    }
+
+
+    @Override
     public List<reviewVO> selectReviewAll() {
         return mapper.selectReviewAll();
     }
@@ -48,9 +59,10 @@ public class reviewServiceImpl implements reviewService {
     }
 
     @Override
-    public int updateReview_views(reviewVO vo) {
+    public int updateReview_views(reviewVO boardVO) {
         return 0;
     }
+
 
     @Override
     public int getTotalCount() {

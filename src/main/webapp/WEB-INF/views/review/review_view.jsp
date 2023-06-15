@@ -64,7 +64,9 @@
                 <tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
-                        <input type="text" name="user_id" id="user_id" value="${vo.user_id}" readonly />
+                        <input type="hidden" name="user_id" id="user_id" value="${vo.user_id}" readonly />
+                        <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
+
                     </td>
                 </tr>
 

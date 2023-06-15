@@ -48,3 +48,46 @@ CREATE SEQUENCE small_id_seq
     NOCYCLE;
 --
 
+/*create table MemberUser(
+                           user_id Number primary key,
+                           user_name VARCHAR2(50) not null,
+                           user_pwd VARCHAR2(50) not null,
+                           user_email varchar2(50) not null,
+                           user_phone varchar2(50) not null,
+                           user_role varchar2(50) not null,
+                           constraint uniq_MemberUser UNIQUE(user_name, user_email, user_phone)
+);
+
+-- Review
+create table Review(
+                       review_id Number primary key,
+                       user_id Number not null,
+                       review_title varchar2(50) not null,
+                       review_content varchar2(1000) not null,
+                       create_date Date not null,
+                       update_date Date not null,
+                       review_views Number not null,
+                       review_recommends Number not null,
+                       CONSTRAINT fk_userid FOREIGN key(user_id) REFERENCES MemberUser(user_id)
+);
+
+-- Member & review join view
+  create view review_vi as
+    select m.user_name,r.*
+        from MemberUser m join Review r
+            on m.user_id = r.user_id;
+
+-- sequence
+  CREATE SEQUENCE MemberUser_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+  CREATE SEQUENCE Review_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+  */
