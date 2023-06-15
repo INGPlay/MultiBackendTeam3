@@ -384,12 +384,12 @@
 								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 								<div class = 'd-flex flex-row-reverse'> \
-									<button onclick='addUserSelectList(" + JSON.stringify(info) + ")'>추가</button> \
+									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
 								</div> \
 							</div> \
 						</div> \
 					</div> \
-				"; 
+				"
 				
 				// 백틱 템플릿은 왠지 모르게 안된다
 				/*
@@ -479,12 +479,31 @@
 			let userSelectListView = document.getElementById("userSelectListView")
 			userSelectListView.innerHTML = "";
 
+			let beforeInfo;
 			for (let i = 0 ; i < userSelectList.length; i++){
 
 				let info = userSelectList[i]
+
+				let listTemplate = "";
+
+				if (i > 0){
+					listTemplate += "\
+					<a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+						<div class='d-flex flex-column align-items-center'> \
+							<div> \
+								길찾기 \
+							</div> \
+							<div> \
+								" + beforeInfo["title"] + " → " + info["title"] + "  \
+							</div> \
+						</div> \
+					</a> \
+					"
+				}
+
 				// 가져올 때는 .userSelectContainer로 가져오기
-				let listTemplate = " \
-					<a href='#' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+				listTemplate += " \
+					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true'> \
 						<div class='d-flex flex-row align-items-center'> \
 						\
 							<div class='flex-shrink-0'> \
@@ -517,6 +536,8 @@
 				"
 				
 				userSelectListView.innerHTML += listTemplate
+
+				beforeInfo = info;
 			}
 
 		}

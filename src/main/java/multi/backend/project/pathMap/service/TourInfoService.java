@@ -167,6 +167,7 @@ public class TourInfoService {
     private TourInfoResponse jsonToTourResponse(JSONObject tourInfo) {
         TourInfoResponse tourInfoResponse = new TourInfoResponse();
 
+        // 이스케이프 처리해야 함
         tourInfoResponse.setTitle((String) tourInfo.get("title"));
         tourInfoResponse.setAddr1((String) tourInfo.get("addr1"));
         tourInfoResponse.setAddr2((String) tourInfo.get("addr2"));
