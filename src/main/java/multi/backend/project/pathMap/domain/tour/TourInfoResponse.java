@@ -12,6 +12,7 @@ public class TourInfoResponse {
     private String addr2;
 
     private Long contentId;
+    private String contentTypeId;
     private String contentType;
 
     // 선택한 지점에서의 거리

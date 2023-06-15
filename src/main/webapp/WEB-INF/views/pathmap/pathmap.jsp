@@ -153,13 +153,16 @@
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 		// 선그리기
-		const polyline = new kakao.maps.Polyline({
-			map: map,
-			strokeWeight: 5, // 선의 두께 입니다
-			strokeColor: '#FFAE00', // 선의 색깔입니다
-			strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-			strokeStyle: 'solid' // 선의 스타일입니다
-		});
+		const mapObject = {
+			"polyLine" : new kakao.maps.Polyline({
+				map: map,
+				strokeWeight: 5, // 선의 두께 입니다
+				strokeColor: '#FFAE00', // 선의 색깔입니다
+				strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+				strokeStyle: 'solid' // 선의 스타일입니다
+			}),
+			"overlayList" : []
+		}
 		
 		// {contentId : info}
 		let markInfoMap = new Map();
@@ -178,22 +181,22 @@
 		])
 
 		// 유저가 선택한 장소 리스트
-		const userSelectList = [];
-
-		// testData
-		// userSelectList.push({
-		// 	"title" : "temp",
-		// 	"addr1" : "제주시 제주도",
-		// 	"addr2" : "제주",
-		// 	"contentId" : 12345,
-		// 	"contentType" : "식당",
-		// 	"dist" : "11111.1111",
-		// 	"firstImageURI" : "",
-		// 	"firstImageURI2" : "",
-		// 	"posX" : 126.570667,
-		// 	"posY" : 33.450701,
-		// 	"tel" : "010-1010-1010"
-		// })
+		const userSelectList = [
+			// testData
+			// {
+			// 	"title" : "temp",
+			// 	"addr1" : "제주시 제주도",
+			// 	"addr2" : "제주",
+			// 	"contentId" : 12345,
+			// 	"contentType" : "식당",
+			// 	"dist" : "11111.1111",
+			// 	"firstImageURI" : "",
+			// 	"firstImageURI2" : "",
+			// 	"posX" : 126.570667,
+			// 	"posY" : 33.450701,
+			// 	"tel" : "010-1010-1010"
+			// }
+		];
 
 		// 초기화 함수
 		updatePage();
@@ -373,6 +376,7 @@
 			
 			return promiseMarking(map, info["posX"], info["posY"], function(){
 
+				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
 				let content = "\
 					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
 						<div class='d-flex flex-row align-items-center'> \
@@ -383,7 +387,8 @@
 								<p class='h5 fw-bold'>" + info["title"] + "</p> \
 								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-								<div class = 'd-flex flex-row-reverse'> \
+								<div class = 'd-flex flex-row'> \
+									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
 									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
 								</div> \
 							</div> \
@@ -468,13 +473,20 @@
 
 		// 페이지 갱신
 		function updatePage(){
-			viewUserSelectList();
+			// 사이드바 갱신
+			renewUserSelectSidebar();
+
+			// 왼쪽 위의 컨텐츠 바 갱신
 			setMarkContentType(markContentTypeCode)
-			setPolyLine();
-			getAreaLargeCode();
+
+			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
+			renewUserSelectMapObject();
+
+			// 왼쪽 위의 지역코드1 갱신
+			renewAreaLargeCode();
 		}
 
-		function viewUserSelectList(){
+		function renewUserSelectSidebar(){
 			
 			let userSelectListView = document.getElementById("userSelectListView")
 			userSelectListView.innerHTML = "";
@@ -486,6 +498,7 @@
 
 				let listTemplate = "";
 
+				// 경로 사이 길찾기 링크 생성
 				if (i > 0){
 					listTemplate += "\
 					<a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
@@ -501,9 +514,11 @@
 					"
 				}
 
+				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+				console.log(detailUri)
 				// 가져올 때는 .userSelectContainer로 가져오기
 				listTemplate += " \
-					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true'> \
+					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
 						<div class='d-flex flex-row align-items-center'> \
 						\
 							<div class='flex-shrink-0'> \
@@ -517,18 +532,18 @@
 								</div> \
 								<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
 								\
-								<div class = 'd-flex flex-row-reverse'> \
-									<button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button>\
-									"
+								<div class = 'd-flex flex-row'> \
+									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+								"
 
-				if (i > 0){
-					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
-				} 
 				if (i < userSelectList.length - 1){
 					listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
 				}
+				if (i > 0){
+					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+				} 
 
-				listTemplate += " \
+				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -609,16 +624,42 @@
 			map.setBounds(bounds)
 		}
 
-		function setPolyLine(){
+		// 지도 위의 선 그리기
+		function renewUserSelectMapObject(){
 
-			const linePath = []
-			userSelectList.forEach(info => {
-				linePath.push(new kakao.maps.LatLng(info["posY"], info["posX"]))
+			const mapPolyLine = mapObject["polyLine"]
+			const mapOverlayList = mapObject["overlayList"]
+
+			// overlay 초기화
+			mapOverlayList.forEach(o => {
+				o.setMap(null)
 			})
 
-			polyline.setPath(linePath)
+			const linePath = []
+			userSelectList.forEach((info, index) => {
+				const pos = new kakao.maps.LatLng(info["posY"], info["posX"])
+
+				// 경로선 추가
+				linePath.push(pos)
+
+				// 순서 오버레이
+				let overlay = new kakao.maps.CustomOverlay({
+						map: map,
+						// clickable: true,
+						content: '<div style="pointer-events: none; font-size:20px"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div>',
+						position: pos,
+						xAnchor: 0.5,
+						yAnchor: 0,
+						zIndex: -1
+				})
+				mapOverlayList.push(overlay)
+				
+			})
+
+			mapPolyLine.setPath(linePath)
 		}
 
+		// 왼쪽 위의 ContentType 바 설정
 		function setMarkContentType(inputCode){
 
 			markContentTypeCode = inputCode
@@ -634,7 +675,7 @@
 			}
 		}
 
-		function getAreaLargeCode(){
+		function renewAreaLargeCode(){
 			
 			$.ajax({
 				url : "/api/tour/area/code",

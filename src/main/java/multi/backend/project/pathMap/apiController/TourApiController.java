@@ -7,8 +7,10 @@ import multi.backend.project.pathMap.domain.area.KeywordDto;
 import multi.backend.project.pathMap.domain.area.TourInfoKeywordRequest;
 import multi.backend.project.pathMap.domain.tour.*;
 import multi.backend.project.pathMap.service.TourCodeService;
+import multi.backend.project.pathMap.service.TourInfoDetailService;
 import multi.backend.project.pathMap.service.TourInfoService;
 import org.apache.ibatis.javassist.NotFoundException;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ import java.util.List;
 public class TourApiController {
     private final TourInfoService tourInfoService;
     private final TourCodeService tourCodeService;
+    private final TourInfoDetailService tourInfoDetailService;
 
     @GetMapping("/area/code")
     public ResponseEntity<List<AreaResponse>> getAreaLargeCode(){
@@ -84,6 +87,18 @@ public class TourApiController {
 
 
         return new ResponseEntity<>(tourInfoResponses, HttpStatus.OK);
+    }
+
+    @GetMapping("/detail/{contentTypeId}/{contentId}")
+    public ResponseEntity<JSONObject> getInfoDetail(@PathVariable String contentTypeId,
+                                                    @PathVariable Long contentId) throws NotFoundException {
+
+
+        URI uri = tourInfoDetailService.getTourInfoDetail(contentTypeId, contentId);
+
+        JSONObject tourInfoDetail = tourInfoDetailService.requestTourInfoDetail(uri);
+
+        return new ResponseEntity<>(tourInfoDetail, HttpStatus.OK);
     }
 
     private static ContentType getContentTypeByCode(String code){

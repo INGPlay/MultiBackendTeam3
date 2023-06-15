@@ -179,6 +179,7 @@ public class TourInfoService {
         tourInfoResponse.setFirstImageURI2((String) tourInfo.get("firstimage2"));
         tourInfoResponse.setContentId(Long.parseLong((String) tourInfo.get("contentid")) );
         tourInfoResponse.setContentType(getContentTypeById((String) tourInfo.get("contenttypeid")));
+        tourInfoResponse.setContentTypeId((String) tourInfo.get("contenttypeid"));
         tourInfoResponse.setPosX(Double.parseDouble((String) tourInfo.get("mapx")));
         tourInfoResponse.setPosY(Double.parseDouble((String) tourInfo.get("mapy")) );
         return tourInfoResponse;

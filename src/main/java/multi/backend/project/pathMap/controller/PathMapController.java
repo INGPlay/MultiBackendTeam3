@@ -34,8 +34,12 @@ public class PathMapController {
 
     @GetMapping("/detail/{contentTypeId}/{contentId}")
     public String viewInfo(@PathVariable String contentTypeId,
-                           @PathVariable Long contentId){
+                           @PathVariable Long contentId,
+                           Model model){
 
-        return "pathmap/info/info";
+        model.addAttribute("contentTypeId", contentTypeId);
+        model.addAttribute("contentId", contentId);
+
+        return "pathmap/info/detail";
     }
 }
