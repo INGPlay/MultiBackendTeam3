@@ -36,12 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
-
 # api key
-**/keys.properties
-
 # config
-**/application.properties
+*.properties
 
 # Init Query
-**/*.sql
+*.sql
