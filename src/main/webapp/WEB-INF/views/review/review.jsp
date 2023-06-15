@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
+<c:set var="myctx" value="${pageContext.request.contextPath}" />
+<!-- "/myapp" 컨텍스트명 -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,8 +46,9 @@
     </div>
 </div>
 <div class="row my-3">
-    <div class="col-9 text-right">
-        <form name="searchF" action="/review/write" method="get" >
+    <div class="col-9 text-center">
+        <!-- 검색 폼 시작 ---------------------------------------------- -->
+        <form name="searchF" action="/review/edit" method="get" onsubmit="a">
             <button class="btn btn-outline-primary">작성</button>
         </form>
     </div>
@@ -60,94 +64,44 @@
 <!-- ------------------------------------------------------- -->
 <div class="row">
     <div class='col-10 offset-1'>
-        <table class="table table-condensed table-striped" id="table">
+        <table class="table table-condensed table-striped">
             <thead>
-            <th width="10%">번호</th>
-            <th width="10%">작성자</th>
-            <th width="20%">제목</th>
+            <th width="10%">작성번호</th>
+            <th width="40%">제목</th>
             <th width="20%">내용</th>
-            <th width="10%">생성 날짜</th>
-            <th width="10%">수정 날짜</th>
+            <th width="20%">생성 날짜</th>
+            <th width="20%">수정 날짜</th>
             <th width="10%">조회수</th>
             <th width="10%">추천수</th>
             </thead>
             <tbody>
-                <%-- 테이블에 게시글이 없을 경우 --%>
-                <c:if test="${list eq null or empty list}">
-                    <div class = "slert alert-danger">
-                        <h3>해당 글은 없습니다.</h3>
-                    </div>
-                </c:if>
 
-                <%-- 테이블에 게시글이 있을 경우 --%>
-                <c:if test="${list ne null and not empty list}">
-                    <c:forEach var="vo" items="${list}">
-                        <tr id="${vo.review_id}">
-                                <td width="10%"><c:out value="${vo.review_id}"/></td>
-                                <td width="10%"><c:out value="${vo.user_id}"/></td>
-                                <td width="20%"><c:out value="${vo.review_title}"/></td>
-                                <td width="20%"><c:out value="${vo.review_content}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.review_views}"/></td>
-                                <td width="10%"><c:out value="${vo.review_recommends}"/></td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="3"  style="text-align:right">
-
+                <td colspan="3"  style="text-align:center">
+                    ${pageNavi}
                 </td>
                 <td colspan="2">
-                    총 게시글수: <span class="text-primary"> 개</span><br>
+                    총 게시글수: <span class="text-primary"> <c:out value="${paging.totalCount}"/> 개</span><br>
                     <span class="text-danger">
-							<c:out value=""/>
+							<c:out value="${paging.cpage}"/>
 						</span>/
-                    <c:out value=""/>
+                    <c:out value="${paging.pageCount}"/>
                     pages
-                    <form action="/review/view" method="get" id="hidden" hidden="hidden">
-                        <input id="review_id" name="review_id" value="">
-                    </form>
                 </td>
             </tr>
             </tfoot>
         </table>
     </div>
 </div>
-
 <style>
     #content .jumbotron, #content .navbar{
         display:none;
     }
+
 </style>
-
-<script>
-    $(()=>{
-        $(document).on('click', 'tr', function(event) {
-            var id = $(this).attr('id');
-
-            if(typeof id == "undefined" || id == "" || id ==null){
-                return;
-            }
-            else{
-                $('#review_id').val(id);
-
-                return $('#hidden').submit() ;
-
-            }
-
-
-
-
-
-        });
-    })
-
-
-</script>
-
+</div>
 
 <!-- footer -->
 <div class="jumbotron jumbotron-fluid text-center" style="margin-bottom: 0">
