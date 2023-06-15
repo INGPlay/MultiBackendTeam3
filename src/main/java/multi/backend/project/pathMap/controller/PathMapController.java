@@ -31,4 +31,11 @@ public class PathMapController {
         model.addAttribute("pathId", pathId);
         return "pathmap/pathmapPost";
     }
+
+    @GetMapping("/detail/{contentTypeId}/{contentId}")
+    public String viewInfo(@PathVariable String contentTypeId,
+                           @PathVariable Long contentId){
+
+        return "pathmap/info/info";
+    }
 }
