@@ -86,8 +86,6 @@ public class TourApiController {
         return new ResponseEntity<>(tourInfoResponses, HttpStatus.OK);
     }
 
-    public getInfoDetail()
-
     private static ContentType getContentTypeByCode(String code){
 
         if (code.equals(ContentType.TOUR_SPOT.getCode())){
