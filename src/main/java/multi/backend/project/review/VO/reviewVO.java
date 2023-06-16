@@ -9,7 +9,8 @@ import java.sql.Date;
 @Alias("reviewVO")
 public class reviewVO {
     private int review_id; // 글 번호
-    private String user_id ; // 작성자 id 
+    private int user_id ; // 작성자 id
+    private String user_name; // 작성자 닉네임
     private String review_title; // 제목
     private String review_content; // 내용
     private Date create_date; // 작성일
