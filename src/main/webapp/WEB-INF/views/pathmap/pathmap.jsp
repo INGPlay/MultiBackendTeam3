@@ -22,6 +22,29 @@
 			width: 100%;
 			height: 100%;
 		}
+		.mapContainer{
+			position: relative;
+		}
+
+		/* 커스텀 바 */
+		.custom_oneshot {position:absolute;bottom:10px;right:10px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_oneshot span {display:block;width:115px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+
+		.custom_contentType {position:absolute;top:10px;left:10px;width:520px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_contentType span {display:block;width:64px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		.custom_contentType .selected {background-color: burlywood;}
+
+		.custom_searchBar {position:absolute;top:55px;left:10px;overflow:hidden;width:350px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_searchBar span {display:block;width:350px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		.select {width: 80px;}
+
+		.custom_alert {position:absolute;top:95px;left:10px;overflow:hidden;width:520px;height:20px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;pointer-events: none;}
+		.custom_alert span {display:block;width:520px;height:20px;float:left;text-align:left;cursor:pointer;}
+
+		.radius_border{border:1px solid #919191;border-radius:5px;} 
+
+		/* 오버레이 */
+		.custom_overlay{pointer-events: none;}
 
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
@@ -40,294 +63,749 @@
 	</style>
 
 </head>
-<body>
+<body style="height: 100%;">
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
-	<main class="flex-row-reverse">
-
-		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
-			<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
-			<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
-			<span class="fs-5 fw-semibold">List group</span>
-			</a>
-			<div class="list-group list-group-flush border-bottom scrollarea">
-			<a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small>Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
+	<main class="flex-row">
 		
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Wed</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Tues</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
-			<a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-				<strong class="mb-1">List group item heading</strong>
-				<small class="text-muted">Mon</small>
-				</div>
-				<div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-			</a>
+		<!-- Map이 표시될 자리 -->
+		<div class="mapContainer flex-fill">
+			<!-- 맵 -->
+			<div id="map"></div>
+
+			<!-- 카테고리 선택 -->
+			<div class="custom_contentType radius_border badge text-wrap" style="background-color: skyblue;"> 
+				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
+				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
+				<!-- 행사/공연/축제 -->
+				<span id="festival" class="badge text-wrap" onclick="setMarkContentType('15')">페스티벌</span>		
+				<span id="tourCourse" class="badge text-wrap" onclick="setMarkContentType('25')">여행코스</span>
+				<span id="leports" class="badge text-wrap" onclick="setMarkContentType('28')">레포츠</span>
+				<span id="accomodation" class="badge text-wrap" onclick="setMarkContentType('32')">숙박</span>
+				<span id="shopping" class="badge text-wrap" onclick="setMarkContentType('38')">쇼핑</span>
+				<span id="restaurant" class="badge text-wrap" onclick="setMarkContentType('39')">음식점</span>
+			</div>
+
+			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
+			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
+				<span id="boundButton" class="fw-semibold">한눈에 보기</span>
+			</div>
+
+			<div class="custom_searchBar">
+				<span>
+					<div class="input-group mb-3">
+
+						<select id="areaLargeSelect" class="select" name="areaLarge" onchange="getAreaSmallCode(this.value)">
+							<option value="">지역</option>
+						</select>
+
+						<select id="areaSmallSelect" class="select" name="areaSmall">
+							<option value="">시군구</option>
+						</select>
+
+						<!-- 검색창 -->
+						<input id="keywordSearch" type="text" class="form-control">
+						
+						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+					</div>
+				</span>
+			</div>
+
+			<!-- 알림 -->
+			<div class="custom_alert">
+				<span id="resultAlert"></span>
+			</div>
+
+		</div>
+
+
+		<!-- 오른쪽 사이드바 -->
+		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+			<div class="input-group input-group-lg">
+				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
+
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
+					id = "pathmapTitle">
+			</div>
+
+			<!-- 패스맵 리스트 -->
+			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
+			</div>
+
+		
+			<div class="mt-auto d-flex justify-content-center" id="submitUserSelectList">
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
+						style="width: 100%; justify-content: center; background-color:skyblue;">
+					<!-- 패스맵 제목이 될 곳 -->
+					<span class="fs-5 fw-semibold">완료</span>
+				</button>
 			</div>
 		</div>
 
 
-		<!-- Map이 표시될 자리 -->
-		<div class="mapContainer flex-fill">
-			<div id="map"></div>
-		</div>
 
-		<script>
-			// 초기화
-			let container = document.getElementById('map');
-			let options = {
-				center: new kakao.maps.LatLng(33.450701, 126.570667),
-				level: 3
-			};
 
-			let map = new kakao.maps.Map(container, options);
+	</main>
+	<script>
+		// 변수 초기화
+		const container = document.getElementById('map');
+		let options = {
+			center: new kakao.maps.LatLng(33.450701, 126.570667),
+			level: 3
+		};
 
-			// 최대 확대수준
-			map.setMaxLevel(11)
+		const map = new kakao.maps.Map(container, options);
 
-			// 줌 컨트롤
-			let zoomControl = new kakao.maps.ZoomControl();
-			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-			
-			// {contentId : info}
-			let markInfoMap = new Map();
+		// 최대 확대수준
+		map.setMaxLevel(13)
 
+		// 줌 컨트롤
+		const zoomControl = new kakao.maps.ZoomControl();
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+		// 선그리기
+		const mapObject = {
+			"polyLine" : new kakao.maps.Polyline({
+				map: map,
+				strokeWeight: 5, // 선의 두께 입니다
+				strokeColor: '#FFAE00', // 선의 색깔입니다
+				strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+				strokeStyle: 'solid' // 선의 스타일입니다
+			}),
+			"overlayList" : []
+		}
+		
+		// {contentId : info}
+		let markInfoMap = new Map();
+
+		// 선택된 컨텐츠 타입
+		let markContentTypeCode = "12";
+		const contentTypeCssIdMap = new Map([
+			["12", "tourSpot"],
+			["14", "curtureSite"],
+			["15", "festival"],
+			["25", "tourCourse"],
+			["28", "leports"],
+			["32", "accomodation"],
+			["38", "shopping"],
+			["39", "restaurant"]
+		])
+
+		const contentTypeNameMap = new Map([
+			["12", "관광지"],
+			["14", "문화시설"],
+			["15", "페스티벌"],
+			["25", "여행코스"],
+			["28", "레포츠"],
+			["32", "숙박"],
+			["38", "쇼핑"],
+			["39", "식당"]
+		])
+
+		// 유저가 선택한 장소 리스트
+		const userSelectList = [
+			// testData
+			// {
+			// 	"title" : "temp",
+			// 	"addr1" : "제주시 제주도",
+			// 	"addr2" : "제주",
+			// 	"contentId" : 12345,
+			// 	"contentType" : "식당",
+			// 	"dist" : "11111.1111",
+			// 	"firstImageURI" : "",
+			// 	"firstImageURI2" : "",
+			// 	"posX" : 126.570667,
+			// 	"posY" : 33.450701,
+			// 	"tel" : "010-1010-1010"
+			// }
+		];
+
+		// 초기화 함수
+		updatePage();
+		// 왼쪽 위의 지역코드1 갱신
+		renewAreaLargeCode();
+		
+		// 리스너 함수
+		// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
+		/*
+		kakao.maps.event.addListener(map, 'dragend', function() {
+
+			// 위치 갱신
 			let pos = map.getCenter()
 			let params = {
-						"posX":pos.getLng(),
-						"posY":pos.getLat(),
-						"radius":getRadius(map.getLevel()),
-						"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-						"pageNo":1
-					}
-			
-			// 리스터 함수
-			// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
-			/*
-			kakao.maps.event.addListener(map, 'dragend', function() {
-
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+					"posX":pos.getLng(),
+					"posY":pos.getLat(),
+					"radius":getRadius(map.getLevel()),
+					"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+					"pageNo":1
+				}
 				
-				markBasedLocation(params, markInfoMap);
-			});
-			*/
+			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+			
+			markBasedLocation(params, markInfoMap);
+		});
+		*/
 
-			// 확대 수준이 변경된다면 -> 너무 많은 Api 요청이 필요함
-			/*
-			kakao.maps.event.addListener(map, 'zoom_changed', function() {
+		// 확대 수준이 변경된다면 -> 너무 많은 Api 요청이 필요함
+		/*
+		kakao.maps.event.addListener(map, 'zoom_changed', function() {
 
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-					
-				markBasedLocation(params, markInfoMap);
-			});
-			*/
+			// 위치 갱신
+			let pos = map.getCenter()
+			let params = {
+					"posX":pos.getLng(),
+					"posY":pos.getLat(),
+					"radius":getRadius(map.getLevel()),
+					"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+					"pageNo":1
+				}
 
-			// 맵을 클릭한다면
-			kakao.maps.event.addListener(map, "click", function(mouseEvent){
-				let pos = mouseEvent.latLng;
+			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+				
+			markBasedLocation(params, markInfoMap);
+		});
+		*/
 
-				map.panTo(pos)
-				console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-				markBasedLocation(params, markInfoMap);
+		// 맵을 클릭한다면
+		kakao.maps.event.addListener(map, "click", function(mouseEvent){
+
+			// 위치 갱신
+			let pos = mouseEvent.latLng;
+			let params = {
+					"posX":pos.getLng(),
+					"posY":pos.getLat(),
+					"radius":getRadius(map.getLevel()),
+					"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+					"pageNo":1,
+					"contentTypeCode":markContentTypeCode
+				}
+
+			// 애니메이션 움직임
+			map.panTo(pos)
+			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+			markBasedLocation(params, markInfoMap);
+		})
+
+		// 한눈에 보기 버튼
+		document.getElementById("boundButton").addEventListener("click", setUserSelectListBounds)
+
+		document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				searchTourInfoKeyword(this.value)
+			}
+		});
+
+		// 지도 확대에 따라 동적으로 범위 조절
+		function getRadius(mapLevel){
+
+			let result = 0;
+			if (mapLevel < 4) {
+				result = 1000;
+			}
+			else if (mapLevel < 5){
+				result = 2000;
+			} else if (mapLevel < 6){
+				result = 3000;
+			} else if (mapLevel < 7){
+				result = 6000;
+			} else if (mapLevel < 8){
+				result = 12000;
+			} else {
+				result = 20000;
+			}
+
+			return result;
+		}
+
+		// 위치에 따른 마킹
+		function markBasedLocation(params, markInfoMap){
+
+			// 콘텐트 타입이 없는 경우 빈 경우
+			if (params["contentType"] === ""){
+				return;
+			}
+
+			$.ajax({
+				url : "/api/tour/location",
+				type : "GET",
+				data : params,
+				contentType: "application/json",
+				dataType : "json"
+			}).done((response) => {
+				resultAlert(getRadius(map.getLevel()) + "m 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
+				updateMarkingInMapByResponse(response, false)
+			}).fail((error) => {
+				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+				console.log(error)
+				console.log(error["responseJSON"]["message"])
+				if (error["status"] === 404){
+					resultAlert(getRadius(map.getLevel()) + "m 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
+				}
 			})
 
-			// 지도 확대에 따라 동적으로 범위 조절
-			function getRadius(mapLevel){
+		}
 
-				let result = 0;
-				if (mapLevel < 4) {
-					result = 1000;
-				}
-				else if (mapLevel < 5){
-					result = 2000;
-				} else if (mapLevel < 6){
-					result = 3000;
-				} else if (mapLevel < 7){
-					result = 6000;
-				} else if (mapLevel < 8){
-					result = 12000;
-				} else {
-					result = 20000;
-				}
+		function updateMarkingInMapByResponse(response, isCentered) {
+			let responseInfoMap = new Map()
 
-				return result;
+			let bounds = new kakao.maps.LatLngBounds();   
+			response.forEach(info => {
+				responseInfoMap.set(info["contentId"], info)
+
+				if (isCentered === true){
+					// 0, null, undefined 체크
+					if (!info["posY"] || !info["posX"]){
+						console.log("잘못나옴 : " + info["posX"] + " " + info["posY"])
+					} else {
+						bounds.extend(
+							new kakao.maps.LatLng(info["posY"], info["posX"])
+						)
+					}
+
+				}
+			})
+
+			if (isCentered === true){
+				console.log("bounds : " + bounds)
+				map.setBounds(bounds)
 			}
 
-			// 위치에 따른 마킹
-			function markBasedLocation(params, markInfoMap){
+			// responseInfoMap의 키 (info["contentId"])를 array로 변환
+			let responseInfoIdList = Array.from(responseInfoMap.keys())
+			let markInfoIdList = Array.from(markInfoMap.keys())
 
-				$.ajax({
-					url : "/api/tour/location",
-					type : "GET",
-					data : params,
-					contentType: "application/json",
-					dataType : "json"
-				}).done((response) => {
+			// 새로 생성 될 거
+			let createIdList = responseInfoIdList.filter(contentId => {
+				return !markInfoIdList.includes(contentId)
+			})		// (responseInfoIdSet - markInfoIdSet)
 
-					let responseInfoMap = new Map()
-					response.forEach(info => {
-						responseInfoMap.set(info["contentId"], info)
-					})
+			// 삭제 될 거
+			let removeIdList = markInfoIdList.filter(contentId => {
+				return !responseInfoIdList.includes(contentId)
+			})		// (markInfoIdSet - responseInfoIdSet)
 
-					// map의 키를 array로 변환
-					let responseInfoIdList = Array.from(responseInfoMap.keys())
-					let markInfoIdList = Array.from(markInfoMap.keys())
+			// 삭제할 마크 안보이게
+			removeIdList.forEach(contentId => {
+				let markInfo = markInfoMap.get(contentId)
+				markInfo["marker"].setMap(null)
+				markInfoMap.delete(contentId)
+			})
 
-					// 새로 생성 될 거
-					let createIdList = responseInfoIdList.filter(id => {
-						return !markInfoIdList.includes(id)
-					})		// (responseInfoIdSet - markInfoIdSet)
+			// 새로운 마크 표시
+			createIdList.forEach(contentId => {
+				let info = responseInfoMap.get(contentId);
+				
+				promiseMarkingInMap(info)
+			})
+		}
 
-					// 삭제 될 거
-					let removeIdList = markInfoIdList.filter(id => {
-						return !responseInfoIdList.includes(id)
-					})		// (markInfoIdSet - responseInfoIdSet)
+		function promiseMarkingInMap(info) {
+			
+			return promiseMarking(map, info["posX"], info["posY"], function(){
 
-					// 삭제할 마크 안보이게
-					removeIdList.forEach(id => {
-						let markInfo = markInfoMap.get(id)
-						markInfo["marker"].setMap(null)
-						markInfoMap.delete(id)
-					})
-
-					// 새로운 마크 표시
-					createIdList.forEach(id => {
-						let info = responseInfoMap.get(id);
-
-						promiseMarking(map, info["posX"], info["posY"], function(){
-
-							let content = `\
-							<div> \
-								<h4>${info["addr1"]} ${info["addr2"]}</h4> \
-								<p>${info["tel"]}</p> \
+				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+				let content = "\
+					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
+						<div class='d-flex flex-row align-items-center'> \
+							<div class='flex-shrink-0'> \
+								<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
 							</div> \
-							`;
+							<div class='flex-grow-1 ms-1'>\
+								<p class='h5 fw-bold'>" + info["title"] + "</p> \
+								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
+								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
+								<div class = 'd-flex flex-row'> \
+									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
+								</div> \
+							</div> \
+						</div> \
+					</div> \
+				"
+				
+				// 백틱 템플릿은 왠지 모르게 안된다
+				/*
+				`\
+				<div> \
+					<h5>${info["title"]}</h5>
+					<p>${info["addr1"]} ${info["addr2"]}</p> \
+					<p>${info["tel"]}</p> \
+				</div> \
+				`;
+				*/
 
-							responseinfoWindow(map, info["posX"], info["posY"], content)
-						})
-						.then(marker => {
-							let markInfo = {
-								"marker" : marker,
-								"info" : info
-							}
-							markInfoMap.set(id, markInfo);
-						})
-						.catch(error => {
-							console.log("Error");
-						})
-					})
-					
+				responseinfoWindow(map, info["posX"], info["posY"], content)
+			})
+			.then(marker => {
+				let markInfo = {
+					"marker" : marker,
+					"info" : info
+				}
+				markInfoMap.set(info["contentId"], markInfo);
+			})
+			.catch(error => {
+				console.log(error);
+			})
+		}
 
-				}).fail((error) => {
-					// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
-					let response = error["responseJSON"];
-					console.log(response["message"])
+		// callback -> 클릭할 경우 발생하는 함수
+		function promiseMarking(map, posX, posY, callback){
+			return new Promise(function(resolve, reject){
+				resolve(marking(map, posX, posY, callback));
+			})
+		}
+
+		function marking(map, posX, posY, callback){
+			var marker = new kakao.maps.Marker({
+				map: map,
+				position: new kakao.maps.LatLng(posY, posX)
+			});
+
+			kakao.maps.event.addListener(marker, "click", callback);
+
+			return marker
+		}
+
+		// 인포윈도우를 띄움
+		function responseinfoWindow(map, posX, posY, content){
+
+			let infoWindow = new kakao.maps.InfoWindow({
+				map: map,
+				position: new kakao.maps.LatLng(posY, posX),
+				content: content,
+				removable: true
+			})
+		}
+
+		// 인포윈도우에서 추가를 선택했을 때 실행
+		function addUserSelectList(info){
+			
+			if (isNotDuplicated(info)){
+				userSelectList.push(info);
+			}
+			console.log(userSelectList)
+			updatePage()
+
+			// 함수 내 함수
+			function isNotDuplicated(newInfo){
+				for (let info of userSelectList){
+					if (info["contentId"] === newInfo["contentId"]){
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		// 페이지 갱신
+		function updatePage(){
+			// 사이드바 갱신
+			renewUserSelectSidebar();
+
+			// 왼쪽 위의 컨텐츠 바 갱신
+			setMarkContentType(markContentTypeCode)
+
+			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
+			renewUserSelectMapObject();
+		}
+
+		function renewUserSelectSidebar(){
+			
+			let userSelectListView = document.getElementById("userSelectListView")
+			userSelectListView.innerHTML = "";
+
+			let beforeInfo;
+			for (let i = 0 ; i < userSelectList.length; i++){
+
+				let info = userSelectList[i]
+
+				let listTemplate = "";
+
+				// 경로 사이 길찾기 링크 생성
+				if (i > 0){
+					listTemplate += "\
+					<a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+						<div class='d-flex flex-column align-items-center'> \
+							<div> \
+								길찾기 \
+							</div> \
+							<div> \
+								" + beforeInfo["title"] + " → " + info["title"] + "  \
+							</div> \
+						</div> \
+					</a> \
+					"
+				}
+
+				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+				console.log(detailUri)
+				// 가져올 때는 .userSelectContainer로 가져오기
+				listTemplate += " \
+					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
+						<div class='d-flex flex-row align-items-center'> \
+						\
+							<div class='flex-shrink-0'> \
+								<img src='"+ info["firstImageURI2"] +"' style='width:160px; height:auto;'> \
+							</div> \
+							\
+							<div class='flex-grow-1 ms-1'> \
+								<div class='d-flex w-100 align-items-center justify-content-between'> \
+									<strong class='mb-1'>" + info["title"] + "</strong> \
+									<small>" + info["contentType"] + "</small> \
+								</div> \
+								<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
+								\
+								<div class = 'd-flex flex-row'> \
+									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+								"
+
+				if (i < userSelectList.length - 1){
+					listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
+				}
+				if (i > 0){
+					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+				} 
+
+				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button> \
+								</div> \
+							</div> \
+						</div> \
+					</a> \
+				"
+				
+				userSelectListView.innerHTML += listTemplate
+
+				beforeInfo = info;
+			}
+
+		}
+
+		// userSelectList의 특정 인덱스의 값을 삭제
+		function deleteUserSelectByIndex(index){
+			userSelectList.splice(index, 1)
+			updatePage()
+		}
+
+		function upUserSelect(index){
+			let temp = userSelectList[index]
+			userSelectList[index] = userSelectList[index -1]
+			userSelectList[index-1] = temp
+
+			updatePage()
+		}
+
+		function downUserSelect(index){
+			let temp = userSelectList[index]
+			userSelectList[index] = userSelectList[index + 1]
+			userSelectList[index+1] = temp
+
+			updatePage()
+		}
+
+		document.getElementById("submitUserSelectList").addEventListener("click", () => {
+			let title = document.getElementById('pathmapTitle').value;
+
+			let data = {
+				"title" : title,
+				"request" : JSON.stringify(userSelectList)
+			}
+
+			console.log("제출")
+			
+			$.ajax({
+				url: "/api/pathmap",
+				type: 'POST',
+				dataType: "json",
+				data : data
+			})
+			.done(function(response) {
+				// { "response" : "OK" }
+				console.log(response["response"])
+				window.location.replace("/pathmap");
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		})
+
+
+		// 등록된 좌표 중간에서 다 보여주도록 함
+		function setUserSelectListBounds(){
+
+			// 아무것도 없이 바운드 설정하면 지도 깨짐
+			if (userSelectList.length <= 0){
+				return;
+			}
+
+			let bounds = new kakao.maps.LatLngBounds(); 
+			userSelectList.forEach(info => {
+				bounds.extend(
+					new kakao.maps.LatLng(info["posY"], info["posX"])
+				)
+			})
+
+			map.setBounds(bounds)
+		}
+
+		// 지도 위의 선 그리기
+		function renewUserSelectMapObject(){
+
+			const mapPolyLine = mapObject["polyLine"]
+			const mapOverlayList = mapObject["overlayList"]
+
+			// overlay 초기화
+			mapOverlayList.forEach(o => {
+				o.setMap(null)
+			})
+
+			const linePath = []
+			userSelectList.forEach((info, index) => {
+				const pos = new kakao.maps.LatLng(info["posY"], info["posX"])
+
+				// 경로선 추가
+				linePath.push(pos)
+
+
+				let overlayContent = '\
+					<div class="custom_overlay"> \
+						<div style="font-size=20px"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div> \
+						<div class="text-muted font-size=8px">' + info["contentType"] + '</div> \
+					</div> \
+				'
+				// 순서 오버레이
+				let overlay = new kakao.maps.CustomOverlay({
+						map: map,
+						// clickable: true,
+						content: overlayContent,
+						position: pos,
+						xAnchor: 0.5,
+						yAnchor: 0,
+						zIndex: -1
+				})
+				mapOverlayList.push(overlay)
+				
+			})
+
+			mapPolyLine.setPath(linePath)
+		}
+
+		// 왼쪽 위의 ContentType 바 설정
+		function setMarkContentType(inputCode){
+
+			markContentTypeCode = inputCode
+
+			for (let [code, id] of contentTypeCssIdMap){
+				let menu = document.getElementById(id)
+
+				if (code === inputCode){
+					menu.className ="selected text-wrap" 
+				} else {
+					menu.className = "badge text-wrap"
+				}
+			}
+		}
+
+		function renewAreaLargeCode(){
+			
+			$.ajax({
+				url : "/api/tour/area/code",
+				type : "GET",
+				contentType: "application/json",
+				dataType : "json"
+			}).done((response) => {
+				console.log(response)
+				
+				let areaLargeSelect = document.getElementById("areaLargeSelect")
+
+				areaLargeSelect.innerHTML = ""
+				let result = "<option value=''>지역</option>";
+				response.forEach(r => {
+					result += "<option value='"+ r["code"] +"'>" + r["name"] + "</option>"
 				})
 
-			}
+				areaLargeSelect.innerHTML = result;
 
-			// callback -> 클릭할 경우 발생하는 함수
-			function promiseMarking(map, posX, posY, callback){
-				return new Promise(function(resolve, reject){
-					resolve(marking(map, posX, posY, callback));
+			}).fail((error) => {
+				console.log(error["responseJSON"]["message"])
+			})
+		}
+
+		function getAreaSmallCode(largeCode){
+			$.ajax({
+				url : "/api/tour/area/code/" + largeCode,
+				type : "GET",
+				contentType : "application/json",
+				dataType : "json"
+			}).done((response) => {
+				console.log(response);
+
+				let areaSmallSelect = document.getElementById("areaSmallSelect")
+
+				areaSmallSelect.innerHTML = ""
+				let result = "<option value=''>시군구</option>";
+				response.forEach(r => {
+					result += "<option value='"+ r["code"] +"'>" + r["name"] + "</option>"
 				})
+
+				areaSmallSelect.innerHTML = result;
+
+			}).fail((error) => {
+				console.log(error["responseJSON"]["message"])
+			})
+		}
+
+		function searchTourInfoKeyword(keyword){
+			areaLargeSelect = document.getElementById("areaLargeSelect")
+			areaSmallSelect = document.getElementById("areaSmallSelect")
+
+			let data = {
+				"keyword" : keyword,
+				"areaLargeCode" : areaLargeSelect.value,
+				"areaSmallCode" : areaSmallSelect.value,
+				"pageSize" : 100,
+				"pageNo" : 1,
+				"contentTypeCode" : markContentTypeCode
 			}
 
-			function marking(map, posX, posY, callback){
-				var marker = new kakao.maps.Marker({
-					map: map,
-					position: new kakao.maps.LatLng(posY, posX)
-				});
+			$.ajax({
+				url : "/api/tour/keyword",
+				type : "GET",
+				data : data,
+				contentType : "application/json",
+				dataType : "json"
+			}).done((response) => {
+				
+				let resultText = ""
+				if (areaLargeSelect.value){
+					areaLargeText = areaLargeSelect.options[areaLargeSelect.selectedIndex].text
+					areaSmallText = areaSmallSelect.options[areaSmallSelect.selectedIndex].text
 
-				kakao.maps.event.addListener(marker, "click", callback);
+					resultText += areaLargeText + " " + areaSmallText + "에 존재하는 ";
+				}
+				resultText += response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다."
 
-				return marker
-			}
+				resultAlert(resultText, "green")
+				
+				updateMarkingInMapByResponse(response, true)
 
-			function responseinfoWindow(map, posX, posY, response){
-				let infoWindow = new kakao.maps.InfoWindow({
-					map: map,
-					position: new kakao.maps.LatLng(posY, posX),
-					content: content,
-					removable: true
-				})
-			}
+			}).fail((error) => {
+				console.log(error)
+				console.log(error["responseJSON"]["message"])
+				if (error["status"] === 404){
+					resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+				}
+			})
+		}
 
-		</script>
-	</main>
+		function resultAlert(message, color){
+			let alert = document.getElementById("resultAlert");
+			alert.innerHTML = message;
+			alert.style.color = color
+		}
+	</script>
+
 
 	<script src="<c:url value='/js/bootstrap.bundle.min.js' />" type="text/javascript"></script>
     <script src="<c:url value='/js/sidebars.js' />" type="text/javascript"></script>

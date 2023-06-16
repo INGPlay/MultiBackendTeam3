@@ -1,7 +1,6 @@
 package multi.backend.project.pathMap.config;
 
 import org.json.simple.parser.JSONParser;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -18,4 +17,5 @@ public class Config {
     public JSONParser jsonParser(){
         return new JSONParser();
     }
+
 }
