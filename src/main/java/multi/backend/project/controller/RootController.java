@@ -10,7 +10,7 @@ public class RootController {
 
     @GetMapping
     public String testJsp(){
-        return "test";
+        return "index1";
     }
 
     @GetMapping("/map")
