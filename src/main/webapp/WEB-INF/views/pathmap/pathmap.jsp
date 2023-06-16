@@ -38,7 +38,13 @@
 		.custom_searchBar span {display:block;width:350px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 		.select {width: 80px;}
 
+		.custom_alert {position:absolute;top:95px;left:10px;overflow:hidden;width:520px;height:20px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;pointer-events: none;}
+		.custom_alert span {display:block;width:520px;height:20px;float:left;text-align:left;cursor:pointer;}
+
 		.radius_border{border:1px solid #919191;border-radius:5px;} 
+
+		/* 오버레이 */
+		.custom_overlay{pointer-events: none;}
 
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
@@ -72,7 +78,7 @@
 				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
 				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
 				<!-- 행사/공연/축제 -->
-				<span id="festival" class="badge text-wrap" onclick="setMarkContentType('15')">이벤트</span>		
+				<span id="festival" class="badge text-wrap" onclick="setMarkContentType('15')">페스티벌</span>		
 				<span id="tourCourse" class="badge text-wrap" onclick="setMarkContentType('25')">여행코스</span>
 				<span id="leports" class="badge text-wrap" onclick="setMarkContentType('28')">레포츠</span>
 				<span id="accomodation" class="badge text-wrap" onclick="setMarkContentType('32')">숙박</span>
@@ -103,6 +109,11 @@
 						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
 					</div>
 				</span>
+			</div>
+
+			<!-- 알림 -->
+			<div class="custom_alert">
+				<span id="resultAlert"></span>
 			</div>
 
 		</div>
@@ -169,7 +180,7 @@
 
 		// 선택된 컨텐츠 타입
 		let markContentTypeCode = "12";
-		const contentTypeMap = new Map([
+		const contentTypeCssIdMap = new Map([
 			["12", "tourSpot"],
 			["14", "curtureSite"],
 			["15", "festival"],
@@ -178,6 +189,17 @@
 			["32", "accomodation"],
 			["38", "shopping"],
 			["39", "restaurant"]
+		])
+
+		const contentTypeNameMap = new Map([
+			["12", "관광지"],
+			["14", "문화시설"],
+			["15", "페스티벌"],
+			["25", "여행코스"],
+			["28", "레포츠"],
+			["32", "숙박"],
+			["38", "쇼핑"],
+			["39", "식당"]
 		])
 
 		// 유저가 선택한 장소 리스트
@@ -200,6 +222,8 @@
 
 		// 초기화 함수
 		updatePage();
+		// 왼쪽 위의 지역코드1 갱신
+		renewAreaLargeCode();
 		
 		// 리스너 함수
 		// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
@@ -309,11 +333,15 @@
 				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
+				resultAlert(getRadius(map.getLevel()) + "m 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
 				updateMarkingInMapByResponse(response, false)
 			}).fail((error) => {
 				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
-				let response = error["responseJSON"];
-				console.log(response["message"])
+				console.log(error)
+				console.log(error["responseJSON"]["message"])
+				if (error["status"] === 404){
+					resultAlert(getRadius(map.getLevel()) + "m 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
+				}
 			})
 
 		}
@@ -481,9 +509,6 @@
 
 			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
 			renewUserSelectMapObject();
-
-			// 왼쪽 위의 지역코드1 갱신
-			renewAreaLargeCode();
 		}
 
 		function renewUserSelectSidebar(){
@@ -642,11 +667,18 @@
 				// 경로선 추가
 				linePath.push(pos)
 
+
+				let overlayContent = '\
+					<div class="custom_overlay"> \
+						<div style="font-size=20px"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div> \
+						<div class="text-muted font-size=8px">' + info["contentType"] + '</div> \
+					</div> \
+				'
 				// 순서 오버레이
 				let overlay = new kakao.maps.CustomOverlay({
 						map: map,
 						// clickable: true,
-						content: '<div style="pointer-events: none; font-size:20px"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div>',
+						content: overlayContent,
 						position: pos,
 						xAnchor: 0.5,
 						yAnchor: 0,
@@ -664,8 +696,8 @@
 
 			markContentTypeCode = inputCode
 
-			for (let [code, name] of contentTypeMap){
-				let menu = document.getElementById(name)
+			for (let [code, id] of contentTypeCssIdMap){
+				let menu = document.getElementById(id)
 
 				if (code === inputCode){
 					menu.className ="selected text-wrap" 
@@ -744,12 +776,33 @@
 				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
+				
+				let resultText = ""
+				if (areaLargeSelect.value){
+					areaLargeText = areaLargeSelect.options[areaLargeSelect.selectedIndex].text
+					areaSmallText = areaSmallSelect.options[areaSmallSelect.selectedIndex].text
 
+					resultText += areaLargeText + " " + areaSmallText + "에 존재하는 ";
+				}
+				resultText += response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다."
+
+				resultAlert(resultText, "green")
+				
 				updateMarkingInMapByResponse(response, true)
 
 			}).fail((error) => {
+				console.log(error)
 				console.log(error["responseJSON"]["message"])
+				if (error["status"] === 404){
+					resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+				}
 			})
+		}
+
+		function resultAlert(message, color){
+			let alert = document.getElementById("resultAlert");
+			alert.innerHTML = message;
+			alert.style.color = color
 		}
 	</script>
 
