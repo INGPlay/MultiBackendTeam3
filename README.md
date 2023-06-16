@@ -14,11 +14,6 @@ keys.tour.info.encode= {인코딩 된 tour api}
 keys.tour.info.decode= {디코딩 된 tour api}
 ```
 
-resources/messages 경로에 api키를 저장하는 keys.properties가 빠져있음
-(.gitignore에 포함됨)
-
-위와 같은 양식으로 resource/messages 경로에 작성하면 됨
-
 <br>
 
 - resources/application.properties
@@ -50,9 +45,8 @@ spring.sql.init.mode=always
 spring.messages.basename=messages/keys
 spring.messages.encoding=UTF-8
 ```
-기본적으로 이렇게 되어 있는데 각 DB 환경에 맞게 {유저이름}, {유저비밀번호} 수정하기
 
-그런다음 .gitignore 마지막 줄에 다음을 추가
+<br>
 
 - data.sql
 ```sql
@@ -63,6 +57,8 @@ INSERT INTO testtable(test_id, test_name, test_date)
 INSERT INTO memberuser(user_id, user_name, user_pwd, user_email, user_phone, user_role)
     VALUES(memberuser_sequence.nextval, '나', '1234', 'abcd@abcd.com', '010-1111-1111', 'ROLE_USER');
 ```
+
+<br>
 
 - schema.sql
 ```sql
@@ -299,6 +295,7 @@ CREATE SEQUENCE Path_Comment_Sequence
     NOCYCLE;
 ```
 
+<br>
 
 ## 경로
 ㄴ controller : Root 경로에서 테스트하기 위한 컨트롤러 하나 있음  
