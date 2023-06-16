@@ -3,8 +3,7 @@ package multi.backend.project.pathMap.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.apiController.response.CodeResponse;
-import multi.backend.project.pathMap.domain.area.InsertAreaLargeDto;
-import multi.backend.project.pathMap.domain.area.InsertAreaSmallDto;
+import multi.backend.project.pathMap.domain.area.*;
 import multi.backend.project.pathMap.mapper.AreaMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,6 +20,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,7 +37,25 @@ public class TourCodeService {
     }
 
     @Transactional
-    public void InitAreaCode() {
+    public List<AreaResponse> getLargeAreaResponse(){
+        List<AreaLargeDto> areaLargeRespons = areaMapper.selectAreaLarge();
+
+        return areaLargeRespons.stream().map(l -> {
+            return new AreaResponse(l.getLarge_code(), l.getLarge_name());
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<AreaResponse> getSmallAreaResponse(String largeCode){
+        List<AreaSmallDto> areaSmallRespons = areaMapper.selectAreaSmall(largeCode);
+
+        return areaSmallRespons.stream().map(l -> {
+            return new AreaResponse(l.getSmall_code(), l.getSmall_name());
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void initAreaCode() {
         List<CodeResponse> largeCodeResponses = requestCodeURI(getAreaCodeURI());
 
         largeCodeResponses.forEach(largeAreaResponse -> {

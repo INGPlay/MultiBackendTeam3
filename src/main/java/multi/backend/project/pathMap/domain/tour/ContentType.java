@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 public enum ContentType {
     TOUR_SPOT("관광지", "12"),
-    CURTURE_SITE("문화시설", "12"),
+    CURTURE_SITE("문화시설", "14"),
     FESTIVAL("행사/공연/축제", "15"),
     TOUR_COURSE("여행코스", "25"),
     LEPORTS("레포츠", "28"),

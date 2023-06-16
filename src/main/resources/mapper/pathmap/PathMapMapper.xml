@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="multi.backend.project.pathMap.mapper.PathMapMapper">
+
+    <insert id="insertMarksBatch" parameterType="java.util.HashMap">
+        insert into Mark (
+            mark_id,
+            path_id,
+            mark_title,
+            mark_addr1,
+            mark_addr2,
+            mark_contentId,
+            mark_contentType,
+            mark_firstImageURI,
+            mark_firstImageURI2,
+            mark_posX,
+            mark_posY,
+            mark_tel,
+            mark_placeOrder
+        )
+        <foreach collection = "markInfoRequests" item="item" separator=" UNION ALL ">
+            select
+                ${item.markId},
+                ${item.pathId},
+                #{item.title},
+                #{item.addr1},
+                #{item.addr2},
+                ${item.contentId},
+                #{item.contentType},
+                #{item.firstImageURI},
+                #{item.firstImageURI2},
+                ${item.posX},
+                ${item.posY},
+                #{item.tel},
+                ${item.placeOrder}
+            from dual
+        </foreach>
+    </insert>
+
+    <!-- 동적쿼리 추가 될 예정 -->
+    <select id="selectPathInfoList" resultType="multi.backend.project.pathMap.domain.pathmap.PathInfoResponse">
+        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS
+        FROM PATH p JOIN MEMBERUSER m
+        ON p.USER_ID = m.USER_ID
+    </select>
+
+    <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse">
+        SELECT
+        MARK_TITLE,
+        MARK_ADDR1,
+        MARK_ADDR2,
+        MARK_CONTENTID,
+        MARK_CONTENTTYPE,
+        MARK_FIRSTIMAGEURI,
+        MARK_FIRSTIMAGEURI2,
+        MARK_POSX,
+        MARK_POSY,
+        MARK_TEL,
+        MARK_PLACEORDER
+        FROM MARK
+        WHERE MARK.PATH_ID = ${pathId}
+    </select>
+
+</mapper>
