@@ -147,6 +147,8 @@
 
 	</main>
 	<script>
+
+
 		// 변수 초기화
 		const container = document.getElementById('map');
 		let options = {
@@ -162,6 +164,9 @@
 		// 줌 컨트롤
 		const zoomControl = new kakao.maps.ZoomControl();
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+		// 좌표 변환
+		const mapGeocoder = new kakao.maps.services.Geocoder()
 
 		// 선그리기
 		const mapObject = {
@@ -333,17 +338,21 @@
 				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
-				resultAlert(getRadius(map.getLevel()) + "m 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
+				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
 				updateMarkingInMapByResponse(response, false)
 			}).fail((error) => {
 				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
 				console.log(error)
 				console.log(error["responseJSON"]["message"])
 				if (error["status"] === 404){
-					resultAlert(getRadius(map.getLevel()) + "m 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
+					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
 				}
 			})
 
+		}
+
+		function changeMToKm(meter){
+			return meter / 1000;
 		}
 
 		function updateMarkingInMapByResponse(response, isCentered) {
@@ -511,7 +520,7 @@
 			renewUserSelectMapObject();
 		}
 
-		function renewUserSelectSidebar(){
+		async function renewUserSelectSidebar(){
 			
 			let userSelectListView = document.getElementById("userSelectListView")
 			userSelectListView.innerHTML = "";
@@ -523,20 +532,43 @@
 
 				let listTemplate = "";
 
+				// <a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
 				// 경로 사이 길찾기 링크 생성
 				if (i > 0){
-					listTemplate += "\
-					<a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
-						<div class='d-flex flex-column align-items-center'> \
-							<div> \
-								길찾기 \
+
+					// 비동기 함수의 콜백값을 가져오려는 몸부림
+					let beforeWtmObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
+					let currentWtmObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
+
+					console.log("beforeWtm : " + beforeWtmObject["wtmX"] + ", " + beforeWtmObject["wtmY"])
+					console.log("currentWtm : " + currentWtmObject["wtmX"] + ", " + currentWtmObject["wtmY"])
+
+					if (beforeWtmObject !== null || currentWtmObject !== null){
+						listTemplate += "\
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+								<div class='d-flex flex-column align-items-center'> \
+									<div> \
+										길찾기 \
+									</div> \
+									<div> \
+										" + beforeInfo["title"] + " → " + info["title"] + "  \
+									</div> \
+								</div> \
+							</a> \
+						"
+					} else {
+						listTemplate += " \
+							<div class='d-flex flex-column align-items-center'> \
+								<div> \
+									길찾기 \
+								</div> \
+								<div> \
+									좌표 변환에 실패하였습니다.  \
+								</div> \
 							</div> \
-							<div> \
-								" + beforeInfo["title"] + " → " + info["title"] + "  \
-							</div> \
-						</div> \
-					</a> \
-					"
+						"
+					}
+
 				}
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
@@ -580,6 +612,32 @@
 				beforeInfo = info;
 			}
 
+		}
+
+		// 좌표 변환 함수
+		function promiseTransWgs84ToWcongnamul(wgs84X, wgs84Y){
+
+			let promiseTransCoords = new Promise((resolve, reject) => {
+				mapGeocoder.transCoord(wgs84X, wgs84Y, (result, status) => {
+					if (status === kakao.maps.services.Status.OK) {
+						let wtmX = result[0].x;
+						let wtmY = result[0].y;
+
+						resolve({
+							"wtmX" : wtmX,
+							"wtmY" : wtmY 
+						})
+
+					} else {
+						reject(null)
+					}
+				}, {
+					input_coord: kakao.maps.services.Coords.WGS84,
+					output_coord: "WCONGNAMUL"
+				})
+			})
+
+			return promiseTransCoords
 		}
 
 		// userSelectList의 특정 인덱스의 값을 삭제

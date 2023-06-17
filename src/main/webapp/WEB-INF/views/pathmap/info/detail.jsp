@@ -43,7 +43,7 @@
         const contentId = ${contentId};
 
         const contentRowName = {
-            "contenttypeid" : "콘텐츠타입ID",
+            // "contenttypeid" : "콘텐츠타입ID",
             "accomcount" : "수용인원",
             "chkbabycarriage" : "유모차대여정보",
             "chkcreditcard" : "신용카드가능정보",
