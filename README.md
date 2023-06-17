@@ -20,7 +20,7 @@ keys.tour.info.decode= {디코딩 된 tour api}
 ```properites
 # Oracle Connection Settings
 spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521:orcl 
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:{SID} 
 spring.datasource.username={유저이름}
 spring.datasource.password={유저비밀번호}
 
