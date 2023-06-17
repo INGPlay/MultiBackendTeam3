@@ -39,7 +39,7 @@ public interface reviewMapper {
     int deleteReview(int id);
 
 //    5. 조회수 증가
-    int updateReview_views(reviewVO boardVO);
+    int updateReview_views(reviewVO vo);
 
 //    6. 총 게시글 수
     int getTotalCount();

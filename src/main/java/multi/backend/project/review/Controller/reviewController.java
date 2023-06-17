@@ -7,10 +7,7 @@ import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,16 +26,17 @@ public class reviewController {
 
 //  게시글 전체 출력
     @GetMapping("/list" )
-    public String listReview(Model m, Criteria cri,HttpSession session){
-
+    public String listReview(Model m, Criteria cri,HttpSession session,  @RequestParam(value="select", required = false, defaultValue = "1") String select){
+        System.out.println(select+"가 선택되었습니다");
         int totalCount =  this.service.getTotalCount(); // 전체 게시글 수
+        cri.setSort(Integer.parseInt(select));
+        System.out.println(cri.getSort());
         m.addAttribute("list",service.getListWithPaging(cri));
         m.addAttribute("pageMaker", new pagingVO(cri,totalCount));
+        m.addAttribute("select",select);
 
         return "review/review";
     }
-
-
 
     //  게시글 삽입 폼 이동
     @GetMapping("/write")
@@ -54,7 +52,9 @@ public class reviewController {
 
         // 유저 정보 존재 유무 확인
         String user_name = review.getUser_name();
+        System.out.println(user_name);
         int isUser = service.isUser(user_name);
+        System.out.println(isUser);
         if(isUser == 0){
             System.out.println("사용자 계정이 없습니다");
         }
@@ -63,9 +63,12 @@ public class reviewController {
             System.out.println(userid);
 
             review.setUser_id(userid);
-            int n = service.insertReview(review);
-            System.out.println("정상적으로 삽입 완료");}
 
+            for (int i = 0; i < 500; i++){
+                int n = service.insertReview(review);
+                 System.out.println("정상적으로 삽입 완료");
+        }
+        }
         return "redirect:/review/list";
     }
 
@@ -74,8 +77,9 @@ public class reviewController {
     @GetMapping("/view")
     public String reviewForm(Model m, HttpServletRequest seq,HttpSession session){
         String id = seq.getParameter("review_id");
-        System.out.println(id);
+
         reviewVO vo = service.selectReviewOne(Integer.valueOf(id));
+        int n = service.updateReview_views(vo);
         m.addAttribute("vo",vo);
         return "review/review_view";
     }

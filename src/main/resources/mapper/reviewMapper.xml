@@ -20,7 +20,6 @@
     <!-- 사용자 이름으로 사용자 계정 번호 가져오기   -->
     <select id="getUserId" resultType="_int" parameterType="String">
         select user_id from MemberUser where user_name = #{user_name}
-
     </select>
 
 
@@ -52,12 +51,26 @@
     </update>
 
     <select id="getListWithPaging" resultType="reviewVO">
-       <![CDATA[
+
         select review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends
         from (select rownum rn, review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends
-              from (select * from review_vi order by review_id desc))
+              from (select * from review_vi
+             <if test="sort == 1">
+                 order by review_id desc
+             </if><if test="sort == 2">
+                 order by REVIEW_VIEWS desc ,review_id desc
+             </if><if test="sort == 3">
+                 order by REVIEW_RECOMMENDS desc,review_id desc
+             </if>
+        ))
+        <![CDATA[
         where rn> (#{pageNum}-1)* #{amount} and rn <= #{pageNum} * #{amount}
         ]]>
     </select>
+
+    <!-- 게시글 클릭시 조회수 증가-->
+    <update id="updateReview_views" parameterType="reviewVO">
+        update review set review_views = #{review_views}+1 where REVIEW_ID=#{review_id}
+    </update>
 </mapper>
 

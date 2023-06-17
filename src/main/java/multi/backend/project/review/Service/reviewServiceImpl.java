@@ -59,8 +59,8 @@ public class reviewServiceImpl implements reviewService {
     }
 
     @Override
-    public int updateReview_views(reviewVO boardVO) {
-        return 0;
+    public int updateReview_views(reviewVO vo) {
+        return mapper.updateReview_views(vo);
     }
 
 

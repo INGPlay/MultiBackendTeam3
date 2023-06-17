@@ -50,10 +50,12 @@
         </form>
     </div>
     <div class="col-3 text-left">
-        <form name="psF" action="list">
-            <select name="pageSize" style="padding:5px" onchange="">
-                <option value="" selected>추천순</option>
-                <option value="" > 조회순</option>
+        <form name="psF" id="psF" action="/review/list" method="get">
+            <select name="select" id ="select" style="padding:5px" onchange="check()">
+                <option value="1" <c:if test="${select eq '1'}">selected</c:if>>--</option>
+                <option value="2" <c:if test="${select eq '2'}">selected</c:if>>조회순</option>
+                <option value="3" <c:if test="${select eq '3'}">selected</c:if>>추천순</option>
+
             </select>
         </form>
     </div>
@@ -114,19 +116,19 @@
             <ul class="pagination">
                 <c:if test="${pageMaker.prev}">
                     <li class="paginate_button previous">
-                        <a href="${pageMaker.startPage -1}">Previous</a>
+                        <a href="${pageMaker.startPage -1}">  Previous  </a>&nbsp
                     </li>
                 </c:if>
 
                 <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
                     <li class="paginate_button">
-                        <a href="${num}"> ${num}</a>
+                        <a href="${num}">   ${num}    </a>&nbsp
                     </li>
                 </c:forEach>
 
                 <c:if test="${pageMaker.next}">
                     <li class="paginate_button next">
-                        <a href="${pageMaker.endPage +1}">Next</a>
+                        <a href="${pageMaker.endPage +1}">  Next  </a>&nbsp
                     </li>
                 </c:if>
             </ul>
@@ -141,7 +143,18 @@
 </style>
 
 <script>
+    function check(){
+        var psF = $('#psF');
+        var numCheck = document.getElementById("select");
+
+        var value = numCheck.options[document.getElementById("select").selectedIndex].value;
+        //alert(value+"click 되었습니다");
+        return psF.submit();
+    }
+
+
     $(()=>{
+
         var actionForm = $("#actionForm");
         $(document).on('click', 'tr', function(event) {
 
@@ -166,7 +179,9 @@
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));
             actionForm.submit();
         });
+
     })
+
 </script>
 
 

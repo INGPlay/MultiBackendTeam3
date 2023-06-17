@@ -91,6 +91,13 @@
         </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
+<div class="col-md-8 offset-md-2 my-4">
+    <form>
+        <h1>댓글 들어갈 곳</h1>
+
+    </form>
+
+</div>
 </body>
 <script>
     const edit = function(){

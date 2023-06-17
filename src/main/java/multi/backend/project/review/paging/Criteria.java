@@ -7,13 +7,15 @@ import lombok.Data;
 public class Criteria {
     private int pageNum; // 페이지 번호
     private int amount; // 한 페이지당 보여질 데이터의 개수
+    private int sort; // 페이지 정렬 방식
 
     public Criteria(){
-        this(1,10);
+        this(1,10,1);
 
     }
-    public Criteria(int pageNum, int amount){
+    public Criteria(int pageNum, int amount,int sort){
         this.pageNum=pageNum;
         this.amount = amount;
+        this.sort = sort;
     }
 }

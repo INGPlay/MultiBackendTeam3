@@ -17,7 +17,7 @@ public class Initializer implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         log.info("[InitializingBean] 지역코드 DB 등록 시작");
 
-//        tourCodeService.initAreaCode();
+        //tourCodeService.initAreaCode();
 
         log.info("[InitializaingBean] 지역코드 DB 등록 완료");
     }
