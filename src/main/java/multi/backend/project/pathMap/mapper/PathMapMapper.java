@@ -2,9 +2,7 @@ package multi.backend.project.pathMap.mapper;
 
 import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +21,21 @@ public interface PathMapMapper {
             "0\n" +
             ")")
     void insertPathMap(Long pathId, String username, String title);
+
+    @Update("UPDATE PATH \n" +
+            "SET\n" +
+            "PATH_TITLE = #{title},\n" +
+            "UPDATE_DATE = SYSDATE\n" +
+            "where PATH_ID = ${pathId}")
+    void updatePathMap(Long pathId, String title);
+
+    @Delete("Delete from PATH \n" +
+            "where path_id = ${pathId}")
+    void deletePathMap(Long pathId);
+
+    @Delete("delete from mark\n" +
+            "where path_id = ${pathId}")
+    void deleteMarksInPath(Long pathId);
 
     @Select("SELECT PATH_SEQUENCE.NEXTVAL FROM DUAL")
     Long getPathmapNextval();

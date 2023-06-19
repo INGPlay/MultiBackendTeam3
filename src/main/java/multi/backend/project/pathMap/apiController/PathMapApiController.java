@@ -23,12 +23,41 @@ public class PathMapApiController {
 
     private final PathMapService pathMapService;
 
+    // 생성
     @PostMapping
     public ResponseEntity<Map<String, Object>> submitPathMap(@RequestParam String title,
                                              @RequestParam String request) throws ParseException {
 
         log.info("title : {}", title);
         pathMapService.insertPath("나", title, request);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 수정
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> updatePathMap(@RequestParam String title,
+                                                             @RequestParam String request,
+                                                             @RequestParam Long pathId) throws ParseException {
+
+        log.info("title : {}, request : {}, pathId : {}", title, request, pathId);
+
+        pathMapService.updatePath(pathId, title, request);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 삭제
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestParam Long pathId){
+
+        log.info("pathId : {}", pathId);
+
+        pathMapService.deletePath(pathId);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");

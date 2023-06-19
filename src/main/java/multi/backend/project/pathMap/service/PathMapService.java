@@ -116,6 +116,28 @@ public class PathMapService {
         pathMapMapper.insertMarksBatch(markInfoRequests);
     }
 
+    @Transactional
+    public void updatePath(Long pathId, String title, String requestJson) throws ParseException {
+
+        log.info("pathId : {}, title : {}", pathId, title);
+
+        pathMapMapper.updatePathMap(pathId, title);
+        updateMarks(pathId, requestJson);
+    }
+
+    public void updateMarks(Long pathId, String requestJson) throws ParseException {
+        // 삭제하고
+        pathMapMapper.deleteMarksInPath(pathId);
+        
+        // 새로 삽입
+        insertMarks(pathId, requestJson);
+    }
+
+    public void deletePath(Long pathId){
+        // path 삭제
+        pathMapMapper.deletePathMap(pathId);
+    }
+
     private static String handleNullOrEmpty(String string){
         if (string == null){
             return "";

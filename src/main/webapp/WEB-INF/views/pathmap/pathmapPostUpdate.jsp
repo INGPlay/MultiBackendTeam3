@@ -73,95 +73,85 @@
 			<!-- 맵 -->
 			<div id="map"></div>
 
+			<!-- 카테고리 선택 -->
+			<div class="custom_contentType radius_border badge text-wrap" style="background-color: skyblue;"> 
+				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
+				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
+				<!-- 행사/공연/축제 -->
+				<span id="festival" class="badge text-wrap" onclick="setMarkContentType('15')">페스티벌</span>		
+				<span id="tourCourse" class="badge text-wrap" onclick="setMarkContentType('25')">여행코스</span>
+				<span id="leports" class="badge text-wrap" onclick="setMarkContentType('28')">레포츠</span>
+				<span id="accomodation" class="badge text-wrap" onclick="setMarkContentType('32')">숙박</span>
+				<span id="shopping" class="badge text-wrap" onclick="setMarkContentType('38')">쇼핑</span>
+				<span id="restaurant" class="badge text-wrap" onclick="setMarkContentType('39')">음식점</span>
+			</div>
+
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
 			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
+			</div>
+
+			<div class="custom_searchBar">
+				<span>
+					<div class="input-group mb-3">
+
+						<select id="areaLargeSelect" class="select" name="areaLarge" onchange="getAreaSmallCode(this.value)">
+							<option value="">지역</option>
+						</select>
+
+						<select id="areaSmallSelect" class="select" name="areaSmall">
+							<option value="">시군구</option>
+						</select>
+
+						<!-- 검색창 -->
+						<input id="keywordSearch" type="text" class="form-control">
+						<script>
+							document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+								if (event.keyCode === 13) {
+									event.preventDefault();
+									searchTourInfoKeyword(this.value)
+								}
+							});
+						</script>
+						
+						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+					</div>
+				</span>
+			</div>
+
+			<!-- 알림 -->
+			<div class="custom_alert">
+				<span id="resultAlert"></span>
 			</div>
 
 		</div>
 
 
 		<!-- 오른쪽 사이드바 -->
-		<div class="d-flex flex-column align-items-stretch bg-white" style="width: 380px;">
+		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
 
-			<!-- 제목 작성 -->
+			<!-- 오른쪽 위 -->
 			<div class="input-group input-group-lg">
-				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
-				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
-					id = "pathmapTitle" disabled>
+				<!-- 뒤로 가기 -->
+				<span onclick="window.location.href='/pathmap/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">←</span>
 
-				<span onclick="window.location.href='/pathmap/update/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">수정</span>
+				<!-- 제목 -->
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
+					id = "pathmapTitle">
+				
+					<span onclick="deletePath()" class="input-group-text" id="inputGroup-sizing-lg">삭제</span>
 			</div>
 
 			<!-- 패스맵 리스트 -->
 			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
 			</div>
 
-			<!-- 댓글, 코멘트 -->
-			<div class="mt-auto d-flex flex-column justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom" onclick="hideUserSelectListView()"
-						style="width: 100%; justify-content: center; background-color:skyblue;"
-						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-					<span class="fs-5 fw-semibold">댓글?</span>
+			<!-- 패스맵 제출 및 저장 -->
+			<div class="mt-auto d-flex justify-content-center" onclick="updateUserSelectList()">
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
+						style="width: 100%; justify-content: center; background-color:skyblue;">
+					<span class="fs-5 fw-semibold">수정</span>
 				</button>
-
-				<script>
-					let isHide = false;
-					function hideUserSelectListView(){
-						let element = document.getElementById("userSelectListView")
-						
-						if (isHide === false){
-							element.style.display = "none";
-							isHide = true;
-						} else {
-							element.style.display = "block";
-							isHide = false;
-						}
-					}
-				</script>
-			</div>
-
-			<div class="collapse list-group list-group-flush border-bottom scrollarea" id="collapseExample">
-				
-				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>
-				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>
-
 			</div>
 
 		</div>
@@ -250,7 +240,6 @@
 			// }
 		];
 
-		// 백에서 받는 pathId
 		const pathId = ${pathId}
 
 		// path의 mark 가져오기
@@ -258,6 +247,12 @@
 
 		// 초기화 함수
 		updatePage();
+
+		// 한번에 보기 함수
+		setUserSelectListBounds()
+		
+		// 왼쪽 위의 지역코드1 갱신
+		renewAreaLargeCode();
 		
 		function loadUserSelectList(pathId){
 			$.ajax({
@@ -281,7 +276,8 @@
 				alert("error")
 			})
 		}
-		
+
+
 		// 리스너 함수
 		// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
 		/*
@@ -468,6 +464,7 @@
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 								<div class = 'd-flex flex-row'> \
 									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -551,15 +548,14 @@
 
 		// 페이지 갱신
 		function updatePage(){
-
-			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
-			renewUserSelectMapObject();
-
 			// 사이드바 갱신
 			renewUserSelectSidebar();
 
-			// 바운드
-			setUserSelectListBounds()
+			// 왼쪽 위의 컨텐츠 바 갱신
+			setMarkContentType(markContentTypeCode)
+
+			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
+			renewUserSelectMapObject();
 		}
 
 		async function renewUserSelectSidebar(){
@@ -633,6 +629,16 @@
 								\
 								<div class = 'd-flex flex-row'> \
 									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+								"
+
+				if (i < userSelectList.length - 1){
+					listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
+				}
+				if (i > 0){
+					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+				} 
+
+				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -716,6 +722,57 @@
 				// { "response" : "OK" }
 				console.log(response["response"])
 				window.location.replace("/pathmap");
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		}
+
+		// 패스맵 제출, 저장
+		function updateUserSelectList(){
+			let title = document.getElementById('pathmapTitle').value;
+
+			let data = {
+				"title" : title,
+				"request" : JSON.stringify(userSelectList),
+				"pathId" : pathId
+			}
+
+			console.log("수정")
+			
+			$.ajax({
+				url: "/api/pathmap",
+				type: 'PUT',
+				dataType: "json",
+				data : data
+			})
+			.done(function(response) {
+				// { "response" : "OK" }
+				console.log(response["response"])
+				window.location.replace("/pathmap/" + pathId);
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		}
+
+		function deletePath(){
+			let data = {
+				"pathId" : pathId
+			}
+
+			console.log("삭제")
+
+			$.ajax({
+				url: "/api/pathmap",
+				type: "DELETE",
+				dataType: "json",
+				data : data
+			})
+			.done(function(response) {
+				// { "response" : "OK" }
+				console.log(response["response"])
+				window.location.replace("/pathmap")
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)
