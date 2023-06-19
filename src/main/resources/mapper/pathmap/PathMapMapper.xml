@@ -63,6 +63,7 @@
             MARK_PLACEORDER
         FROM MARK
         WHERE MARK.PATH_ID = ${pathId}
+        ORDER BY MARK.MARK_PLACEORDER
     </select>
 
 </mapper>

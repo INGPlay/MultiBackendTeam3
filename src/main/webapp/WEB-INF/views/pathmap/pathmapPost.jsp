@@ -324,24 +324,24 @@
 		*/
 
 		// 맵을 클릭한다면
-		kakao.maps.event.addListener(map, "click", function(mouseEvent){
+		// kakao.maps.event.addListener(map, "click", function(mouseEvent){
 
-			// 위치 갱신
-			let pos = mouseEvent.latLng;
-			let params = {
-					"posX":pos.getLng(),
-					"posY":pos.getLat(),
-					"radius":getRadius(map.getLevel()),
-					"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-					"pageNo":1,
-					"contentTypeCode":markContentTypeCode
-				}
+		// 	// 위치 갱신
+		// 	let pos = mouseEvent.latLng;
+		// 	let params = {
+		// 			"posX":pos.getLng(),
+		// 			"posY":pos.getLat(),
+		// 			"radius":getRadius(map.getLevel()),
+		// 			"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+		// 			"pageNo":1,
+		// 			"contentTypeCode":markContentTypeCode
+		// 		}
 
-			// 애니메이션 움직임
-			map.panTo(pos)
-			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-			markBasedLocation(params, markInfoMap);
-		})
+		// 	// 애니메이션 움직임
+		// 	map.panTo(pos)
+		// 	console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+		// 	markBasedLocation(params, markInfoMap);
+		// })
 
 		// 지도 확대에 따라 동적으로 범위 조절
 		function getRadius(mapLevel){

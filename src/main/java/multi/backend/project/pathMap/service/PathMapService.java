@@ -125,7 +125,7 @@ public class PathMapService {
         updateMarks(pathId, requestJson);
     }
 
-    public void updateMarks(Long pathId, String requestJson) throws ParseException {
+    private void updateMarks(Long pathId, String requestJson) throws ParseException {
         // 삭제하고
         pathMapMapper.deleteMarksInPath(pathId);
         
@@ -133,6 +133,7 @@ public class PathMapService {
         insertMarks(pathId, requestJson);
     }
 
+    @Transactional
     public void deletePath(Long pathId){
         // path 삭제
         pathMapMapper.deletePathMap(pathId);
