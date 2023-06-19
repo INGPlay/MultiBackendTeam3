@@ -82,7 +82,7 @@
 
 
 		<!-- 오른쪽 사이드바 -->
-		<div class="d-flex flex-column align-items-stretch bg-white" style="width: 380px;">
+		<div class="d-flex flex-column align-items-stretch bg-white" style="width: 420px;">
 
 			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
@@ -456,6 +456,9 @@
 			return promiseMarking(map, info["posX"], info["posY"], function(){
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+
+				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
 				let content = "\
 					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
 						<div class='d-flex flex-row align-items-center'> \
@@ -466,8 +469,9 @@
 								<p class='h5 fw-bold'>" + info["title"] + "</p> \
 								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-								<div class = 'd-flex flex-row'> \
-									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+								<div class='me-auto d-flex flex-row'> \
+									<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+									<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -615,6 +619,10 @@
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
 				console.log(detailUri)
+
+				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+
 				// 가져올 때는 .userSelectContainer로 가져오기
 				listTemplate += " \
 					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
@@ -632,7 +640,10 @@
 								<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
 								\
 								<div class = 'd-flex flex-row'> \
-									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+									<div class='me-auto d-flex flex-row'> \
+										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+									</div> \
 								</div> \
 							</div> \
 						</div> \

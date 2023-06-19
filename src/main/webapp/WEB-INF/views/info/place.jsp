@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <%@ include file="../template/staticTemplate.jsp" %>
+    <%@ include file="./template/staticTemplate.jsp" %>
 
 </head>
 <body>
@@ -24,8 +24,8 @@
         <table class="table table table-hover">
             <thead>
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">제목</th>
+                <th scope="col">항목</th>
+                <th scope="col">정보</th>
               </tr>
             </thead>
             <tbody id = "listRow">

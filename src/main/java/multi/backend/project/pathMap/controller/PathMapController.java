@@ -54,6 +54,6 @@ public class PathMapController {
         model.addAttribute("contentTypeId", contentTypeId);
         model.addAttribute("contentId", contentId);
 
-        return "pathmap/info/detail";
+        return "redirect:/info/place/" + contentTypeId + "/" + contentId;
     }
 }
