@@ -11,6 +11,7 @@
             mark_addr1,
             mark_addr2,
             mark_contentId,
+            mark_contentTypeId,
             mark_contentType,
             mark_firstImageURI,
             mark_firstImageURI2,
@@ -27,6 +28,7 @@
                 #{item.addr1},
                 #{item.addr2},
                 ${item.contentId},
+                #{item.contentTypeId},
                 #{item.contentType},
                 #{item.firstImageURI},
                 #{item.firstImageURI2},
@@ -47,17 +49,18 @@
 
     <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse">
         SELECT
-        MARK_TITLE,
-        MARK_ADDR1,
-        MARK_ADDR2,
-        MARK_CONTENTID,
-        MARK_CONTENTTYPE,
-        MARK_FIRSTIMAGEURI,
-        MARK_FIRSTIMAGEURI2,
-        MARK_POSX,
-        MARK_POSY,
-        MARK_TEL,
-        MARK_PLACEORDER
+            MARK_TITLE,
+            MARK_ADDR1,
+            MARK_ADDR2,
+            MARK_CONTENTID,
+            MARK_CONTENTTYPEID,
+            MARK_CONTENTTYPE,
+            MARK_FIRSTIMAGEURI,
+            MARK_FIRSTIMAGEURI2,
+            MARK_POSX,
+            MARK_POSY,
+            MARK_TEL,
+            MARK_PLACEORDER
         FROM MARK
         WHERE MARK.PATH_ID = ${pathId}
     </select>

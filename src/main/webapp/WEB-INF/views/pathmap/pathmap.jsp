@@ -88,7 +88,7 @@
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
 			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
-				<span id="boundButton" class="fw-semibold">한눈에 보기</span>
+				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
 			<div class="custom_searchBar">
@@ -105,6 +105,14 @@
 
 						<!-- 검색창 -->
 						<input id="keywordSearch" type="text" class="form-control">
+						<script>
+							document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+								if (event.keyCode === 13) {
+									event.preventDefault();
+									searchTourInfoKeyword(this.value)
+								}
+							});
+						</script>
 						
 						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
 					</div>
@@ -121,9 +129,10 @@
 
 		<!-- 오른쪽 사이드바 -->
 		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+
+			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
 				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
-
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 			</div>
@@ -132,20 +141,18 @@
 			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
 			</div>
 
-		
-			<div class="mt-auto d-flex justify-content-center" id="submitUserSelectList">
+			<!-- 패스맵 제출 및 저장 -->
+			<div class="mt-auto d-flex justify-content-center" onclick="submitUserSelectList()">
 				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
 						style="width: 100%; justify-content: center; background-color:skyblue;">
-					<!-- 패스맵 제목이 될 곳 -->
 					<span class="fs-5 fw-semibold">완료</span>
 				</button>
 			</div>
+
 		</div>
 
-
-
-
 	</main>
+
 	<script>
 
 
@@ -180,7 +187,10 @@
 			"overlayList" : []
 		}
 		
-		// {contentId : info}
+		// {contentId : {
+				// 	"marker" : marker,
+				// 	"info" : info
+				// 	}
 		let markInfoMap = new Map();
 
 		// 선택된 컨텐츠 타입
@@ -290,16 +300,6 @@
 			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
 			markBasedLocation(params, markInfoMap);
 		})
-
-		// 한눈에 보기 버튼
-		document.getElementById("boundButton").addEventListener("click", setUserSelectListBounds)
-
-		document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
-			if (event.keyCode === 13) {
-				event.preventDefault();
-				searchTourInfoKeyword(this.value)
-			}
-		});
 
 		// 지도 확대에 따라 동적으로 범위 조절
 		function getRadius(mapLevel){
@@ -432,7 +432,7 @@
 						</div> \
 					</div> \
 				"
-				
+				info
 				// 백틱 템플릿은 왠지 모르게 안된다
 				/*
 				`\
@@ -643,6 +643,7 @@
 		// userSelectList의 특정 인덱스의 값을 삭제
 		function deleteUserSelectByIndex(index){
 			userSelectList.splice(index, 1)
+			
 			updatePage()
 		}
 
@@ -662,7 +663,8 @@
 			updatePage()
 		}
 
-		document.getElementById("submitUserSelectList").addEventListener("click", () => {
+		// 패스맵 제출, 저장
+		function submitUserSelectList(){
 			let title = document.getElementById('pathmapTitle').value;
 
 			let data = {
@@ -686,7 +688,7 @@
 			.fail(function(error) {
 				console.log("Error : " + error)
 			});
-		})
+		}
 
 
 		// 등록된 좌표 중간에서 다 보여주도록 함
@@ -705,6 +707,12 @@
 			})
 
 			map.setBounds(bounds)
+
+			// 맵 안의 마커 초기화
+			markInfoMap.forEach(markInfo => {
+				markInfo["marker"].setMap(null)
+			})
+			markInfoMap.clear()
 		}
 
 		// 지도 위의 선 그리기

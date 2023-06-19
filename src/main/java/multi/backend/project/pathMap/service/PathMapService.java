@@ -59,6 +59,7 @@ public class PathMapService {
                     handleNullOrEmpty(response.getAddr1()),
                     handleNullOrEmpty(response.getAddr2()),
                     response.getContentId(),
+                    response.getContentTypeId(),
                     response.getContentType(),
                     handleNullOrEmpty(response.getFirstImageURI()),
                     handleNullOrEmpty(response.getFirstImageURI2()),
@@ -98,6 +99,7 @@ public class PathMapService {
             markInfoRequest.put("addr1", handleNullOrEmpty((String) info.get("addr1")));
             markInfoRequest.put("addr2", handleNullOrEmpty((String) info.get("addr2")));
             markInfoRequest.put("contentId", (Long) info.get("contentId"));
+            markInfoRequest.put("contentTypeId", (String) info.get("contentTypeId"));
             markInfoRequest.put("contentType", (String) info.get("contentType"));
             markInfoRequest.put("firstImageURI", handleNullOrEmpty((String) info.get("firstImageURI")));
             markInfoRequest.put("firstImageURI2", handleNullOrEmpty((String) info.get("firstImageURI2")));

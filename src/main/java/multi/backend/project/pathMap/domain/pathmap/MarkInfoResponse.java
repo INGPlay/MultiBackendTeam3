@@ -12,6 +12,7 @@ public class MarkInfoResponse {
     private String addr2;
 
     private Long contentId;
+    private String contentTypeId;
     private String contentType;
 
     private String firstImageURI;
