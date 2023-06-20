@@ -12,6 +12,7 @@ public class CommentResponse {
     private String content;
     private Date createDate;
     private Date updateDate;
+    private Long commentId;
     private Long commentGroup;
     private Long commentDepth;
 }

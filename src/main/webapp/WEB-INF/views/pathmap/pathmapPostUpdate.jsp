@@ -46,6 +46,7 @@
 		/* 오버레이 */
 		.custom_overlay{pointer-events: none;}
 
+
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
 		  font-size: 1.125rem;
@@ -93,7 +94,7 @@
 			<div id="map"></div>
 
 			<!-- 카테고리 선택 -->
-			<div class="custom_contentType radius_border badge text-wrap bg-primary bg-opacity-75"> 
+			<div class="custom_contentType radius_border badge text-wrap main_color_only"> 
 				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
 				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
 				<!-- 행사/공연/축제 -->
@@ -106,7 +107,7 @@
 			</div>
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
-			<div class="custom_oneshot radius_border bg-primary bg-opacity-75"> 
+			<div class="custom_oneshot radius_border main_color"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
@@ -158,8 +159,6 @@
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 				
-					<span class="input-group-text" id="inputGroup-sizing-lg" 
-						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">삭제</span>
 			</div>
 
 			<!-- 패스맵 리스트 -->
@@ -167,11 +166,19 @@
 			</div>
 
 			<!-- 패스맵 제출 및 저장 -->
-			<div class="mt-auto d-flex justify-content-center" onclick="updateUserSelectList()">
-				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-75"
-						style="width: 100%; justify-content: center;">
+			<div class="mt-auto d-flex flex-row justify-content-center">
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
+						style="width: 100%; justify-content: center;" onclick="updateUserSelectList()"
+						type="button">
 					<span class="fs-5 fw-semibold">수정</span>
 				</button>
+
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
+						style="width: 100%; justify-content: center;"
+						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">
+					<span class="fs-5 fw-semibold">삭제</span>
+				</button>
+
 			</div>
 
 		</div>
@@ -610,7 +617,7 @@
 
 					if (beforeWtmObject !== null || currentWtmObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \

@@ -42,7 +42,7 @@ public interface PathMapMapper {
     @Select("SELECT PATH_SEQUENCE.NEXTVAL FROM DUAL")
     Long getPathmapNextval();
 
-    @Select("SELECT COUNT(mark_id) from Mark")
+    @Select("SELECT MAX(mark_id) from Mark")
     Long getMarkCount();
 
     @Select("SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS\n" +
@@ -51,7 +51,7 @@ public interface PathMapMapper {
             "Where p.PATH_ID = ${pathId}")
     PathInfoResponse selectPathInfo(Long pathId);
 
-    @Select("select m.user_name, p.content, p.create_date, p.update_date, p.comment_group, p.comment_depth \n" +
+    @Select("select m.user_name, p.content, p.create_date, p.update_date, p.comment_id, p.comment_group, p.comment_depth \n" +
             "FROM PATH_COMMENT p JOIN MEMBERUSER m \n" +
             "ON p.user_id = m.user_id \n" +
             "where p.PATH_ID = ${pathId}")
@@ -69,6 +69,10 @@ public interface PathMapMapper {
             "(select user_id from MemberUser u where u.user_name = #{username}) \n" +
             ")")
     void insertPathComment(InsertPathCommentDto insertPathCommentDto);
+
+    @Delete("delete from path_comment \n" +
+            "where comment_id = ${commentId}")
+    void deletePathComment(Long commentId);
 
     // XML 파일
     void insertMarksBatch(List<Map<String, Object>> markInfoRequests);

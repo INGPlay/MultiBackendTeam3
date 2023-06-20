@@ -154,6 +154,11 @@ public class PathMapService {
         pathMapMapper.insertPathComment(insertPathCommentDto);
     }
 
+    @Transactional
+    public void deletePathComment(Long commentid){
+        pathMapMapper.deletePathComment(commentid);
+    }
+
     private static String handleNullOrEmpty(String string){
         if (string == null){
             return "";

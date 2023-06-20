@@ -74,7 +74,7 @@
 			<div id="map"></div>
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
-			<div class="custom_oneshot radius_border bg-primary bg-opacity-75"> 
+			<div class="custom_oneshot radius_border main_color"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
@@ -99,22 +99,22 @@
 
 			<!-- 추천, 복사, 댓글 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-75"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
 						style="width: 100%; justify-content: center;"
 						type="button">
 					<span class="fs-5 fw-semibold">추천</span>
 				</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-50"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
 						style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
 						type="button">
 					<span class="fs-5 fw-semibold">복사</span>
 				</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-25" 
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-25" 
 						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
 						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-					<span class="fs-5 fw-semibold">댓글</span>
+					<span class="fs-5 fw-semibold" id = "commentButtonText">댓글</span>
 				</button>
 
 			</div>
@@ -139,13 +139,13 @@
 			<div class="collapse list-group list-group-flush border-bottom scrollarea" id="collapseExample">
 				
 				<!-- 스크롤링 -->
-				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'>
+				<div class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'>
 
 					<!-- 댓글 리스트 -->
 					<dl id = "commentList" class="row mb-0" style="word-break:break-all;">
 					</dl>
 
-				</a>
+				</div>
 				
 				<!-- 댓글 작성 -->
 				<div class="input-group input-group-lg">
@@ -249,6 +249,9 @@
 
 		// 초기화 함수
 		updatePage();
+
+		// 댓글 불러오기
+		getComment()
 		
 		function loadUserSelectList(pathId){
 			$.ajax({
@@ -582,7 +585,7 @@
 
 					if (beforeWtmObject !== null || currentWtmObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \
@@ -767,6 +770,12 @@
 			.done(function(response){
 				let commentList = document.getElementById("commentList")
 
+				let commentButtonText = document.getElementById("commentButtonText")
+
+				if (response){
+					commentButtonText.innerHTML = "댓글 " + response.length
+				}
+
 				let result = "";
 				
 				response.forEach(comment => {
@@ -778,6 +787,7 @@
 							</p> \
 							<p> \
 								<small>' + comment["updateDate"] + '</small> \
+								<button onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button> \
 							</p> \
 						</dd> \
 					'
@@ -792,10 +802,10 @@
 
 		// 댓글 달기
 		function submitComment(){
-			let comment = document.getElementById('commentInput').value;
+			let commentContent = document.getElementById('commentInput').value;
 
 			let data = {
-				"comment" : comment,
+				"comment" : commentContent,
 				"pathId" : pathId
 			}
 
@@ -806,12 +816,33 @@
 				data : data
 			})
 			.done(function(response){
-
+				document.getElementById('commentInput').value = null;
 				getComment()
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)
 			});
+		}
+
+		function deleteComment(commentId){
+
+			let data = {
+				"commentId" : commentId
+			}
+
+			$.ajax({
+				url : "/api/pathmap/comment",
+				type : 'DELETE',
+				dataType : "json",
+				data : data
+			})
+			.done(function(response){
+				
+				getComment()
+			})
+			.fail(function(error){
+
+			})
 		}
 
 

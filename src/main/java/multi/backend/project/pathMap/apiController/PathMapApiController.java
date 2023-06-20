@@ -110,4 +110,16 @@ public class PathMapApiController {
         response.put("response", "OK");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/comment")
+    public ResponseEntity<Map<String, Object>> deleteComment(@RequestParam Long commentId){
+        
+        // 계정 검증 후 삭제
+        
+        pathMapService.deletePathComment(commentId);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

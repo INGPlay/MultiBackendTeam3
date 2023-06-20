@@ -16,7 +16,9 @@
 <body>
     <div class="container">
         <div class="d-flex flex-row-reverse bd-highlight">
-            <button class="btn btn-primary" onClick="location.href='/pathmap/mark'">작성하기</button>
+            <button class="btn main_color" onClick="location.href='/pathmap/mark'">
+                <strong>작성하기</strong>
+            </button>
         </div>
 
         <table class="table table table-hover">
