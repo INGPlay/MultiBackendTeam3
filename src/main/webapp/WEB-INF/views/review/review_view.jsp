@@ -41,7 +41,7 @@
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
         <h2>Review view</h2>
         <p>
-            <a href="#" onclick="edit()">글수정</a>| <a href="list">글목록</a>
+            <a href="#" onclick="edit()">글수정</a>| <a href="javascript:history.back()">글목록</a>
         <p>
 
         <form name="bf" id="bf" role="form" method="post">

@@ -52,7 +52,7 @@
     <div class="col-3 text-left">
         <form name="psF" id="psF" action="/review/list" method="get">
             <select name="select" id ="select" style="padding:5px" onchange="check()">
-                <option value="1" <c:if test="${select eq '1'}">selected</c:if>>--</option>
+                <option value="1" <c:if test="${select eq '1'}">selected</c:if>>최신순</option>
                 <option value="2" <c:if test="${select eq '2'}">selected</c:if>>조회순</option>
                 <option value="3" <c:if test="${select eq '3'}">selected</c:if>>추천순</option>
 
@@ -75,28 +75,28 @@
             <th width="10%">추천수</th>
             </thead>
             <tbody>
-                <%-- 테이블에 게시글이 없을 경우 --%>
-                <c:if test="${list eq null or empty list}">
-                    <div class = "slert alert-danger">
-                        <h3>해당 글은 없습니다.</h3>
-                    </div>
-                </c:if>
+            <%-- 테이블에 게시글이 없을 경우 --%>
+            <c:if test="${list eq null or empty list}">
+                <div class = "slert alert-danger">
+                    <h3>해당 글은 없습니다.</h3>
+                </div>
+            </c:if>
 
-                <%-- 테이블에 게시글이 있을 경우 --%>
-                <c:if test="${list ne null and not empty list}">
-                    <c:forEach var="vo" items="${list}">
-                        <tr id="${vo.review_id}">
-                                <td width="10%"><c:out value="${vo.review_id}"/></td>
-                                <td width="10%"><c:out value="${vo.user_name}"/></td>
-                                <td width="20%"><c:out value="${vo.review_title}"/></td>
-                                <td width="20%"><c:out value="${vo.review_content}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.review_views}"/></td>
-                                <td width="10%"><c:out value="${vo.review_recommends}"/></td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
+            <%-- 테이블에 게시글이 있을 경우 --%>
+            <c:if test="${list ne null and not empty list}">
+                <c:forEach var="vo" items="${list}">
+                    <tr id="${vo.review_id}">
+                        <td width="10%"><c:out value="${vo.review_id}"/></td>
+                        <td width="10%"><c:out value="${vo.user_name}"/></td>
+                        <td width="20%"><c:out value="${vo.review_title}"/></td>
+                        <td width="20%"><c:out value="${vo.review_content}"/></td>
+                        <td width="10%"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%"><c:out value="${vo.review_views}"/></td>
+                        <td width="10%"><c:out value="${vo.review_recommends}"/></td>
+                    </tr>
+                </c:forEach>
+            </c:if>
 
             </tbody>
 
@@ -110,6 +110,7 @@
             <form id="actionForm" action="/review/list" method="get" hidden="hidden">
                 <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
                 <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
+                <input type = 'text' name="select" value="${pageMaker.cri.sort}">
             </form>
         </tr>
         <div class="pull-left">
@@ -121,8 +122,9 @@
                 </c:if>
 
                 <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                    <li class="paginate_button">
-                        <a href="${num}">   ${num}    </a>&nbsp
+                    <li class="paginate_button ">
+                        <a style="<c:out value="${pageMaker.cri.pageNum == num ? 'color:red' : 'none'}"/> " href="${num}">${num}</a>&nbsp
+
                     </li>
                 </c:forEach>
 

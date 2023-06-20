@@ -27,14 +27,13 @@ public class reviewController {
 //  게시글 전체 출력
     @GetMapping("/list" )
     public String listReview(Model m, Criteria cri,HttpSession session,  @RequestParam(value="select", required = false, defaultValue = "1") String select){
-        System.out.println(select+"가 선택되었습니다");
+        //System.out.println(select+"가 선택되었습니다");
         int totalCount =  this.service.getTotalCount(); // 전체 게시글 수
         cri.setSort(Integer.parseInt(select));
-        System.out.println(cri.getSort());
+        //System.out.println(cri.getSort());
         m.addAttribute("list",service.getListWithPaging(cri));
         m.addAttribute("pageMaker", new pagingVO(cri,totalCount));
         m.addAttribute("select",select);
-
         return "review/review";
     }
 
@@ -64,7 +63,7 @@ public class reviewController {
 
             review.setUser_id(userid);
 
-            for (int i = 0; i < 500; i++){
+            for (int i = 0; i < 20; i++){
                 int n = service.insertReview(review);
                  System.out.println("정상적으로 삽입 완료");
         }
@@ -77,7 +76,6 @@ public class reviewController {
     @GetMapping("/view")
     public String reviewForm(Model m, HttpServletRequest seq,HttpSession session){
         String id = seq.getParameter("review_id");
-
         reviewVO vo = service.selectReviewOne(Integer.valueOf(id));
         int n = service.updateReview_views(vo);
         m.addAttribute("vo",vo);
@@ -92,15 +90,12 @@ public class reviewController {
     public String editForm(Model m , @ModelAttribute reviewVO vo,HttpSession session){
         //System.out.println("수정폼 이동");
         m.addAttribute("vo",vo);
-
     return "review/edit";
     }
 
     @PostMapping("/delete")
     public String deleteReview(Model m , HttpServletRequest seq,HttpSession session){
         String id = seq.getParameter("review_id");
-        // System.out.println(id); 정상적으로 받아오기 완료
-
         int n = service.deleteReview(Integer.parseInt(id));
         String str = (n>0)? "정상적으로 삭제 완료":"삭제 실패 지져스";
         System.out.println(str);
