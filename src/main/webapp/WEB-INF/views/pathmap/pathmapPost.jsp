@@ -119,62 +119,40 @@
 
 			</div>
 			<script>
-				let isHide = false;
+				let isOpenComment = false;
 				function hideUserSelectListView(){
 					let element = document.getElementById("userSelectListView")
 					
-					if (isHide === false){
+					if (isOpenComment === false){
 						element.style.display = "none";
-						isHide = true;
+						getComment()
+						isOpenComment = true;
 					} else {
 						element.style.display = "block";
-						isHide = false;
+						isOpenComment = false;
 					}
 				}
 			</script>
 
 
+			<!-- 댓글창 -->
 			<div class="collapse list-group list-group-flush border-bottom scrollarea" id="collapseExample">
 				
-				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>
-				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>							<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
-					fasdf
-				</a>
+				<!-- 스크롤링 -->
+				<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'>
 
+					<!-- 댓글 리스트 -->
+					<dl id = "commentList" class="row mb-0" style="word-break:break-all;">
+					</dl>
+
+				</a>
+				
+				<!-- 댓글 작성 -->
+				<div class="input-group input-group-lg">
+					<input type="text" class="form-control" id = "commentInput">
+	
+					<span type="button" onclick="submitComment()" class="input-group-text">작성</span>
+				</div>
 			</div>
 
 		</div>
@@ -767,6 +745,69 @@
 				// { "response" : "OK" }
 				console.log(response["response"])
 				window.location.replace("/pathmap");
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		}
+
+		// 댓글 달기
+		function getComment(){
+
+			let data = {
+				"pathId" : pathId
+			}
+
+			$.ajax({
+				url: "/api/pathmap/comment",
+				type: 'GET',
+				dataType: "json",
+				data : data
+			})
+			.done(function(response){
+				let commentList = document.getElementById("commentList")
+
+				let result = "";
+				
+				response.forEach(comment => {
+					result += '\
+						<dt class="col-sm-3">' + comment["username"] + '</dt> \
+						<dd class="col-sm-9 mb-1"> \
+							<p> \
+							' + comment["content"] + '  \
+							</p> \
+							<p> \
+								<small>' + comment["updateDate"] + '</small> \
+							</p> \
+						</dd> \
+					'
+				})
+
+				commentList.innerHTML = result;
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		}
+
+		// 댓글 달기
+		function submitComment(){
+			let comment = document.getElementById('commentInput').value;
+
+			let data = {
+				"comment" : comment,
+				"pathId" : pathId
+			}
+
+			$.ajax({
+				url: "/api/pathmap/comment",
+				type: 'POST',
+				dataType: "json",
+				data : data
+			})
+			.done(function(response){
+
+				getComment()
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)

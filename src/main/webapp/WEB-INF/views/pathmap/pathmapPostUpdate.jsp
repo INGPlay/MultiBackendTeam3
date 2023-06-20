@@ -64,6 +64,25 @@
 
 </head>
 <body style="height: 100%;">
+	<!-- Modal -->
+	<div class="modal fade" id="deleteCheck" tabindex="-1" aria-labelledby="deleteCheckLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="deleteCheckLabel">확인</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+				플래너를 삭제하시겠습니까?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" onclick="deletePath()" >삭제하기</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
 	<main class="flex-row">
@@ -139,7 +158,8 @@
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 				
-					<span onclick="deletePath()" class="input-group-text" id="inputGroup-sizing-lg">삭제</span>
+					<span class="input-group-text" id="inputGroup-sizing-lg" 
+						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">삭제</span>
 			</div>
 
 			<!-- 패스맵 리스트 -->

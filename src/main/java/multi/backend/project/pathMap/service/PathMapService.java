@@ -2,6 +2,8 @@ package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.domain.pathmap.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.InsertPathCommentDto;
 import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
 import multi.backend.project.pathMap.mapper.PathMapMapper;
@@ -137,6 +139,19 @@ public class PathMapService {
     public void deletePath(Long pathId){
         // path 삭제
         pathMapMapper.deletePathMap(pathId);
+    }
+
+
+    @Transactional
+    public List<CommentResponse> selectComment(Long pathId){
+        List<CommentResponse> commentResponses = pathMapMapper.selectPathComment(pathId);
+
+        return commentResponses;
+    }
+
+    @Transactional
+    public void insertPathComment(InsertPathCommentDto insertPathCommentDto){
+        pathMapMapper.insertPathComment(insertPathCommentDto);
     }
 
     private static String handleNullOrEmpty(String string){

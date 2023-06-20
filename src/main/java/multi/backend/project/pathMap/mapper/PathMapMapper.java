@@ -1,5 +1,7 @@
 package multi.backend.project.pathMap.mapper;
 
+import multi.backend.project.pathMap.domain.pathmap.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.InsertPathCommentDto;
 import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
 import org.apache.ibatis.annotations.*;
@@ -48,6 +50,25 @@ public interface PathMapMapper {
             "ON p.USER_ID = m.USER_ID\n" +
             "Where p.PATH_ID = ${pathId}")
     PathInfoResponse selectPathInfo(Long pathId);
+
+    @Select("select m.user_name, p.content, p.create_date, p.update_date, p.comment_group, p.comment_depth \n" +
+            "FROM PATH_COMMENT p JOIN MEMBERUSER m \n" +
+            "ON p.user_id = m.user_id \n" +
+            "where p.PATH_ID = ${pathId}")
+    List<CommentResponse> selectPathComment(Long pathId);
+
+    @Insert("insert into path_comment (comment_id, path_id, create_date, update_date, content, comment_group, comment_depth, user_id) \n" +
+            "values ( \n" +
+            "Path_Comment_Sequence.nextval,\n" +
+            "${pathId}, \n" +
+            "sysdate, \n" +
+            "sysdate, \n" +
+            "#{commentContent}, \n" +
+            "0, \n" +
+            "0, \n" +
+            "(select user_id from MemberUser u where u.user_name = #{username}) \n" +
+            ")")
+    void insertPathComment(InsertPathCommentDto insertPathCommentDto);
 
     // XML 파일
     void insertMarksBatch(List<Map<String, Object>> markInfoRequests);

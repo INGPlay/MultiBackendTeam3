@@ -3,6 +3,8 @@ package multi.backend.project.pathMap.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.domain.pathmap.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.InsertPathCommentDto;
 import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
 import multi.backend.project.pathMap.service.PathMapService;
@@ -86,5 +88,26 @@ public class PathMapApiController {
         responseMap.put("infoList", markInfoList);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/comment")
+    public ResponseEntity<List<CommentResponse>> getCommentList(@RequestParam Long pathId){
+
+        List<CommentResponse> commentResponses = pathMapService.selectComment(pathId);
+
+        return new ResponseEntity<>(commentResponses, HttpStatus.OK);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<Map<String, Object>> submitComment(@RequestParam String comment,
+                                                             @RequestParam Long pathId){
+
+        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(pathId, "나", comment);
+
+        pathMapService.insertPathComment(insertPathCommentDto);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
