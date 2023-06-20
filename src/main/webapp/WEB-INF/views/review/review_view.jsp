@@ -41,13 +41,14 @@
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
         <h2>Review view</h2>
         <p>
-            <a href="#" onclick="edit()">글수정</a>| <a href="list">글목록</a>
+            <a href="#" onclick="edit()">글수정</a>| <a href = "#" onclick="goList()">글목록</a>
         <p>
 
         <form name="bf" id="bf" role="form" method="post">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
-            <input type="hidden" name="mode" value="">
+
+
             <!-- 원본글쓰기: mode=> write
                  답변글쓰기: mode=> rewrite
                   글수정  : mode=> edit
@@ -66,7 +67,6 @@
                     <td style="width:80%">
                         <input type="hidden" name="user_id" id="user_id" value="${vo.user_id}" readonly />
                         <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
-
                     </td>
                 </tr>
 
@@ -76,29 +76,24 @@
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
                 </tr>
-
             </table>
         </form>
-
-
-        <form>
-            <table id = Rereview>
-
-
-            </table>
-
+        <form method="get" action="list" name="reset" id="reset">
 
         </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
+
 </body>
 <script>
     const edit = function(){
-        var review_id =$('#review_id').val();
-        //alert(1)
         bf.method='post';
         bf.action='edit'
         bf.submit();
+    }
+
+    const goList = function (){
+        reset.submit();
     }
 </script>
 </html>

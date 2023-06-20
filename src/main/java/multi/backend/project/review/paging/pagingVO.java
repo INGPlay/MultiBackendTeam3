@@ -22,7 +22,7 @@ public class pagingVO {
         int realEnd = (int)(Math.ceil((total *1.0)/cri.getAmount()));
 
         if(realEnd < this.endPage){
-             this.endPage = realEnd;
+            this.endPage = realEnd;
         }
 
         this.prev = this.startPage>1;
