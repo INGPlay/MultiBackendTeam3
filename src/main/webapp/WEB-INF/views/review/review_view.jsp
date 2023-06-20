@@ -47,7 +47,8 @@
         <form name="bf" id="bf" role="form" method="post">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
-            <input type="hidden" name="mode" value="">
+
+
             <!-- 원본글쓰기: mode=> write
                  답변글쓰기: mode=> rewrite
                   글수정  : mode=> edit
@@ -79,25 +80,9 @@
 
             </table>
         </form>
-
-
-        <form>
-            <table id = Rereview>
-
-
-            </table>
-
-
-        </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
-<div class="col-md-8 offset-md-2 my-4">
-    <form>
-        <h1>댓글 들어갈 곳</h1>
 
-    </form>
-
-</div>
 </body>
 <script>
     const edit = function(){

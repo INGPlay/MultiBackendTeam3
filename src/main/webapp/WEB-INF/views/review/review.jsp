@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 <!DOCTYPE html>
@@ -26,23 +25,16 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        #content {
-            overflow-y: scroll;
-            -ms-overflow-style: none; /* 인터넷 익스플로러 */
-            scrollbar-width: none; /* 파이어폭스 */
+        .pagination{
+            justify-content: center;
+            border: 1px solid #aaa;
         }
-        #content::-webkit-scrollbar {
-            display: none; /* 크롬, 사파리, 오페라, 엣지 */
-        }
+
+         .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
     </style>
 </head>
 
 <body>
-<div class="row my-5">
-    <div class="col-12 text-center">
-        <h2>상단바</h2>
-    </div>
-</div>
 <div class="row my-3">
     <div class="col-9 text-right">
         <form name="searchF" action="/review/write" method="get" >
@@ -103,18 +95,20 @@
 
         </table>
         <tr>
-            <form action="/review/view" method="get" id="hidden" hidden="hidden">
+            <form action="/review/view" method="get" id="hidden" hidden="hidden"> <%--hidden="hidden"--%>
                 <input type="text" id="review_id" name="review_id" value="">
+                <input type="text" id="pageVo" name="pageVo" value="${pageVO}">
             </form>
 
             <form id="actionForm" action="/review/list" method="get" hidden="hidden">
                 <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
                 <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
                 <input type = 'text' name="select" value="${pageMaker.cri.sort}">
+
             </form>
         </tr>
-        <div class="pull-left">
-            <ul class="pagination">
+        <div>
+            <ul class="pagination" >
                 <c:if test="${pageMaker.prev}">
                     <li class="paginate_button previous">
                         <a href="${pageMaker.startPage -1}">  Previous  </a>&nbsp
@@ -159,7 +153,6 @@
 
         var actionForm = $("#actionForm");
         $(document).on('click', 'tr', function(event) {
-
             var id = $(this).attr('id');
             //alert(id);
 
@@ -186,11 +179,6 @@
 
 </script>
 
-
-<!-- footer -->
-<div class="jumbotron jumbotron-fluid text-center" style="margin-bottom: 0">
-    <h2>하단바</h2>
-</div>
 </body>
 </html>
 
