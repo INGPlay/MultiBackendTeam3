@@ -74,7 +74,7 @@
 			<div id="map"></div>
 
 			<!-- 카테고리 선택 -->
-			<div class="custom_contentType radius_border badge text-wrap" style="background-color: skyblue;"> 
+			<div class="custom_contentType radius_border badge text-wrap bg-primary bg-opacity-75"> 
 				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
 				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
 				<!-- 행사/공연/축제 -->
@@ -87,7 +87,7 @@
 			</div>
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
-			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
+			<div class="custom_oneshot radius_border bg-primary bg-opacity-75"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
@@ -148,8 +148,8 @@
 
 			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex justify-content-center" onclick="updateUserSelectList()">
-				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
-						style="width: 100%; justify-content: center; background-color:skyblue;">
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-75"
+						style="width: 100%; justify-content: center;">
 					<span class="fs-5 fw-semibold">수정</span>
 				</button>
 			</div>

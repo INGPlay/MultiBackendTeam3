@@ -74,7 +74,7 @@
 			<div id="map"></div>
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
-			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
+			<div class="custom_oneshot radius_border bg-primary bg-opacity-75"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
@@ -97,29 +97,42 @@
 			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
 			</div>
 
-			<!-- 댓글, 코멘트 -->
-			<div class="mt-auto d-flex flex-column justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom" onclick="hideUserSelectListView()"
-						style="width: 100%; justify-content: center; background-color:skyblue;"
-						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-					<span class="fs-5 fw-semibold">댓글?</span>
+			<!-- 추천, 복사, 댓글 -->
+			<div class="mt-auto d-flex flex-row justify-content-center">
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-75"
+						style="width: 100%; justify-content: center;"
+						type="button">
+					<span class="fs-5 fw-semibold">추천</span>
 				</button>
 
-				<script>
-					let isHide = false;
-					function hideUserSelectListView(){
-						let element = document.getElementById("userSelectListView")
-						
-						if (isHide === false){
-							element.style.display = "none";
-							isHide = true;
-						} else {
-							element.style.display = "block";
-							isHide = false;
-						}
-					}
-				</script>
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-50"
+						style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
+						type="button">
+					<span class="fs-5 fw-semibold">복사</span>
+				</button>
+
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom bg-primary bg-opacity-25" 
+						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
+						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					<span class="fs-5 fw-semibold">댓글</span>
+				</button>
+
 			</div>
+			<script>
+				let isHide = false;
+				function hideUserSelectListView(){
+					let element = document.getElementById("userSelectListView")
+					
+					if (isHide === false){
+						element.style.display = "none";
+						isHide = true;
+					} else {
+						element.style.display = "block";
+						isHide = false;
+					}
+				}
+			</script>
+
 
 			<div class="collapse list-group list-group-flush border-bottom scrollarea" id="collapseExample">
 				
@@ -712,6 +725,33 @@
 
 			let data = {
 				"title" : title,
+				"request" : JSON.stringify(userSelectList)
+			}
+
+			console.log("제출")
+			
+			$.ajax({
+				url: "/api/pathmap",
+				type: 'POST',
+				dataType: "json",
+				data : data
+			})
+			.done(function(response) {
+				// { "response" : "OK" }
+				console.log(response["response"])
+				window.location.replace("/pathmap");
+			})
+			.fail(function(error) {
+				console.log("Error : " + error)
+			});
+		}
+
+		// 패스맵 복사
+		function copyUserSelectList(){
+			let title = document.getElementById('pathmapTitle').value;
+
+			let data = {
+				"title" : "[복사] " + title,
 				"request" : JSON.stringify(userSelectList)
 			}
 
