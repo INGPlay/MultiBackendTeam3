@@ -43,44 +43,176 @@
               </tr> -->
             </tbody>
         </table>
+
+        <!-- 페이징 바 -->
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+
+                <!-- 페이징 리스트 -->
+                <ul class="pagination" id = "pagingButtonList">
+
+                    <!-- 이전 페이지 -->
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    
+                    <!-- 다음 페이지 -->
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
     </div>
 
     <script>
-        
-        initPathList()
 
-        function initPathList(){
+        let PAGE_PAGE = 1;
+        let PAGE_SIZE = 10;
+        let PAGE_ORDERBY = "createDate";
+        let PAGE_SEARCHWORD = ""
+        
+        updatePage(PAGE_PAGE, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+
+        function updatePage(page, size, orderBy, searchWord){
+
+            const data = {
+                "page" : page,
+                "size" : size,
+                "orderBy" : orderBy,
+                "searchWord" : searchWord
+            }
 
             $.ajax({
 					url : "/api/pathmap",
 					type : "GET",
-					// data : params,
+					data : data,
 					contentType: "application/json",
-					dataType : "json"
+					dataType : "json",
+                    async:false
 				}).done((response) => {
                     
-                    let listRow = document.getElementById("listRow")
+                    console.log(response)
+                    
+                    initPathList(response["pathInfoResponses"])
 
-                    let result = ''
-                    response.forEach(r => {
-
-                        result += " \
-                            <tr onclick='window.location.href= \"/pathmap/" + r['pathId'] + "\"'> \
-                                <th scope='row'>" + r['pathId'] +"</th> \
-                                <td>" + r['pathTitle'] + "</td> \
-                                <td>" + r['username'] + "</td> \
-                                <td>" + r['createDate'] + "</td> \
-                                <td>" + r['pathRecommends'] + "</td> \
-                                <td>" + r['pathViews'] + "</td> \
-                            </tr> \
-                        "
-                    })
-
-                    document.getElementById("listRow").innerHTML = result
+                    initPagingBar(response)
 
                 }).fail((error) => {
                     alert("불러오기에 실패하였습니다.")
                 })
+        }
+
+        function initPathList(pathList){
+            
+            let result = ''
+            pathList.forEach(path => {
+
+                result += " \
+                    <tr onclick='window.location.href= \"/pathmap/" + path['pathId'] + "\"'> \
+                        <th scope='row'>" + path['pathId'] +"</th> \
+                        <td>" + path['pathTitle'] + "</td> \
+                        <td>" + path['username'] + "</td> \
+                        <td>" + path['createDate'] + "</td> \
+                        <td>" + path['pathRecommends'] + "</td> \
+                        <td>" + path['pathViews'] + "</td> \
+                    </tr> \
+                "
+            })
+
+            let listRow = document.getElementById("listRow")
+            document.getElementById("listRow").innerHTML = result
+        }
+
+        function initPagingBar(response){
+
+            let result = ''
+
+            const hasPrevious = response["hasPrevious"]
+            const hasNext = response["hasNext"]
+            const pageNumList = response["pageNumList"]
+
+            const previousButtonId = "previousButton"
+            const nextButtonId = "nextButton"
+            const pageNumIdTemplate = "pageButton"
+            
+            if (hasPrevious){
+
+                result += ' \
+                    <li class="page-item"> \
+                        <a id = "' + previousButtonId + '" class="page-link" aria-label="Previous"> \
+                            <span aria-hidden="true">&laquo;</span> \
+                        </a> \
+                    </li> \
+                '
+            }
+
+            pageNumList.forEach(pageNum => {
+
+                if (pageNum === response["currentPageNum"]){
+                    result += '\
+                    <li class="page-item active"> \
+                    '
+                } else {
+                    result += '\
+                    <li class="page-item"> \
+                    '
+                }
+
+                let pageNumId = pageNumIdTemplate + pageNum
+                result += ' \
+                        <a id = "' + pageNumId + '" class="page-link">' + pageNum + '</a> \
+                    </li> \
+                '
+            })
+
+
+            if (hasNext){
+                result += ' \
+                    <li class="page-item"> \
+                        <a id = "' + nextButtonId + '" class="page-link" aria-label="next" > \
+                            <span aria-hidden="true">&raquo;</span> \
+                        </a> \
+                    </li> \
+                '
+            }
+
+            let pagingBar = document.getElementById("pagingButtonList")
+            pagingBar.innerHTML = result;
+
+            // 이벤트 등록
+            pageNumList.forEach(pageNum => {
+                let pageNumId = pageNumIdTemplate + pageNum
+
+                document.getElementById(pageNumId).addEventListener("click", event => {
+                    updatePage(pageNum, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                })
+            })
+
+            if (hasPrevious){
+                document.getElementById(previousButtonId).addEventListener("click", event => {
+                    updatePage(response["previousNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                })
+            }
+
+            if (hasNext){
+                document.getElementById(nextButtonId).addEventListener("click", event => {
+                    updatePage(response["nextNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                })
+            }
+
+
+
         }
     </script>
 </body>

@@ -1,9 +1,7 @@
 package multi.backend.project.pathMap.mapper;
 
-import multi.backend.project.pathMap.domain.pathmap.CommentResponse;
-import multi.backend.project.pathMap.domain.pathmap.InsertPathCommentDto;
-import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
-import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.*;
+import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -77,7 +75,7 @@ public interface PathMapMapper {
     // XML 파일
     void insertMarksBatch(List<Map<String, Object>> markInfoRequests);
 
-    List<PathInfoResponse> selectPathInfoList();
+    List<PathInfoResponse> selectPathInfoList(PathThreadPageDto pathThreadPageDto);
 
     List<MarkInfoResponse> selectMarkInfoByPathId(Long pathId);
 }

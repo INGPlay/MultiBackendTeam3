@@ -41,10 +41,27 @@
     </insert>
 
     <!-- 동적쿼리 추가 될 예정 -->
-    <select id="selectPathInfoList" resultType="multi.backend.project.pathMap.domain.pathmap.PathInfoResponse">
+    <select id="selectPathInfoList"
+            parameterType="multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto"
+            resultType="multi.backend.project.pathMap.domain.pathmap.PathInfoResponse">
         SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS
         FROM PATH p JOIN MEMBERUSER m
         ON p.USER_ID = m.USER_ID
+        where 1 = 1
+        <if test="searchWord != null and searchWord != ''">
+            and p.PATH_TITLE like concat('%', #{searchWord}, '%')
+        </if>
+
+        <if test=" 'createDate'.equals(orderBy) ">
+            Order by p.create_date desc
+        </if>
+        <if test=" 'view'.equals(orderBy) ">
+            Order by p.PATH_VIEWS desc
+        </if>
+        <if test=" 'recommend'.equals(orderBy)">
+            Order by p.PATH_RECOMMENDS desc
+        </if>
+
     </select>
 
     <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse">

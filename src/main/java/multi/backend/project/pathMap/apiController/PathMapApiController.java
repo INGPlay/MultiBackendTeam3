@@ -3,10 +3,9 @@ package multi.backend.project.pathMap.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.pathMap.domain.pathmap.CommentResponse;
-import multi.backend.project.pathMap.domain.pathmap.InsertPathCommentDto;
-import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
-import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.*;
+import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
+import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.service.PathMapService;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +30,7 @@ public class PathMapApiController {
                                              @RequestParam String request) throws ParseException {
 
         log.info("title : {}", title);
+
         pathMapService.insertPath("나", title, request);
 
         HashMap<String, Object> response = new HashMap<>();
@@ -66,14 +66,17 @@ public class PathMapApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 조회
     @GetMapping
-    public ResponseEntity<List<PathInfoResponse>> selectPathInfoList(){
+    public ResponseEntity<PathPagingResponse> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
+                                                                 @RequestParam(defaultValue = "10") int size,
+                                                                 @RequestParam(defaultValue = "createDate") String orderBy,
+                                                                 @RequestParam(defaultValue = "") String searchWord){
 
-        List<PathInfoResponse> pathList = pathMapService.getPathInfoList();
+        PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord);
 
-        pathList.forEach(p -> {
-            log.info("{} {}",p.getPathTitle(), p.getCreateDate());
-        });
+        PathPagingResponse pathList = pathMapService.getPathInfoList(pathThreadPageDto);
+
         return new ResponseEntity<>(pathList, HttpStatus.OK);
     }
 
@@ -90,6 +93,7 @@ public class PathMapApiController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
+    // 댓글 관련 ---------------------------------
     @GetMapping("/comment")
     public ResponseEntity<List<CommentResponse>> getCommentList(@RequestParam Long pathId){
 
