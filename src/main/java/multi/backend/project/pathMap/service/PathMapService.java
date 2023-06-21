@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
+import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import multi.backend.project.pathMap.mapper.PathMapMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,7 +32,7 @@ public class PathMapService {
     private final JSONParser jsonParser;
 
 
-    // 동적 쿼리 예정
+    // 동적 쿼리
     @Transactional
     public PathPagingResponse<PathInfoResponse> getPathInfoList(PathThreadPageDto pathThreadPageDto){
         List<PathInfoResponse> pathInfoResponses = pathMapMapper.selectPathInfoList(pathThreadPageDto);
@@ -129,6 +132,12 @@ public class PathMapService {
 
         pathMapMapper.updatePathMap(pathId, title);
         updateMarks(pathId, requestJson);
+    }
+    
+    // 조회수 추가    
+    public void plusPathViews(Long pathId){
+
+        pathMapMapper.updatePathMapViews(pathId);
     }
 
     private void updateMarks(Long pathId, String requestJson) throws ParseException {

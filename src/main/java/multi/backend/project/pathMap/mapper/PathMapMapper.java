@@ -2,6 +2,9 @@ package multi.backend.project.pathMap.mapper;
 
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
+import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -29,6 +32,12 @@ public interface PathMapMapper {
             "where PATH_ID = ${pathId}")
     void updatePathMap(Long pathId, String title);
 
+    @Update("UPDATE PATH \n" +
+            "SET \n" +
+            "PATH_VIEWS = (PATH_VIEWS + 1)\n" +
+            "where PATH_ID = ${pathId}")
+    void updatePathMapViews(Long pathId);
+
     @Delete("Delete from PATH \n" +
             "where path_id = ${pathId}")
     void deletePathMap(Long pathId);
@@ -40,7 +49,7 @@ public interface PathMapMapper {
     @Select("SELECT PATH_SEQUENCE.NEXTVAL FROM DUAL")
     Long getPathmapNextval();
 
-    @Select("SELECT MAX(mark_id) from Mark")
+    @Select("SELECT NVL(MAX(mark_id), 0) from Mark")
     Long getMarkCount();
 
     @Select("SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS\n" +

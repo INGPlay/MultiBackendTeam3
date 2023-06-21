@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
+import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import multi.backend.project.pathMap.service.PathMapService;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -69,9 +72,9 @@ public class PathMapApiController {
     // 조회
     @GetMapping
     public ResponseEntity<PathPagingResponse<PathInfoResponse>> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
-                                                                                 @RequestParam(defaultValue = "10") int size,
-                                                                                 @RequestParam(defaultValue = "createDate") String orderBy,
-                                                                                 @RequestParam(defaultValue = "") String searchWord,
+                                                                                   @RequestParam(defaultValue = "10") int size,
+                                                                                   @RequestParam(defaultValue = "createDate") String orderBy,
+                                                                                   @RequestParam(defaultValue = "") String searchWord,
                                                                                    @RequestParam(defaultValue = "title") String searchOption){
 
         log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}", page, size, orderBy, searchWord, searchOption);
@@ -83,6 +86,7 @@ public class PathMapApiController {
         return new ResponseEntity<>(pathList, HttpStatus.OK);
     }
 
+    // 게시글 조회
     @GetMapping("/{pathId}")
     public ResponseEntity<Map<String, Object>> selectPathInfoDetail(@PathVariable Long pathId){
 

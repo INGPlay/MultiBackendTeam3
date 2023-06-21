@@ -1,4 +1,4 @@
-package multi.backend.project.pathMap.domain.pathmap;
+package multi.backend.project.pathMap.domain.pathmap.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
