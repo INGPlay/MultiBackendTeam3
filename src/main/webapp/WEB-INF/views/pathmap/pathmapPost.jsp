@@ -124,11 +124,11 @@
 					let element = document.getElementById("userSelectListView")
 					
 					if (isOpenComment === false){
-						element.style.display = "none";
+						element.style.height="50%"
 						getComment()
 						isOpenComment = true;
 					} else {
-						element.style.display = "block";
+						element.style.height="100%"
 						isOpenComment = false;
 					}
 				}

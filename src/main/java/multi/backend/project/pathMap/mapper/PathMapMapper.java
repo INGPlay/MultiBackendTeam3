@@ -30,7 +30,7 @@ public interface PathMapMapper {
             "PATH_TITLE = #{title},\n" +
             "UPDATE_DATE = SYSDATE\n" +
             "where PATH_ID = ${pathId}")
-    void updatePathMap(Long pathId, String title);
+    void updatePathMap(@Param("pathId") Long pathId, @Param("title") String title);
 
     @Update("UPDATE PATH \n" +
             "SET \n" +

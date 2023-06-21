@@ -18,7 +18,7 @@
         <div class="d-flex flex-row bd-highlight">
             <!-- 조회 조건 -->
             <select class="col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
-                <option value="createDate" selected>작성일순</option>
+                <option value="createDate" selected>최신순</option>
                 <option value="view">조회순</option>
                 <option value="recommend">추천순</option>
             </select>
