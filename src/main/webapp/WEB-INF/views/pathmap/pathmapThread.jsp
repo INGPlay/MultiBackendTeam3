@@ -19,8 +19,8 @@
             <!-- 조회 조건 -->
             <select class="col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
                 <option value="createDate" selected>작성일순</option>
-                <option value="title">조회순</option>
-                <option value="author">추천순</option>
+                <option value="view">조회순</option>
+                <option value="recommend">추천순</option>
             </select>
 
             <button class="btn main_color ms-auto" onClick="location.href='/pathmap/mark'">

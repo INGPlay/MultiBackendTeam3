@@ -23,7 +23,7 @@ public interface PathMapMapper {
             "0,\n" +
             "0\n" +
             ")")
-    void insertPathMap(Long pathId, String username, String title);
+    void insertPathMap(@Param("pathId") Long pathId, @Param("username") String username, @Param("title") String title);
 
     @Update("UPDATE PATH \n" +
             "SET\n" +

@@ -20,7 +20,7 @@
             mark_tel,
             mark_placeOrder
         )
-        <foreach collection = "markInfoRequests" item="item" separator=" UNION ALL ">
+        <foreach collection = "list" item="item" separator=" UNION ALL ">
             select
                 ${item.markId},
                 ${item.pathId},
@@ -44,7 +44,7 @@
     <select id="selectPathInfoList"
             parameterType="multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto"
             resultType="multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse">
-        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS
+        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, (SELECT count(*) FROM FAVORITE f WHERE PATH_ID = p.path_id) recommend
         FROM PATH p JOIN MEMBERUSER m
         ON p.USER_ID = m.USER_ID
         where 1 = 1
@@ -65,7 +65,7 @@
             Order by p.PATH_VIEWS desc
         </if>
         <if test=" 'recommend'.equals(orderBy)">
-            Order by p.PATH_RECOMMENDS desc
+            Order by recommend desc
         </if>
 
     </select>

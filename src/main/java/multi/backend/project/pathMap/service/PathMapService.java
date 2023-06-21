@@ -88,10 +88,12 @@ public class PathMapService {
         // 트랜잭션 안에서 같은 pathId를 보장하기 위해
         Long pathId = pathMapMapper.getPathmapNextval();
 
+        log.info("asdfasdf : {}", pathId);
         pathMapMapper.insertPathMap(pathId, username, handleNullOrEmpty(title));
         insertMarks(pathId, requestJson);
     }
 
+    @Transactional
     private void insertMarks(Long pathId, String requestJson) throws ParseException {
         JSONArray request = (JSONArray) jsonParser.parse(requestJson);
 
@@ -134,7 +136,7 @@ public class PathMapService {
         updateMarks(pathId, requestJson);
     }
     
-    // 조회수 추가    
+    // 조회수 추가
     public void plusPathViews(Long pathId){
 
         pathMapMapper.updatePathMapViews(pathId);

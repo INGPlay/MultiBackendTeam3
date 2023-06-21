@@ -101,8 +101,8 @@
 			<div class="mt-auto d-flex flex-row justify-content-center">
 				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
 						style="width: 100%; justify-content: center;"
-						type="button">
-					<span class="fs-5 fw-semibold">추천</span>
+						type="button" onclick="toggleFavorite()">
+					<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
 				</button>
 
 				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
@@ -558,6 +558,9 @@
 
 			// 바운드
 			setUserSelectListBounds()
+
+			// 사용자가 추천했는지 갱신
+			renewFavorite()
 		}
 
 		async function renewUserSelectSidebar(){
@@ -677,6 +680,55 @@
 			return promiseTransCoords
 		}
 
+		// 추천 버튼 갱신
+		function renewFavorite(){
+			
+			const data = {
+				"pathId" : pathId
+			}
+
+			$.ajax({
+				url : "/api/pathmap/favorite",
+				data : data,
+				type : "GET",
+				contentType: "application/json",
+			}).done((response) => {
+				console.log(response)
+
+				let favoriteButtonText = document.getElementById("favoriteButtonText")
+				if (response["isFavorite"] === true) {
+					favoriteButtonText.innerHTML = "추천완료"
+				} else {
+					favoriteButtonText.innerHTML = "추천"
+				}
+
+			}).fail((error) => {
+				console.log("error : " + error)
+			})
+		}
+
+		function toggleFavorite(){
+			
+			const data = {
+				"pathId" : pathId
+			}
+
+			$.ajax({
+				url : "/api/pathmap/favorite",
+				data : data,
+				type : "POST",
+			}).done((response) => {
+				console.log(response)
+
+				renewFavorite()
+
+			}).fail((error) => {
+				console.log("error : " + error)
+			})
+		}
+
+
+
 		// userSelectList의 특정 인덱스의 값을 삭제
 		function deleteUserSelectByIndex(index){
 			userSelectList.splice(index, 1)
@@ -785,9 +837,9 @@
 							<p> \
 							' + comment["content"] + '  \
 							</p> \
-							<p> \
+							<p class = "d-flex"> \
 								<small>' + comment["updateDate"] + '</small> \
-								<button onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button> \
+								<button class="ms-auto" onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button> \
 							</p> \
 						</dd> \
 					'

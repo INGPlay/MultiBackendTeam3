@@ -3,12 +3,14 @@ package multi.backend.project.pathMap.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.domain.favorite.FavoriteDto;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
+import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class PathMapApiController {
 
     private final PathMapService pathMapService;
+    private final FavoriteService favoriteService;
 
     // 생성
     @PostMapping
@@ -98,6 +101,33 @@ public class PathMapApiController {
         responseMap.put("infoList", markInfoList);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    // 추천 관련 ------------------------------------
+    @GetMapping("/favorite")
+    public ResponseEntity<Map<String, Object>> isFavorite(@RequestParam Long pathId){
+
+        FavoriteDto favoriteDto = new FavoriteDto("나", pathId);
+
+        boolean isFavorite = favoriteService.isFavorite(favoriteDto);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        response.put("isFavorite", isFavorite);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/favorite")
+    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestParam Long pathId){
+
+        FavoriteDto favoriteDto = new FavoriteDto("나", pathId);
+
+        favoriteService.toggleFavorite(favoriteDto);
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("response", "OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 댓글 관련 ---------------------------------
