@@ -74,7 +74,7 @@
 			<div id="map"></div>
 
 			<!-- 카테고리 선택 -->
-			<div class="custom_contentType radius_border badge text-wrap" style="background-color: skyblue;"> 
+			<div class="custom_contentType radius_border badge text-wrap main_color_only"> 
 				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
 				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
 				<!-- 행사/공연/축제 -->
@@ -87,8 +87,8 @@
 			</div>
 
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
-			<div class="custom_oneshot radius_border" style="background-color: skyblue;"> 
-				<span id="boundButton" class="fw-semibold">한눈에 보기</span>
+			<div class="custom_oneshot radius_border main_color"> 
+				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
 			</div>
 
 			<div class="custom_searchBar">
@@ -105,6 +105,14 @@
 
 						<!-- 검색창 -->
 						<input id="keywordSearch" type="text" class="form-control">
+						<script>
+							document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+								if (event.keyCode === 13) {
+									event.preventDefault();
+									searchTourInfoKeyword(this.value)
+								}
+							});
+						</script>
 						
 						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
 					</div>
@@ -120,10 +128,11 @@
 
 
 		<!-- 오른쪽 사이드바 -->
-		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 420px;">
+
+			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
 				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
-
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 			</div>
@@ -132,21 +141,21 @@
 			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
 			</div>
 
-		
-			<div class="mt-auto d-flex justify-content-center" id="submitUserSelectList">
-				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
-						style="width: 100%; justify-content: center; background-color:skyblue;">
-					<!-- 패스맵 제목이 될 곳 -->
+			<!-- 패스맵 제출 및 저장 -->
+			<div class="mt-auto d-flex justify-content-center" onclick="submitUserSelectList()">
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom main_color"
+						style="width: 100%; justify-content: center;">
 					<span class="fs-5 fw-semibold">완료</span>
 				</button>
 			</div>
+
 		</div>
 
-
-
-
 	</main>
+
 	<script>
+
+
 		// 변수 초기화
 		const container = document.getElementById('map');
 		let options = {
@@ -163,6 +172,9 @@
 		const zoomControl = new kakao.maps.ZoomControl();
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+		// 좌표 변환
+		const mapGeocoder = new kakao.maps.services.Geocoder()
+
 		// 선그리기
 		const mapObject = {
 			"polyLine" : new kakao.maps.Polyline({
@@ -175,7 +187,10 @@
 			"overlayList" : []
 		}
 		
-		// {contentId : info}
+		// {contentId : {
+				// 	"marker" : marker,
+				// 	"info" : info
+				// 	}
 		let markInfoMap = new Map();
 
 		// 선택된 컨텐츠 타입
@@ -286,16 +301,6 @@
 			markBasedLocation(params, markInfoMap);
 		})
 
-		// 한눈에 보기 버튼
-		document.getElementById("boundButton").addEventListener("click", setUserSelectListBounds)
-
-		document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
-			if (event.keyCode === 13) {
-				event.preventDefault();
-				searchTourInfoKeyword(this.value)
-			}
-		});
-
 		// 지도 확대에 따라 동적으로 범위 조절
 		function getRadius(mapLevel){
 
@@ -333,17 +338,21 @@
 				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
-				resultAlert(getRadius(map.getLevel()) + "m 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
+				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
 				updateMarkingInMapByResponse(response, false)
 			}).fail((error) => {
 				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
 				console.log(error)
 				console.log(error["responseJSON"]["message"])
 				if (error["status"] === 404){
-					resultAlert(getRadius(map.getLevel()) + "m 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
+					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
 				}
 			})
 
+		}
+
+		function changeMToKm(meter){
+			return meter / 1000;
 		}
 
 		function updateMarkingInMapByResponse(response, isCentered) {
@@ -405,6 +414,10 @@
 			return promiseMarking(map, info["posX"], info["posY"], function(){
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+
+				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+				
 				let content = "\
 					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
 						<div class='d-flex flex-row align-items-center'> \
@@ -416,14 +429,17 @@
 								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 								<div class = 'd-flex flex-row'> \
-									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+									<div class='me-auto d-flex flex-row'> \
+										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+									</div> \
 									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
 								</div> \
 							</div> \
 						</div> \
 					</div> \
 				"
-				
+				info
 				// 백틱 템플릿은 왠지 모르게 안된다
 				/*
 				`\
@@ -511,7 +527,7 @@
 			renewUserSelectMapObject();
 		}
 
-		function renewUserSelectSidebar(){
+		async function renewUserSelectSidebar(){
 			
 			let userSelectListView = document.getElementById("userSelectListView")
 			userSelectListView.innerHTML = "";
@@ -523,24 +539,51 @@
 
 				let listTemplate = "";
 
+				// <a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
 				// 경로 사이 길찾기 링크 생성
 				if (i > 0){
-					listTemplate += "\
-					<a href='http://map.naver.com/index.nhn?slng="+ beforeInfo["posX"] +"&slat=" + beforeInfo["posY"] + "&stext="+ beforeInfo["title"] + "&elng=" + info["posX"] + "&elat=" + info["posY"] + "&pathType=0&showMap=true&etext=" + info["title"] + "&menu=route' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action active py-3 lh-tight userSelectContainer' aria-current='true'> \
-						<div class='d-flex flex-column align-items-center'> \
-							<div> \
-								길찾기 \
+
+					// 비동기 함수의 콜백값을 가져오려는 몸부림
+					let beforeWtmObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
+					let currentWtmObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
+
+					console.log("beforeWtm : " + beforeWtmObject["wtmX"] + ", " + beforeWtmObject["wtmY"])
+					console.log("currentWtm : " + currentWtmObject["wtmX"] + ", " + currentWtmObject["wtmY"])
+
+					if (beforeWtmObject !== null || currentWtmObject !== null){
+						listTemplate += "\
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
+								<div class='d-flex flex-column align-items-center'> \
+									<div> \
+										길찾기 \
+									</div> \
+									<div> \
+										" + beforeInfo["title"] + " → " + info["title"] + "  \
+									</div> \
+								</div> \
+							</a> \
+						"
+					} else {
+						listTemplate += " \
+							<div class='d-flex flex-column align-items-center main_color'> \
+								<div> \
+									길찾기 \
+								</div> \
+								<div> \
+									좌표 변환에 실패하였습니다.  \
+								</div> \
 							</div> \
-							<div> \
-								" + beforeInfo["title"] + " → " + info["title"] + "  \
-							</div> \
-						</div> \
-					</a> \
-					"
+						"
+					}
+
 				}
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
 				console.log(detailUri)
+
+				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+
 				// 가져올 때는 .userSelectContainer로 가져오기
 				listTemplate += " \
 					<a class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'> \
@@ -558,7 +601,10 @@
 								<div class='col-10 mb-1 small'>" + info["addr1"] + " " + info["addr2"] + "</div> \
 								\
 								<div class = 'd-flex flex-row'> \
-									<button class='me-auto' onclick='window.open(\"" + detailUri + "\");'>정보!</button> \
+									<div class='me-auto d-flex flex-row'> \
+										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+									</div> \
 								"
 
 				if (i < userSelectList.length - 1){
@@ -582,9 +628,36 @@
 
 		}
 
+		// 좌표 변환 함수
+		function promiseTransWgs84ToWcongnamul(wgs84X, wgs84Y){
+
+			let promiseTransCoords = new Promise((resolve, reject) => {
+				mapGeocoder.transCoord(wgs84X, wgs84Y, (result, status) => {
+					if (status === kakao.maps.services.Status.OK) {
+						let wtmX = result[0].x;
+						let wtmY = result[0].y;
+
+						resolve({
+							"wtmX" : wtmX,
+							"wtmY" : wtmY 
+						})
+
+					} else {
+						reject(null)
+					}
+				}, {
+					input_coord: kakao.maps.services.Coords.WGS84,
+					output_coord: "WCONGNAMUL"
+				})
+			})
+
+			return promiseTransCoords
+		}
+
 		// userSelectList의 특정 인덱스의 값을 삭제
 		function deleteUserSelectByIndex(index){
 			userSelectList.splice(index, 1)
+			
 			updatePage()
 		}
 
@@ -604,7 +677,8 @@
 			updatePage()
 		}
 
-		document.getElementById("submitUserSelectList").addEventListener("click", () => {
+		// 패스맵 제출, 저장
+		function submitUserSelectList(){
 			let title = document.getElementById('pathmapTitle').value;
 
 			let data = {
@@ -628,7 +702,7 @@
 			.fail(function(error) {
 				console.log("Error : " + error)
 			});
-		})
+		}
 
 
 		// 등록된 좌표 중간에서 다 보여주도록 함
@@ -647,6 +721,12 @@
 			})
 
 			map.setBounds(bounds)
+
+			// 맵 안의 마커 초기화
+			markInfoMap.forEach(markInfo => {
+				markInfo["marker"].setMap(null)
+			})
+			markInfoMap.clear()
 		}
 
 		// 지도 위의 선 그리기
@@ -670,7 +750,7 @@
 
 				let overlayContent = '\
 					<div class="custom_overlay"> \
-						<div style="font-size=20px"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div> \
+						<div style="font-size:20px;"><strong>'+ info["title"] + " : " + (index + 1) + '</strong></div> \
 						<div class="text-muted font-size=8px">' + info["contentType"] + '</div> \
 					</div> \
 				'
@@ -805,7 +885,6 @@
 			alert.style.color = color
 		}
 	</script>
-
 
 	<script src="<c:url value='/js/bootstrap.bundle.min.js' />" type="text/javascript"></script>
     <script src="<c:url value='/js/sidebars.js' />" type="text/javascript"></script>

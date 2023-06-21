@@ -1,0 +1,11 @@
+.main_color_only{
+    background-color: #12bbad;
+}
+
+.main_color{
+    background-color: #12bbad;
+}
+
+.main_color:hover{
+    background-color: #0e8c82;
+}

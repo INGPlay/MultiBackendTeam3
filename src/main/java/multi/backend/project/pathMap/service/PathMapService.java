@@ -2,8 +2,12 @@ package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse;
-import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.*;
+import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
+import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
+import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
+import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import multi.backend.project.pathMap.mapper.PathMapMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,10 +32,15 @@ public class PathMapService {
     private final JSONParser jsonParser;
 
 
-    // 동적 쿼리 예정
+    // 동적 쿼리
     @Transactional
-    public List<PathInfoResponse> getPathInfoList(){
-        return pathMapMapper.selectPathInfoList();
+    public PathPagingResponse<PathInfoResponse> getPathInfoList(PathThreadPageDto pathThreadPageDto){
+        List<PathInfoResponse> pathInfoResponses = pathMapMapper.selectPathInfoList(pathThreadPageDto);
+        int totalCount = pathInfoResponses.size();
+
+        PathPagingResponse<PathInfoResponse> pathPagingResponse = new PathPagingResponse<PathInfoResponse>(pathInfoResponses, pathThreadPageDto.getPage(), pathThreadPageDto.getSize());
+
+        return pathPagingResponse;
     }
 
     @Transactional
@@ -59,6 +68,7 @@ public class PathMapService {
                     handleNullOrEmpty(response.getAddr1()),
                     handleNullOrEmpty(response.getAddr2()),
                     response.getContentId(),
+                    response.getContentTypeId(),
                     response.getContentType(),
                     handleNullOrEmpty(response.getFirstImageURI()),
                     handleNullOrEmpty(response.getFirstImageURI2()),
@@ -78,10 +88,12 @@ public class PathMapService {
         // 트랜잭션 안에서 같은 pathId를 보장하기 위해
         Long pathId = pathMapMapper.getPathmapNextval();
 
+        log.info("asdfasdf : {}", pathId);
         pathMapMapper.insertPathMap(pathId, username, handleNullOrEmpty(title));
         insertMarks(pathId, requestJson);
     }
 
+    @Transactional
     private void insertMarks(Long pathId, String requestJson) throws ParseException {
         JSONArray request = (JSONArray) jsonParser.parse(requestJson);
 
@@ -98,6 +110,7 @@ public class PathMapService {
             markInfoRequest.put("addr1", handleNullOrEmpty((String) info.get("addr1")));
             markInfoRequest.put("addr2", handleNullOrEmpty((String) info.get("addr2")));
             markInfoRequest.put("contentId", (Long) info.get("contentId"));
+            markInfoRequest.put("contentTypeId", (String) info.get("contentTypeId"));
             markInfoRequest.put("contentType", (String) info.get("contentType"));
             markInfoRequest.put("firstImageURI", handleNullOrEmpty((String) info.get("firstImageURI")));
             markInfoRequest.put("firstImageURI2", handleNullOrEmpty((String) info.get("firstImageURI2")));
@@ -112,6 +125,53 @@ public class PathMapService {
         log.info("{}", markInfoRequests);
 
         pathMapMapper.insertMarksBatch(markInfoRequests);
+    }
+
+    @Transactional
+    public void updatePath(Long pathId, String title, String requestJson) throws ParseException {
+
+        log.info("pathId : {}, title : {}", pathId, title);
+
+        pathMapMapper.updatePathMap(pathId, title);
+        updateMarks(pathId, requestJson);
+    }
+    
+    // 조회수 추가
+    public void plusPathViews(Long pathId){
+
+        pathMapMapper.updatePathMapViews(pathId);
+    }
+
+    private void updateMarks(Long pathId, String requestJson) throws ParseException {
+        // 삭제하고
+        pathMapMapper.deleteMarksInPath(pathId);
+        
+        // 새로 삽입
+        insertMarks(pathId, requestJson);
+    }
+
+    @Transactional
+    public void deletePath(Long pathId){
+        // path 삭제
+        pathMapMapper.deletePathMap(pathId);
+    }
+
+
+    @Transactional
+    public List<CommentResponse> selectComment(Long pathId){
+        List<CommentResponse> commentResponses = pathMapMapper.selectPathComment(pathId);
+
+        return commentResponses;
+    }
+
+    @Transactional
+    public void insertPathComment(InsertPathCommentDto insertPathCommentDto){
+        pathMapMapper.insertPathComment(insertPathCommentDto);
+    }
+
+    @Transactional
+    public void deletePathComment(Long commentid){
+        pathMapMapper.deletePathComment(commentid);
     }
 
     private static String handleNullOrEmpty(String string){

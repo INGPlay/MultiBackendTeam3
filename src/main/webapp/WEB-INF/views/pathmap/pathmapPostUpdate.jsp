@@ -46,6 +46,7 @@
 		/* 오버레이 */
 		.custom_overlay{pointer-events: none;}
 
+
 		/* 부트스트랩 사이드바 */
 		.bd-placeholder-img {
 		  font-size: 1.125rem;
@@ -64,6 +65,25 @@
 
 </head>
 <body style="height: 100%;">
+	<!-- Modal -->
+	<div class="modal fade" id="deleteCheck" tabindex="-1" aria-labelledby="deleteCheckLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="deleteCheckLabel">확인</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+				플래너를 삭제하시겠습니까?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" onclick="deletePath()" >삭제하기</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
 	<main class="flex-row">
@@ -73,86 +93,92 @@
 			<!-- 맵 -->
 			<div id="map"></div>
 
+			<!-- 카테고리 선택 -->
+			<div class="custom_contentType radius_border badge text-wrap main_color_only"> 
+				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
+				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
+				<!-- 행사/공연/축제 -->
+				<span id="festival" class="badge text-wrap" onclick="setMarkContentType('15')">페스티벌</span>		
+				<span id="tourCourse" class="badge text-wrap" onclick="setMarkContentType('25')">여행코스</span>
+				<span id="leports" class="badge text-wrap" onclick="setMarkContentType('28')">레포츠</span>
+				<span id="accomodation" class="badge text-wrap" onclick="setMarkContentType('32')">숙박</span>
+				<span id="shopping" class="badge text-wrap" onclick="setMarkContentType('38')">쇼핑</span>
+				<span id="restaurant" class="badge text-wrap" onclick="setMarkContentType('39')">음식점</span>
+			</div>
+
 			<!-- 오른쪽 아래 한눈에 보기 버튼 -->
 			<div class="custom_oneshot radius_border main_color"> 
 				<span class="fw-semibold" onclick="setUserSelectListBounds()">한눈에 보기</span>
+			</div>
+
+			<div class="custom_searchBar">
+				<span>
+					<div class="input-group mb-3">
+
+						<select id="areaLargeSelect" class="select" name="areaLarge" onchange="getAreaSmallCode(this.value)">
+							<option value="">지역</option>
+						</select>
+
+						<select id="areaSmallSelect" class="select" name="areaSmall">
+							<option value="">시군구</option>
+						</select>
+
+						<!-- 검색창 -->
+						<input id="keywordSearch" type="text" class="form-control">
+						<script>
+							document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+								if (event.keyCode === 13) {
+									event.preventDefault();
+									searchTourInfoKeyword(this.value)
+								}
+							});
+						</script>
+						
+						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+					</div>
+				</span>
+			</div>
+
+			<!-- 알림 -->
+			<div class="custom_alert">
+				<span id="resultAlert"></span>
 			</div>
 
 		</div>
 
 
 		<!-- 오른쪽 사이드바 -->
-		<div class="d-flex flex-column align-items-stretch bg-white" style="width: 420px;">
+		<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 420px;">
 
-			<!-- 제목 작성 -->
+			<!-- 오른쪽 위 -->
 			<div class="input-group input-group-lg">
-				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
-				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
-					id = "pathmapTitle" disabled>
+				<!-- 뒤로 가기 -->
+				<span onclick="window.location.href='/pathmap/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">←</span>
 
-				<span onclick="window.location.href='/pathmap/update/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">수정</span>
+				<!-- 제목 -->
+				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
+					id = "pathmapTitle">
+				
 			</div>
 
 			<!-- 패스맵 리스트 -->
 			<div class="list-group list-group-flush border-bottom scrollarea" id="userSelectListView">
 			</div>
 
-			<!-- 추천, 복사, 댓글 -->
+			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
 				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
-						style="width: 100%; justify-content: center;"
-						type="button" onclick="toggleFavorite()">
-					<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
+						style="width: 100%; justify-content: center;" onclick="updateUserSelectList()"
+						type="button">
+					<span class="fs-5 fw-semibold">수정</span>
 				</button>
 
 				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
-						style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
-						type="button">
-					<span class="fs-5 fw-semibold">복사</span>
+						style="width: 100%; justify-content: center;"
+						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">
+					<span class="fs-5 fw-semibold">삭제</span>
 				</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-25" 
-						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
-						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-					<span class="fs-5 fw-semibold" id = "commentButtonText">댓글</span>
-				</button>
-
-			</div>
-			<script>
-				let isOpenComment = false;
-				function hideUserSelectListView(){
-					let element = document.getElementById("userSelectListView")
-					
-					if (isOpenComment === false){
-						element.style.height="50%"
-						getComment()
-						isOpenComment = true;
-					} else {
-						element.style.height="100%"
-						isOpenComment = false;
-					}
-				}
-			</script>
-
-
-			<!-- 댓글창 -->
-			<div class="collapse list-group list-group-flush border-bottom scrollarea" id="collapseExample">
-				
-				<!-- 스크롤링 -->
-				<div class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer' aria-current='true' target='_blank' rel='noopener noreferrer'>
-
-					<!-- 댓글 리스트 -->
-					<dl id = "commentList" class="row mb-0" style="word-break:break-all;">
-					</dl>
-
-				</div>
-				
-				<!-- 댓글 작성 -->
-				<div class="input-group input-group-lg">
-					<input type="text" class="form-control" id = "commentInput">
-	
-					<span type="button" onclick="submitComment()" class="input-group-text">작성</span>
-				</div>
 			</div>
 
 		</div>
@@ -241,7 +267,6 @@
 			// }
 		];
 
-		// 백에서 받는 pathId
 		const pathId = ${pathId}
 
 		// path의 mark 가져오기
@@ -250,8 +275,11 @@
 		// 초기화 함수
 		updatePage();
 
-		// 댓글 불러오기
-		getComment()
+		// 한번에 보기 함수
+		setUserSelectListBounds()
+		
+		// 왼쪽 위의 지역코드1 갱신
+		renewAreaLargeCode();
 		
 		function loadUserSelectList(pathId){
 			$.ajax({
@@ -275,7 +303,8 @@
 				alert("error")
 			})
 		}
-		
+
+
 		// 리스너 함수
 		// 드래그가 끝났을 때 -> 너무 많은 Api 요청이 필요함
 		/*
@@ -318,24 +347,24 @@
 		*/
 
 		// 맵을 클릭한다면
-		// kakao.maps.event.addListener(map, "click", function(mouseEvent){
+		kakao.maps.event.addListener(map, "click", function(mouseEvent){
 
-		// 	// 위치 갱신
-		// 	let pos = mouseEvent.latLng;
-		// 	let params = {
-		// 			"posX":pos.getLng(),
-		// 			"posY":pos.getLat(),
-		// 			"radius":getRadius(map.getLevel()),
-		// 			"pageSize":300,			// 값이 너무 크면 느려질 수 있음
-		// 			"pageNo":1,
-		// 			"contentTypeCode":markContentTypeCode
-		// 		}
+			// 위치 갱신
+			let pos = mouseEvent.latLng;
+			let params = {
+					"posX":pos.getLng(),
+					"posY":pos.getLat(),
+					"radius":getRadius(map.getLevel()),
+					"pageSize":300,			// 값이 너무 크면 느려질 수 있음
+					"pageNo":1,
+					"contentTypeCode":markContentTypeCode
+				}
 
-		// 	// 애니메이션 움직임
-		// 	map.panTo(pos)
-		// 	console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
-		// 	markBasedLocation(params, markInfoMap);
-		// })
+			// 애니메이션 움직임
+			map.panTo(pos)
+			console.log("경도(X) : " +  pos.getLng(), "위도(Y) : " + pos.getLat()) 
+			markBasedLocation(params, markInfoMap);
+		})
 
 		// 지도 확대에 따라 동적으로 범위 조절
 		function getRadius(mapLevel){
@@ -453,6 +482,7 @@
 
 				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
 				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+				
 				let content = "\
 					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
 						<div class='d-flex flex-row align-items-center'> \
@@ -463,9 +493,12 @@
 								<p class='h5 fw-bold'>" + info["title"] + "</p> \
 								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-								<div class='me-auto d-flex flex-row'> \
-									<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-									<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+								<div class = 'd-flex flex-row'> \
+									<div class='me-auto d-flex flex-row'> \
+										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+									</div> \
+									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -549,18 +582,14 @@
 
 		// 페이지 갱신
 		function updatePage(){
-
-			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
-			renewUserSelectMapObject();
-
 			// 사이드바 갱신
 			renewUserSelectSidebar();
 
-			// 바운드
-			setUserSelectListBounds()
+			// 왼쪽 위의 컨텐츠 바 갱신
+			setMarkContentType(markContentTypeCode)
 
-			// 사용자가 추천했는지 갱신
-			renewFavorite()
+			// 유저가 선택한 마커 관련 오브젝트(경로선, 마커 등) 갱신
+			renewUserSelectMapObject();
 		}
 
 		async function renewUserSelectSidebar(){
@@ -588,7 +617,7 @@
 
 					if (beforeWtmObject !== null || currentWtmObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \
@@ -641,6 +670,16 @@
 										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
 										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
 									</div> \
+								"
+
+				if (i < userSelectList.length - 1){
+					listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
+				}
+				if (i > 0){
+					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+				} 
+
+				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -679,55 +718,6 @@
 
 			return promiseTransCoords
 		}
-
-		// 추천 버튼 갱신
-		function renewFavorite(){
-			
-			const data = {
-				"pathId" : pathId
-			}
-
-			$.ajax({
-				url : "/api/pathmap/favorite",
-				data : data,
-				type : "GET",
-				contentType: "application/json",
-			}).done((response) => {
-				console.log(response)
-
-				let favoriteButtonText = document.getElementById("favoriteButtonText")
-				if (response["isFavorite"] === true) {
-					favoriteButtonText.innerHTML = "추천완료"
-				} else {
-					favoriteButtonText.innerHTML = "추천"
-				}
-
-			}).fail((error) => {
-				console.log("error : " + error)
-			})
-		}
-
-		function toggleFavorite(){
-			
-			const data = {
-				"pathId" : pathId
-			}
-
-			$.ajax({
-				url : "/api/pathmap/favorite",
-				data : data,
-				type : "POST",
-			}).done((response) => {
-				console.log(response)
-
-				renewFavorite()
-
-			}).fail((error) => {
-				console.log("error : " + error)
-			})
-		}
-
-
 
 		// userSelectList의 특정 인덱스의 값을 삭제
 		function deleteUserSelectByIndex(index){
@@ -779,122 +769,55 @@
 			});
 		}
 
-		// 패스맵 복사
-		function copyUserSelectList(){
+		// 패스맵 제출, 저장
+		function updateUserSelectList(){
 			let title = document.getElementById('pathmapTitle').value;
 
 			let data = {
-				"title" : "[복사] " + title,
-				"request" : JSON.stringify(userSelectList)
+				"title" : title,
+				"request" : JSON.stringify(userSelectList),
+				"pathId" : pathId
 			}
 
-			console.log("제출")
+			console.log("수정")
 			
 			$.ajax({
 				url: "/api/pathmap",
-				type: 'POST',
+				type: 'PUT',
 				dataType: "json",
 				data : data
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
 				console.log(response["response"])
-				window.location.replace("/pathmap");
+				window.location.replace("/pathmap/" + pathId);
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)
 			});
 		}
 
-		// 댓글 달기
-		function getComment(){
-
+		function deletePath(){
 			let data = {
 				"pathId" : pathId
 			}
 
+			console.log("삭제")
+
 			$.ajax({
-				url: "/api/pathmap/comment",
-				type: 'GET',
+				url: "/api/pathmap",
+				type: "DELETE",
 				dataType: "json",
 				data : data
 			})
-			.done(function(response){
-				let commentList = document.getElementById("commentList")
-
-				let commentButtonText = document.getElementById("commentButtonText")
-
-				if (response){
-					commentButtonText.innerHTML = "댓글 " + response.length
-				}
-
-				let result = "";
-				
-				response.forEach(comment => {
-					result += '\
-						<dt class="col-sm-3">' + comment["username"] + '</dt> \
-						<dd class="col-sm-9 mb-1"> \
-							<p> \
-							' + comment["content"] + '  \
-							</p> \
-							<p class = "d-flex"> \
-								<small>' + comment["updateDate"] + '</small> \
-								<button class="ms-auto" onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button> \
-							</p> \
-						</dd> \
-					'
-				})
-
-				commentList.innerHTML = result;
+			.done(function(response) {
+				// { "response" : "OK" }
+				console.log(response["response"])
+				window.location.replace("/pathmap")
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)
 			});
-		}
-
-		// 댓글 달기
-		function submitComment(){
-			let commentContent = document.getElementById('commentInput').value;
-
-			let data = {
-				"comment" : commentContent,
-				"pathId" : pathId
-			}
-
-			$.ajax({
-				url: "/api/pathmap/comment",
-				type: 'POST',
-				dataType: "json",
-				data : data
-			})
-			.done(function(response){
-				document.getElementById('commentInput').value = null;
-				getComment()
-			})
-			.fail(function(error) {
-				console.log("Error : " + error)
-			});
-		}
-
-		function deleteComment(commentId){
-
-			let data = {
-				"commentId" : commentId
-			}
-
-			$.ajax({
-				url : "/api/pathmap/comment",
-				type : 'DELETE',
-				dataType : "json",
-				data : data
-			})
-			.done(function(response){
-				
-				getComment()
-			})
-			.fail(function(error){
-
-			})
 		}
 
 
