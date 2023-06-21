@@ -15,8 +15,15 @@
 </head>
 <body>
     <div class="container">
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <button class="btn main_color" onClick="location.href='/pathmap/mark'">
+        <div class="d-flex flex-row bd-highlight">
+            <!-- 조회 조건 -->
+            <select class="col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
+                <option value="createDate" selected>작성일순</option>
+                <option value="title">조회순</option>
+                <option value="author">추천순</option>
+            </select>
+
+            <button class="btn main_color ms-auto" onClick="location.href='/pathmap/mark'">
                 <strong>작성하기</strong>
             </button>
         </div>
@@ -73,24 +80,59 @@
             </nav>
         </div>
 
+        <!--  검색  -->
+        <div class="row justify-content-center">
+            <div class="col-5">
+                <div class="input-group mb-3">
+
+                    <!-- 검색 조건 -->
+                    <select class="col-2" name="searchOption" id="searchOptionSelect">
+                        <option value="title" selected>제목</option>
+                        <option value="author">글쓴이</option>
+                    </select>
+
+                    <!-- 검색할 단어 -->
+                    <input type="text" name="searchWord" class="form-control col-5" id="searchWordInput">
+
+                    <button type="submit" class="btn btn-outline-dark col-2" onclick="search()">검색</button>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
 
+
         let PAGE_PAGE = 1;
         let PAGE_SIZE = 10;
-        let PAGE_ORDERBY = "createDate";
-        let PAGE_SEARCHWORD = ""
-        
-        updatePage(PAGE_PAGE, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
 
-        function updatePage(page, size, orderBy, searchWord){
+        const orderBySelect  = document.getElementById("orderBySelect");
+        let PAGE_ORDERBY = orderBySelect.options[orderBySelect.selectedIndex].value;
+
+        const searchWordInput = document.getElementById("searchWordInput")
+        let PAGE_SEARCHWORD = searchWordInput.value
+
+        const searchOptionSelect = document.getElementById("searchOptionSelect")
+        let PAGE_SEARCHOPTION = searchOptionSelect.options[searchOptionSelect.selectedIndex].value;
+        
+
+        updatePageStaticOption()
+
+        
+        function updatePageStaticOption(){
+            updatePage(PAGE_PAGE, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
+        }
+
+        function updatePage(page, size, orderBy, searchWord, searchOption){
 
             const data = {
                 "page" : page,
                 "size" : size,
                 "orderBy" : orderBy,
-                "searchWord" : searchWord
+                "searchWord" : searchWord,
+                "searchOption" : searchOption
             }
 
             $.ajax({
@@ -195,24 +237,37 @@
                 let pageNumId = pageNumIdTemplate + pageNum
 
                 document.getElementById(pageNumId).addEventListener("click", event => {
-                    updatePage(pageNum, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                    updatePage(pageNum, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
                 })
             })
 
             if (hasPrevious){
                 document.getElementById(previousButtonId).addEventListener("click", event => {
-                    updatePage(response["previousNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                    updatePage(response["previousNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
                 })
             }
 
             if (hasNext){
                 document.getElementById(nextButtonId).addEventListener("click", event => {
-                    updatePage(response["nextNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD)
+                    updatePage(response["nextNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
                 })
             }
 
+        }
 
+        function setOrderBy(order){
+            PAGE_ORDERBY = order.options[order.selectedIndex].value
+            updatePageStaticOption()
+        }
+        
+        function search(){
+            const searchWordInput = document.getElementById("searchWordInput")
+            PAGE_SEARCHWORD = searchWordInput.value
 
+            const searchOptionSelect = document.getElementById("searchOptionSelect")
+            PAGE_SEARCHOPTION = searchOptionSelect.options[searchOptionSelect.selectedIndex].value;
+
+            updatePageStaticOption()
         }
     </script>
 </body>

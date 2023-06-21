@@ -1,15 +1,14 @@
 package multi.backend.project.pathMap.domain.pathmap.paging;
 
 import lombok.Getter;
-import multi.backend.project.pathMap.domain.pathmap.PathInfoResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
-public class PathPagingResponse {
-    private final List<PathInfoResponse> pathInfoResponses;
+public class PathPagingResponse<T> {
+    private final List<T> pathInfoResponses;
 
     private final int totalCount;
     private final int totalPageNum;
@@ -28,7 +27,7 @@ public class PathPagingResponse {
     private final Integer previousNum;
     private final Integer nextNum;
 
-    public PathPagingResponse(List<PathInfoResponse> pathInfoResponses, int currentPageNum, int pageSize) {
+    public PathPagingResponse(List<T> pathInfoResponses, int currentPageNum, int pageSize) {
         this.totalCount = pathInfoResponses.size();
 
         this.currentPageNum = currentPageNum;
@@ -50,7 +49,7 @@ public class PathPagingResponse {
         this.pathInfoResponses = initPathInfoResponsePage(pathInfoResponses);
     }
 
-    private List<PathInfoResponse> initPathInfoResponsePage(List<PathInfoResponse> pathInfoResponses) {
+    private List<T> initPathInfoResponsePage(List<T> pathInfoResponses) {
         int end = currentPageNum * pageSize;
         int start = end - pageSize;
 
@@ -90,7 +89,7 @@ public class PathPagingResponse {
     }
 
     private Integer initPreviousNum(){
-        int result = startNum - pageSize;
+        int result = startNum - 1;
 
         // 이전 페이지가 없다면
         if (!hasPrevious){

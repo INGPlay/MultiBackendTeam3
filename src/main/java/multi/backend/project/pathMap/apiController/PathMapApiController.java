@@ -27,7 +27,7 @@ public class PathMapApiController {
     // 생성
     @PostMapping
     public ResponseEntity<Map<String, Object>> submitPathMap(@RequestParam String title,
-                                             @RequestParam String request) throws ParseException {
+                                                            @RequestParam String request) throws ParseException {
 
         log.info("title : {}", title);
 
@@ -68,14 +68,17 @@ public class PathMapApiController {
 
     // 조회
     @GetMapping
-    public ResponseEntity<PathPagingResponse> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
-                                                                 @RequestParam(defaultValue = "10") int size,
-                                                                 @RequestParam(defaultValue = "createDate") String orderBy,
-                                                                 @RequestParam(defaultValue = "") String searchWord){
+    public ResponseEntity<PathPagingResponse<PathInfoResponse>> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
+                                                                                 @RequestParam(defaultValue = "10") int size,
+                                                                                 @RequestParam(defaultValue = "createDate") String orderBy,
+                                                                                 @RequestParam(defaultValue = "") String searchWord,
+                                                                                   @RequestParam(defaultValue = "title") String searchOption){
 
-        PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord);
+        log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}", page, size, orderBy, searchWord, searchOption);
 
-        PathPagingResponse pathList = pathMapService.getPathInfoList(pathThreadPageDto);
+        PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord, searchOption);
+
+        PathPagingResponse<PathInfoResponse> pathList = pathMapService.getPathInfoList(pathThreadPageDto);
 
         return new ResponseEntity<>(pathList, HttpStatus.OK);
     }

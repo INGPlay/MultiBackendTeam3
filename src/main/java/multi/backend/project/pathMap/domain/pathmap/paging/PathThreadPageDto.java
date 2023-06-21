@@ -10,4 +10,5 @@ public class PathThreadPageDto {
     private int size;
     private String orderBy;
     private String searchWord;
+    private String searchOption;
 }

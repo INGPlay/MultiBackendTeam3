@@ -31,11 +31,11 @@ public class PathMapService {
 
     // 동적 쿼리 예정
     @Transactional
-    public PathPagingResponse getPathInfoList(PathThreadPageDto pathThreadPageDto){
+    public PathPagingResponse<PathInfoResponse> getPathInfoList(PathThreadPageDto pathThreadPageDto){
         List<PathInfoResponse> pathInfoResponses = pathMapMapper.selectPathInfoList(pathThreadPageDto);
         int totalCount = pathInfoResponses.size();
 
-        PathPagingResponse pathPagingResponse = new PathPagingResponse(pathInfoResponses, pathThreadPageDto.getPage(), pathThreadPageDto.getSize());
+        PathPagingResponse<PathInfoResponse> pathPagingResponse = new PathPagingResponse<PathInfoResponse>(pathInfoResponses, pathThreadPageDto.getPage(), pathThreadPageDto.getSize());
 
         return pathPagingResponse;
     }
