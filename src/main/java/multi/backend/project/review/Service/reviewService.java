@@ -12,9 +12,9 @@ public interface reviewService {
     int insertReview(reviewVO vo);
 
     //    1_2 insert하기 위해 유저 정보 존재 여부 확인
-   int isUser(String user_name);
+    int isUser(String user_name);
 
-   //  1_3 . insert 하기 위해 유저 id 가져오기
+    //  1_3 . insert 하기 위해 유저 id 가져오기
     int getUserId(String user_name);
 
     //    2. Read
