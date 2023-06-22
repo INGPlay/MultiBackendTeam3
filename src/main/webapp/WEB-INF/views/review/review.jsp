@@ -106,26 +106,28 @@
             </form>
         </tr>
         <div>
-            <ul class="pagination" >
-                <c:if test="${pageMaker.prev}">
-                    <li class="paginate_button previous">
-                        <a href="${pageMaker.startPage -1}">  Previous  </a>&nbsp
-                    </li>
-                </c:if>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <c:if test="${pageMaker.prev}">
+                        <li class="page-item">
+                            <a class="page-link" href="${pageMaker.startPage -1}">&laquo;</a>&nbsp
+                        </li>
+                    </c:if>
 
-                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                    <li class="paginate_button ">
-                        <a style="<c:out value="${pageMaker.cri.pageNum == num ? 'color:red' : 'none'}"/> " href="${num}">${num}</a>&nbsp
+                    <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                        <li class="page-item ">
+                            <a class="page-link" style="<c:out value="${pageMaker.cri.pageNum == num ? 'background-color: #12bbad' : 'none'}"/> " href="${num}">${num}</a>&nbsp
 
-                    </li>
-                </c:forEach>
+                        </li>
+                    </c:forEach>
 
-                <c:if test="${pageMaker.next}">
-                    <li class="paginate_button next">
-                        <a href="${pageMaker.endPage +1}">  Next  </a>&nbsp
-                    </li>
-                </c:if>
-            </ul>
+                    <c:if test="${pageMaker.next}">
+                        <li class="page-item">
+                            <a class="page-link" href="${pageMaker.endPage +1}">&raquo;</a>&nbsp
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -148,7 +150,6 @@
 
 
     $(()=>{
-
         var actionForm = $("#actionForm");
         $(document).on('click', 'tr', function(event) {
             var id = $(this).attr('id');
@@ -163,7 +164,7 @@
                 return $('#hidden').submit() ;
             }
         });
-        $(".paginate_button a").on("click",function(e){
+        $(".page-item a").on("click",function(e){
             e.preventDefault();
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));
             actionForm.submit();
@@ -175,4 +176,3 @@
 
 </body>
 </html>
-

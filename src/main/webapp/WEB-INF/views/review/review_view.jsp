@@ -137,5 +137,11 @@
         bf.action='view';
         bf.submit();
     }
+    $(()=>{
+        let url ="";
+        let review_id = $('#review_id');
+        alert(review_id);
+    })
+
 </script>
 </html>
