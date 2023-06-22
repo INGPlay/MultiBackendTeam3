@@ -1,7 +1,7 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.Sevice;
 
 import multi.backend.project.review.Mapper.reviewMapper;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Service("reviewService")
-public class reviewServiceImpl implements reviewService {
+public class reviewServiceImpl implements multi.backend.project.review.Sevice.reviewService {
 
     @Autowired
     public reviewMapper mapper;
@@ -54,7 +54,7 @@ public class reviewServiceImpl implements reviewService {
     }
 
     @Override
-    public int deleteReview(int id) {
+    public int deleteReview(int id ) {
         return mapper.deleteReview(id);
     }
 
@@ -67,5 +67,10 @@ public class reviewServiceImpl implements reviewService {
     @Override
     public int getTotalCount() {
         return this.mapper.getTotalCount();
+    }
+
+    @Override
+    public int updateReview_recommends(reviewVO vo) {
+        return mapper.updateReview_recommends(vo);
     }
 }

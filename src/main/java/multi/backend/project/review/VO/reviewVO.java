@@ -1,4 +1,4 @@
-package multi.backend.project.review.VO;
+package multi.backend.project.review.vo;
 
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
@@ -17,6 +17,9 @@ public class reviewVO {
     private Date update_date; // 수정일
     private int review_views; // 조회수
     private int review_recommends; // 추천수
+
+
+
 
     @Override
     public String toString() {

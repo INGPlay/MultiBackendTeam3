@@ -4,13 +4,29 @@
 <!-- ckeditor 4 cdn ------------------------------------------------------- -->
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 <!-- ---------------------------------------------------------------------- -->
+<!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+<!-- jQuery library -->
+<script
+        src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<!-- Popper JS -->
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<style>
+    #btn{
+        text-align: center;
+    }
+
+</style>
 
 <div class="row">
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
         <h2>Create Review</h2>
         <form name="bf" id="bf" role="form" action="/review/write" method="post" enctype="multipart/form-data" >
-            <table class="table">
+            <table class="table table table-hover">
                 <tr>
                     <td style="width:20%"><b>제목</b></td>
                     <td style="width:80%">
@@ -23,11 +39,11 @@
                         <input type="text" name="place" id="place"  class="form-control">
                     </td>
                 </tr><tr>
-                <td style="width:20%"><b>작성자</b></td>
-                <td style="width:80%">
-                    <input type="text" name="user_name" id="username" class="form-control">
-                </td>
-            </tr>
+                    <td style="width:20%"><b>작성자</b></td>
+                    <td style="width:80%">
+                        <input type="text" name="user_name" id="username" class="form-control">
+                    </td>
+                </tr>
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
@@ -36,9 +52,8 @@
                 </tr>
 
                 <tr>
-                    <td colspan="2" class="text-center">
-                        <button type="submit" id="btnWrite" class="btn btn-success">작성하기</button>
-
+                    <td colspan="2" id="btn">
+                        <button type="submit" id="btnWrite" class="align-items-center flex-shrink-0 p-2 link-dark text-decoration-none" style="background-color: #12bbad; padding: 5px;">작성하기</button>
                     </td>
                 </tr>
 

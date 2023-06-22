@@ -72,5 +72,13 @@
     <update id="updateReview_views" parameterType="reviewVO">
         update review set review_views = #{review_views}+1 where REVIEW_ID=#{review_id}
     </update>
+
+    <!-- 추천 버튼 클릭시 추천수 증가-->
+    <update id="updateReview_recommends" parameterType="reviewVO">
+        update review set review_recommends = #{review_recommends}+1 where review_id=#{review_id}
+
+    </update>
 </mapper>
+
+
 

@@ -1,6 +1,6 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.Sevice;
 
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 
 import java.util.List;
@@ -37,4 +37,7 @@ public interface reviewService {
 
     //    6. 총 게시글 수
     int getTotalCount();
+
+    //  7. 추천수 증가
+    int updateReview_recommends(reviewVO vo);
 }

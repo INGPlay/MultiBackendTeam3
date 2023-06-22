@@ -12,8 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Edit</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <!-- jQuery library -->
     <script
             src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -21,8 +21,7 @@
     <script
             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <style>
         #content {
@@ -33,6 +32,30 @@
         #content::-webkit-scrollbar {
             display: none; /* 크롬, 사파리, 오페라, 엣지 */
         }
+
+        .div{
+            width: 40%;
+            margin: 40px auto;
+            position:relative;
+            border: none;
+        }
+        .div img{
+            position: absolute;
+            top:40%;
+            left:50%;
+            width:20%;
+            transform: translate(-50%, -50%);
+
+        }
+        .div span{
+            position: absolute;
+            top:40%;
+            left:50%;
+            width:10%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -44,7 +67,7 @@
             <a href="#" onclick="edit()">글수정</a>| <a href = "#" onclick="goList()">글목록</a>
         <p>
 
-        <form name="bf" id="bf" role="form" method="post">
+        <form name="bf" id="bf" role="form">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
 
@@ -76,11 +99,23 @@
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
                 </tr>
+
+                <tr>
+                     <td colspan="2" style="border-bottom-style: hidden">
+                         <div onclick="com()"width="100px" height="100px"  class="div">
+                             <img class="img" src="/image/re.png"/>
+                             <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
+                             <span>${vo.review_recommends} </span>
+                         </div>
+                     </td>
+                </tr>
             </table>
         </form>
-        <form method="get" action="list" name="reset" id="reset">
 
+
+        <form method="get" action="list" name="reset" id="reset">
         </form>
+
     </div><!-- .col end-->
 </div><!-- .row end-->
 
@@ -94,6 +129,13 @@
 
     const goList = function (){
         reset.submit();
+    }
+
+    const com = function(){
+        alert("추천하였습니다.");
+        bf.method='post';
+        bf.action='view';
+        bf.submit();
     }
 </script>
 </html>
