@@ -47,7 +47,8 @@
         <form name="bf" id="bf" role="form" method="post">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
-            <input type="hidden" name="mode" value="">
+            <input type="hidden" name="pagingvo" value="${pageVO}">
+
             <!-- 원본글쓰기: mode=> write
                  답변글쓰기: mode=> rewrite
                   글수정  : mode=> edit
@@ -64,7 +65,8 @@
                 <tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
-                        <input type="text" name="user_id" id="user_id" value="${vo.user_id}" readonly />
+                        <input type="hidden" name="user_id" id="user_id" value="${vo.user_id}" readonly />
+                        <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
                     </td>
                 </tr>
                 <tr>

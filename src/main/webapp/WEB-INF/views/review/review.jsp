@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 <!DOCTYPE html>
@@ -25,23 +25,16 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        #content {
-            overflow-y: scroll;
-            -ms-overflow-style: none; /* 인터넷 익스플로러 */
-            scrollbar-width: none; /* 파이어폭스 */
+        .pagination{
+            justify-content: center;
+            border: 1px solid #aaa;
         }
-        #content::-webkit-scrollbar {
-            display: none; /* 크롬, 사파리, 오페라, 엣지 */
-        }
+
+        .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
     </style>
 </head>
 
 <body>
-<div class="row my-5">
-    <div class="col-12 text-center">
-        <h2>상단바</h2>
-    </div>
-</div>
 <div class="row my-3">
     <div class="col-9 text-right">
         <form name="searchF" action="/review/write" method="get" >
@@ -49,10 +42,12 @@
         </form>
     </div>
     <div class="col-3 text-left">
-        <form name="psF" action="list">
-            <select name="pageSize" style="padding:5px" onchange="">
-                <option value="" selected>추천순</option>
-                <option value="" > 조회순</option>
+        <form name="psF" id="psF" action="/review/list" method="get">
+            <select name="select" id ="select" style="padding:5px" onchange="check()">
+                <option value="1" <c:if test="${select eq '1'}">selected</c:if>>최신순</option>
+                <option value="2" <c:if test="${select eq '2'}">selected</c:if>>조회순</option>
+                <option value="3" <c:if test="${select eq '3'}">selected</c:if>>추천순</option>
+
             </select>
         </form>
     </div>
@@ -72,48 +67,67 @@
             <th width="10%">추천수</th>
             </thead>
             <tbody>
-                <%-- 테이블에 게시글이 없을 경우 --%>
-                <c:if test="${list eq null or empty list}">
-                    <div class = "slert alert-danger">
-                        <h3>해당 글은 없습니다.</h3>
-                    </div>
-                </c:if>
+            <%-- 테이블에 게시글이 없을 경우 --%>
+            <c:if test="${list eq null or empty list}">
+                <div class = "slert alert-danger">
+                    <h3>해당 글은 없습니다.</h3>
+                </div>
+            </c:if>
 
-                <%-- 테이블에 게시글이 있을 경우 --%>
-                <c:if test="${list ne null and not empty list}">
-                    <c:forEach var="vo" items="${list}">
-                        <tr id="${vo.review_id}">
-                                <td width="10%"><c:out value="${vo.review_id}"/></td>
-                                <td width="10%"><c:out value="${vo.user_id}"/></td>
-                                <td width="20%"><c:out value="${vo.review_title}"/></td>
-                                <td width="20%"><c:out value="${vo.review_content}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.create_date}"/></td>
-                                <td width="10%"><c:out value="${vo.review_views}"/></td>
-                                <td width="10%"><c:out value="${vo.review_recommends}"/></td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
+            <%-- 테이블에 게시글이 있을 경우 --%>
+            <c:if test="${list ne null and not empty list}">
+                <c:forEach var="vo" items="${list}">
+                    <tr id="${vo.review_id}">
+                        <td width="10%"><c:out value="${vo.review_id}"/></td>
+                        <td width="10%"><c:out value="${vo.user_name}"/></td>
+                        <td width="20%"><c:out value="${vo.review_title}"/></td>
+                        <td width="20%"><c:out value="${vo.review_content}"/></td>
+                        <td width="10%"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%"><c:out value="${vo.review_views}"/></td>
+                        <td width="10%"><c:out value="${vo.review_recommends}"/></td>
+                    </tr>
+                </c:forEach>
+            </c:if>
+
             </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="3"  style="text-align:right">
 
-                </td>
-                <td colspan="2">
-                    총 게시글수: <span class="text-primary"> 개</span><br>
-                    <span class="text-danger">
-							<c:out value=""/>
-						</span>/
-                    <c:out value=""/>
-                    pages
-                    <form action="/review/view" method="get" id="hidden" hidden="hidden">
-                        <input id="review_id" name="review_id" value="">
-                    </form>
-                </td>
-            </tr>
-            </tfoot>
+
         </table>
+        <tr>
+            <form action="/review/view" method="get" id="hidden" hidden="hidden"> <%--hidden="hidden"--%>
+                <input type="text" id="review_id" name="review_id" value="">
+            </form>
+
+            <form id="actionForm" action="/review/list" method="get" hidden="hidden">
+                <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
+                <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
+                <input type = 'text' name="select" value="${pageMaker.cri.sort}">
+
+            </form>
+        </tr>
+        <div>
+            <ul class="pagination" >
+                <c:if test="${pageMaker.prev}">
+                    <li class="paginate_button previous">
+                        <a href="${pageMaker.startPage -1}">  Previous  </a>&nbsp
+                    </li>
+                </c:if>
+
+                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                    <li class="paginate_button ">
+                        <a style="<c:out value="${pageMaker.cri.pageNum == num ? 'color:red' : 'none'}"/> " href="${num}">${num}</a>&nbsp
+
+                    </li>
+                </c:forEach>
+
+                <c:if test="${pageMaker.next}">
+                    <li class="paginate_button next">
+                        <a href="${pageMaker.endPage +1}">  Next  </a>&nbsp
+                    </li>
+                </c:if>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -124,35 +138,42 @@
 </style>
 
 <script>
+    function check(){
+        var psF = $('#psF');
+        var numCheck = document.getElementById("select");
+
+        var value = numCheck.options[document.getElementById("select").selectedIndex].value;
+        //alert(value+"click 되었습니다");
+        return psF.submit();
+    }
+
+
     $(()=>{
+
+        var actionForm = $("#actionForm");
         $(document).on('click', 'tr', function(event) {
             var id = $(this).attr('id');
+            //alert(id);
 
             if(typeof id == "undefined" || id == "" || id ==null){
-                return;
+                return false;
             }
             else{
                 $('#review_id').val(id);
-
+                //console.log($('#review_id').val());
                 return $('#hidden').submit() ;
-
             }
-
-
-
-
-
         });
-    })
+        $(".paginate_button a").on("click",function(e){
+            e.preventDefault();
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        });
 
+    })
 
 </script>
 
-
-<!-- footer -->
-<div class="jumbotron jumbotron-fluid text-center" style="margin-bottom: 0">
-    <h2>하단바</h2>
-</div>
 </body>
 </html>
 

@@ -17,4 +17,27 @@ public class RootController {
     public String testMap(){
         return "map";
     }
+
+
+    @GetMapping("home/main_login")
+    public String testlogin(){
+
+        return "home/main_login";
+    }
+
+
+    @GetMapping("home/main_my")
+    public String testmy(){
+        return "home/main_my";
+    }
+
+    @GetMapping("home/main_rank")
+    public String testrank(){
+        return "home/main_rank";
+    }
+
+
+
+
+
 }

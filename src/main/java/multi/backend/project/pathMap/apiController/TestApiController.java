@@ -17,7 +17,7 @@ public class TestApiController {
     @GetMapping("/tour")
     public String tourApi(){
 
-        tourCodeService.InitAreaCode();
+        tourCodeService.initAreaCode();
 
         return "콘솔창에 오류가 안떴다면 ok";
     }
