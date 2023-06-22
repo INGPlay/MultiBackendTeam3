@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <%@ include file="../template/staticTemplate.jsp" %>
+    <%@ include file="./template/staticTemplate.jsp" %>
 
 </head>
 <body>
@@ -24,8 +24,8 @@
         <table class="table table table-hover">
             <thead>
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">제목</th>
+                <th scope="col">항목</th>
+                <th scope="col">정보</th>
               </tr>
             </thead>
             <tbody id = "listRow">
@@ -43,7 +43,7 @@
         const contentId = ${contentId};
 
         const contentRowName = {
-            "contenttypeid" : "콘텐츠타입ID",
+            // "contenttypeid" : "콘텐츠타입ID",
             "accomcount" : "수용인원",
             "chkbabycarriage" : "유모차대여정보",
             "chkcreditcard" : "신용카드가능정보",

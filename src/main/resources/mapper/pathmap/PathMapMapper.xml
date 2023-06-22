@@ -11,6 +11,7 @@
             mark_addr1,
             mark_addr2,
             mark_contentId,
+            mark_contentTypeId,
             mark_contentType,
             mark_firstImageURI,
             mark_firstImageURI2,
@@ -19,7 +20,7 @@
             mark_tel,
             mark_placeOrder
         )
-        <foreach collection = "markInfoRequests" item="item" separator=" UNION ALL ">
+        <foreach collection = "list" item="item" separator=" UNION ALL ">
             select
                 ${item.markId},
                 ${item.pathId},
@@ -27,6 +28,7 @@
                 #{item.addr1},
                 #{item.addr2},
                 ${item.contentId},
+                #{item.contentTypeId},
                 #{item.contentType},
                 #{item.firstImageURI},
                 #{item.firstImageURI2},
@@ -38,28 +40,53 @@
         </foreach>
     </insert>
 
-    <!-- 동적쿼리 추가 될 예정 -->
-    <select id="selectPathInfoList" resultType="multi.backend.project.pathMap.domain.pathmap.PathInfoResponse">
-        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS
+    <!-- 동적쿼리 -->
+    <select id="selectPathInfoList"
+            parameterType="multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto"
+            resultType="multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse">
+        SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, (SELECT count(*) FROM FAVORITE f WHERE PATH_ID = p.path_id) recommend
         FROM PATH p JOIN MEMBERUSER m
         ON p.USER_ID = m.USER_ID
+        where 1 = 1
+        <if test="searchWord != null and searchWord != ''">
+            <if test=" 'title'.equals(searchOption) ">
+                and p.PATH_TITLE like '%${searchWord}%'
+            </if>
+            <if test=" 'author'.equals(searchOption) ">
+                and m.USER_NAME like '%${searchWord}%'
+            </if>
+
+        </if>
+
+        <if test=" 'createDate'.equals(orderBy) ">
+            Order by p.create_date desc
+        </if>
+        <if test=" 'view'.equals(orderBy) ">
+            Order by p.PATH_VIEWS desc
+        </if>
+        <if test=" 'recommend'.equals(orderBy)">
+            Order by recommend desc
+        </if>
+
     </select>
 
-    <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.MarkInfoResponse">
+    <select id="selectMarkInfoByPathId" resultType="multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse">
         SELECT
-        MARK_TITLE,
-        MARK_ADDR1,
-        MARK_ADDR2,
-        MARK_CONTENTID,
-        MARK_CONTENTTYPE,
-        MARK_FIRSTIMAGEURI,
-        MARK_FIRSTIMAGEURI2,
-        MARK_POSX,
-        MARK_POSY,
-        MARK_TEL,
-        MARK_PLACEORDER
+            MARK_TITLE,
+            MARK_ADDR1,
+            MARK_ADDR2,
+            MARK_CONTENTID,
+            MARK_CONTENTTYPEID,
+            MARK_CONTENTTYPE,
+            MARK_FIRSTIMAGEURI,
+            MARK_FIRSTIMAGEURI2,
+            MARK_POSX,
+            MARK_POSY,
+            MARK_TEL,
+            MARK_PLACEORDER
         FROM MARK
         WHERE MARK.PATH_ID = ${pathId}
+        ORDER BY MARK.MARK_PLACEORDER
     </select>
 
 </mapper>

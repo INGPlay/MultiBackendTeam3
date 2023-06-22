@@ -1,4 +1,4 @@
-package multi.backend.project.pathMap.domain.pathmap;
+package multi.backend.project.pathMap.domain.pathmap.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,7 @@ public class MarkInfoResponse {
     private String addr2;
 
     private Long contentId;
+    private String contentTypeId;
     private String contentType;
 
     private String firstImageURI;
