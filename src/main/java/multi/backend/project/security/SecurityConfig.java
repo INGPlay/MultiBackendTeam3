@@ -1,14 +1,28 @@
 package multi.backend.project.security;
 
+import lombok.RequiredArgsConstructor;
+import multi.backend.project.security.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final CustomUserDetailService customUserDetailService;
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(customUserDetailService);
+
+        return authenticationManagerBuilder.build();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -17,19 +31,19 @@ public class SecurityConfig {
                 .cors().disable()
 
                 .authorizeRequests(a -> a
-                        .anyRequest().permitAll()
 //                        // 기본 페이지
 //                        .antMatchers("/", "/login", "/register", "/error",
-//                                "/css/*", "/js/*", "/favicon.ico").permitAll()
+//                                "/css/*", "/js/*", "resources/*", "/favicon.ico").permitAll()
 //
 //                        // 테스트
-//                        .antMatchers("/test/user").hasRole("USER")
+                        .antMatchers("/test/user").hasRole("USER")
 //                        .antMatchers("/test/manager").hasRole("MANAGER")
-//                        .antMatchers("/test/admin").hasRole("ADMIN")
+                        .antMatchers("/test/admin").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .formLogin(f -> f
                         .loginPage("/login")
-                        .defaultSuccessUrl("/thread")
+                        .defaultSuccessUrl("/")
                         .failureUrl("/login?fail")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -44,7 +58,7 @@ public class SecurityConfig {
                         .rememberMeParameter("remember-me")         // 기본 파라미터명은 remember-me
                         .tokenValiditySeconds(3600)              // Default 는 14일
                         .alwaysRemember(true)                    // 리멤버 미 기능이 활성화되지 않아도 항상 실행
-//                        .userDetailsService(customUserDetailsService)
+                        .userDetailsService(customUserDetailService)
                 )
                 .sessionManagement(m -> m
 //                        .sessionFixation().changeSessionId()
