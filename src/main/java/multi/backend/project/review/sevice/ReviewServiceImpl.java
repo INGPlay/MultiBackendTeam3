@@ -1,8 +1,8 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.sevice;
 
-import multi.backend.project.review.Mapper.reviewMapper;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.mapper.ReviewMapper;
 import multi.backend.project.review.paging.Criteria;
+import multi.backend.project.review.vo.ReviewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +11,13 @@ import java.util.List;
 
 
 @Service("reviewService")
-public class reviewServiceImpl implements reviewService {
+public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
-    public reviewMapper mapper;
+    public ReviewMapper mapper;
 
     @Override
-    public int insertReview(reviewVO vo) {
+    public int insertReview(ReviewVO vo) {
         return mapper.insertReview(vo);
     }
 
@@ -33,33 +33,33 @@ public class reviewServiceImpl implements reviewService {
 
 
     @Override
-    public List<reviewVO> selectReviewAll() {
+    public List<ReviewVO> selectReviewAll() {
         return mapper.selectReviewAll();
     }
 
     @Override
-    public reviewVO selectReviewOne(int review_id) {
+    public ReviewVO selectReviewOne(int review_id) {
         return mapper.selectReviewOne(review_id);
     }
 
     @Override
-    public List<reviewVO> getListWithPaging(Criteria cri) {
+    public List<ReviewVO> getListWithPaging(Criteria cri) {
         return mapper.getListWithPaging(cri);
     }
 
 
     @Override
-    public int updateReview(reviewVO vo) {
+    public int updateReview(ReviewVO vo) {
         return mapper.updateReview(vo);
     }
 
     @Override
-    public int deleteReview(int id) {
+    public int deleteReview(int id ) {
         return mapper.deleteReview(id);
     }
 
     @Override
-    public int updateReview_views(reviewVO vo) {
+    public int updateReview_views(ReviewVO vo) {
         return mapper.updateReview_views(vo);
     }
 
@@ -67,5 +67,10 @@ public class reviewServiceImpl implements reviewService {
     @Override
     public int getTotalCount() {
         return this.mapper.getTotalCount();
+    }
+
+    @Override
+    public int updateReview_recommends(ReviewVO vo) {
+        return mapper.updateReview_recommends(vo);
     }
 }

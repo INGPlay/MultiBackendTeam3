@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="multi.backend.project.review.Mapper.reviewMapper">
+<mapper namespace="multi.backend.project.review.mapper.ReviewMapper">
 
     <!--  게시글 추가  -->
     <insert id="insertReview" parameterType="reviewVO">
@@ -72,5 +72,13 @@
     <update id="updateReview_views" parameterType="reviewVO">
         update review set review_views = #{review_views}+1 where REVIEW_ID=#{review_id}
     </update>
+
+    <!-- 추천 버튼 클릭시 추천수 증가-->
+    <update id="updateReview_recommends" parameterType="reviewVO">
+        update review set review_recommends = #{review_recommends}+1 where review_id=#{review_id}
+
+    </update>
 </mapper>
+
+
 

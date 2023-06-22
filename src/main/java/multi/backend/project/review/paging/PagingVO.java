@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class pagingVO {
+public class PagingVO {
     private int startPage;
     private int endPage;
     private boolean prev, next;
@@ -12,7 +12,7 @@ public class pagingVO {
     private int total;
     private Criteria cri;
 
-    public pagingVO(Criteria cri, int total){
+    public PagingVO(Criteria cri, int total){
         this.cri = cri;
         this.total = total;
 
@@ -22,7 +22,7 @@ public class pagingVO {
         int realEnd = (int)(Math.ceil((total *1.0)/cri.getAmount()));
 
         if(realEnd < this.endPage){
-            this.endPage = realEnd;
+             this.endPage = realEnd;
         }
 
         this.prev = this.startPage>1;

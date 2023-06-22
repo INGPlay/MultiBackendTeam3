@@ -12,8 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Edit</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <!-- jQuery library -->
     <script
             src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -21,18 +21,12 @@
     <script
             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <style>
-        #content {
-            overflow-y: scroll;
-            -ms-overflow-style: none; /* 인터넷 익스플로러 */
-            scrollbar-width: none; /* 파이어폭스 */
-        }
-        #content::-webkit-scrollbar {
-            display: none; /* 크롬, 사파리, 오페라, 엣지 */
-        }
+      #update{
+          background-color: #12bbad;
+      }
     </style>
 </head>
 <body>
@@ -48,13 +42,13 @@
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
             <input type="hidden" name="pagingvo" value="${pageVO}">
-
+            <input type="hidden" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
             <!-- 원본글쓰기: mode=> write
                  답변글쓰기: mode=> rewrite
                   글수정  : mode=> edit
              -->
             <!-- -------------------------------------------- -->
-            <table class="table">
+            <table class="table table table-hover">
                 <tr>
                     <td style="width:20%"><b>제목</b></td>
                     <td style="width:80%">
@@ -67,6 +61,7 @@
                     <td style="width:80%">
                         <input type="hidden" name="user_id" id="user_id" value="${vo.user_id}" readonly />
                         <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
+
                     </td>
                 </tr>
                 <tr>
@@ -77,14 +72,14 @@
                 </tr>
 
                 <tr>
-                    <td colspan="2" class="text-center">
+                    <td colspan="2" class="text-center" style="border-bottom-style: none;">
                         <button id="update" onclick = "edit('update')" class="btn btn-success">글수정</button>
                         <button id="delete" onclick = "edit('delete')" class="btn btn-warning">삭제</button>
-
                     </td>
 
                 </tr>
             </table>
+
         </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
