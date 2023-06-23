@@ -28,7 +28,7 @@
             justify-content: center;
         }
 
-         .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
+        .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
     </style>
 </head>
 
@@ -176,3 +176,4 @@
 
 </body>
 </html>
+

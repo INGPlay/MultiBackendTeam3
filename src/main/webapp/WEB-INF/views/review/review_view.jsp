@@ -55,6 +55,10 @@
             transform: translate(-50%, -50%);
             text-align: center;
         }
+        .link{
+            font-size: 14px;
+        }
+
 
     </style>
 </head>
@@ -95,30 +99,54 @@
 
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
-                    <td style="width:80%">
+                    <td style="width:80%; border-bottom-style: hidden ">
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
                 </tr>
 
                 <tr>
-                     <td colspan="2" style="border-bottom-style: hidden">
-                         <div onclick="com()"width="100px" height="100px"  class="div">
-                             <img class="img" src="/image/re.png"/>
-                             <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
-                             <span>${vo.review_recommends} </span>
-                         </div>
-                     </td>
+                    <td colspan="2" style="border-bottom-style: hidden">
+                        <div onclick="com()"width="100px" height="100px"  class="div">
+                            <img class="img" src="/image/re.png"/>
+                            <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
+                            <span>${vo.review_recommends} </span>
+                        </div>
+                    </td>
+
                 </tr>
             </table>
         </form>
 
-
-        <form method="get" action="list" name="reset" id="reset">
-        </form>
-
     </div><!-- .col end-->
-</div><!-- .row end-->
 
+    <div class="row">
+        <div align="center" id="bbs1" class="col-md-8 offset-md-2 my-4">
+            <form>
+                <table class="table table table-hover">
+                    <tr>
+                        <td colspan="2">
+                            <b>댓글()</b> &nbsp;
+                            <a href="#" class="link">등록순</a>
+                            <a href="#" class="link">최신순</a>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="90%" height="100px">
+                            <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
+
+                        </td>
+                        <td width="10%"><input type="button" onclick="insertComment()" class="d-flex align-items-center flex-shrink-0 p-2 link-dark text-decoration-none " style="background-color: #12bbad; padding: 5px; margin-top: 25%;" value="등록"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div id="comment_list" align="center" id="b" class="col-md-8 offset-md-2 my-4" />
+
+</div><!-- .row end-->
+<form method="get" action="list" name="reset" id="reset"></form>
 </body>
 <script>
     const edit = function(){
@@ -137,11 +165,102 @@
         bf.action='view';
         bf.submit();
     }
+
+    const deleteComment = function(id){
+        $.ajax({
+            type:'post',
+            url:'/review/deleteComment',
+            dataType:'text',
+            data:{"id":id},
+            cache:false,
+        }).done((res)=>{
+            alert("삭제되었습니다.")
+            init();
+        }).fail((err)=>{
+            alert(err.status)
+        })
+    }
+
+    const insertComment = function(){
+        let rid=$('#review_id').val();
+        let con=$('#content').val();
+        let uid=$('#user_id').val();
+
+        let jsonData={
+            review_id:rid,
+            content:con,
+            user_id:uid
+        };
+
+        $.ajax({
+            type:'post',
+            url:'/review/insert',
+            dataType:'text',
+            contentType:'application/json; charset=UTF-8',
+            data:JSON.stringify(jsonData),
+            cache: false
+        }).done((res)=>{
+            alert("정상적으로 삽입되었습니다.")
+            init();
+        }).fail((err)=>{
+            alert(err.status)
+        })
+    }
+
+    const showComment = function(res){
+        let str = "<table id='table1' style='width: 100%'>"
+
+        $.each(res,(i,vo)=>{
+            str+='<tr>';
+
+            str+='<td width="10%">';
+            str+=res[i].user_name;
+            str+='</td>';
+
+            str+='<td width="50%">';
+            str+=res[i].content;
+            str+='</td>';
+
+            str+='<td width=15%>';
+            str+=res[i].create_date;
+            str+='</td>';
+
+            str+='<td width=15%>';
+            str+=res[i].update_date;
+            str+='</td>';
+            str+='<td width="10%">';
+            str+='<input type="button" value="삭제" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/>';
+            str+='</td>';
+            str+='</tr>';
+
+        })
+        str+='</table>';
+
+        $('#comment_list').html(str);
+    }
+
+    const init = function(){
+        let rid = $('#review_id').val();
+        //alert(rid);
+        $.ajax({
+            type:'get',
+            url:'/review/comment',
+            data:{"review_id":rid},
+            dataType:'json',
+            cache:false
+        }).done((res)=>{
+            //alert('댓글 조회 확인');
+            //alert(JSON.stringify(res));
+            showComment(res);
+        }).fail((err)=>{
+            alert(err.status);
+        })
+    }
+
+
     $(()=>{
-        let url ="";
-        let review_id = $('#review_id');
-        alert(review_id);
-    })
+        init();}
+    )
 
 </script>
 </html>

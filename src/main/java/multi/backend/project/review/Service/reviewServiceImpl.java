@@ -1,6 +1,8 @@
 package multi.backend.project.review.Sevice;
 
 import multi.backend.project.review.Mapper.reviewMapper;
+import multi.backend.project.review.VO.Review_CommentVO;
+
 import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +74,20 @@ public class reviewServiceImpl implements multi.backend.project.review.Sevice.re
     @Override
     public int updateReview_recommends(reviewVO vo) {
         return mapper.updateReview_recommends(vo);
+    }
+
+    @Override
+    public int insert_recommends(Review_CommentVO vo) {
+        return mapper.insert_recommends(vo);
+    }
+
+    @Override
+    public List<Review_CommentVO> selectReviewComment(int review_id) {
+        return mapper.selectReviewComment(review_id);
+    }
+
+    @Override
+    public int deleteComment(int id) {
+        return mapper.deleteComment(id);
     }
 }

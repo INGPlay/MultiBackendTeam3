@@ -3,6 +3,8 @@ package multi.backend.project.review.Controller;
 
 import lombok.extern.log4j.Log4j2;
 import multi.backend.project.review.Sevice.reviewServiceImpl;
+import multi.backend.project.review.VO.Review_CommentVO;
+
 import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
@@ -13,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+
 
 
 @RequestMapping("/review")
@@ -61,9 +65,41 @@ public class reviewController {
         return "review/review_view";
     }
 
+    @GetMapping(value="/comment", produces="application/json")
+    @ResponseBody
+    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id){
+        System.out.println(review_id);
+        List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id));
+        System.out.println(commentList.toString());
+        return commentList;
+    }
+
+
+    @PostMapping(value="/insert", produces="application/json")
+    @ResponseBody
+    public String insertComment(@RequestBody Review_CommentVO vo) throws Exception {
+        //@RequestParam Review_CommentVO vo
+
+        //System.out.println(vo);
+        int n = service.insert_recommends(vo);
+
+        String str="결과";
+
+        return str;
+    }
+
+    @PostMapping(value="/deleteComment", produces = "application/json")
+    @ResponseBody
+    public String deleteComment(@RequestParam("id")String id) throws Exception{
+        int n = service.deleteComment(Integer.parseInt(id));
+
+        return "";
+    }
+
+
     @PostMapping("/view")
     public String reviewForm(Model m, @ModelAttribute reviewVO vo, RedirectAttributes reb){
-        int n = service.updateReview_recommends(vo);
+        service.updateReview_recommends(vo);
         reb.addAttribute("redirect_id",vo.getReview_id());
         return "redirect:/review/view";
     }

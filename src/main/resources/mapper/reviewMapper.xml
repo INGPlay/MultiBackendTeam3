@@ -78,6 +78,28 @@
         update review set review_recommends = #{review_recommends}+1 where review_id=#{review_id}
 
     </update>
+
+
+    <!-- 댓글 추가 -->
+    <insert id="insert_recommends" parameterType="commentVO">
+        <selectKey keyProperty="comment_id" resultType="_int" order="BEFORE">
+            select TO_NUMBER(Review_Comment_Sequence.nextval) from dual
+        </selectKey>
+        insert into Review_Comment(comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id)
+        values(#{comment_id}, #{review_id},SYSDATE,SYSDATE,#{content},0,0,#{user_id})
+    </insert>
+
+
+    <!-- 해당 게시글 댓글 조회   -->
+    <select id="selectReviewComment" resultType="commentVO" parameterType="_int">
+        select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
+        from comment_vi where review_id = #{review_id}
+    </select>
+
+    <!-- 댓글 삭제 -->
+    <delete parameterType="_int" id="deleteComment">
+        delete from review_comment where comment_id=#{id}
+    </delete>
 </mapper>
 
 
