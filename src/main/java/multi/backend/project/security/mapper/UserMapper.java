@@ -18,4 +18,14 @@ public interface UserMapper {
             "   MemberUser_Sequence.nextval, #{username}, #{password}, #{email}, #{phone}, #{role} \n" +
             ")")
     void insertUser(UserDto userDto);
+
+    @Select("select user_name, user_pwd, user_email, user_phone, user_role \n" +
+            "from MemberUser \n" +
+            "where user_email = #{useremail}")
+    UserDto selectUserByUserEmail(String useremail);
+
+    @Select("select user_name, user_pwd, user_email, user_phone, user_role \n" +
+            "from MemberUser \n" +
+            "where user_phone = #{userphone}")
+    UserDto selectUserByUserPhone(String userphone);
 }

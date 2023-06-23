@@ -42,15 +42,15 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin(f -> f
-                        .loginPage("/login")
+                        .loginPage("/user/login?success")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/login?fail")
+                        .failureUrl("/user/login?fail")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login-process")
                 )
                 .logout(l -> l
-                        .logoutUrl("/logout")
+                        .logoutUrl("/user/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID", "remember-me")
                 )

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,9 +24,13 @@
                 <option value="recommend">추천순</option>
             </select>
 
-            <button class="btn main_color ms-auto" onClick="location.href='/pathmap/mark'">
-                <strong>작성하기</strong>
-            </button>
+            <!-- 로그인 한 사용자만 작성가능 -->
+            <sec:authorize access="isAuthenticated()">
+                <button class="btn main_color ms-auto" onClick="location.href='/pathmap/mark'">
+                    <strong>작성하기</strong>
+                </button>
+            </sec:authorize>
+
         </div>
 
         <table class="table table table-hover">

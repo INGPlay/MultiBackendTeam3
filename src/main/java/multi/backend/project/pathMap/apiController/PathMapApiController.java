@@ -12,9 +12,11 @@ import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
+import multi.backend.project.security.domain.UserContext;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,11 +35,12 @@ public class PathMapApiController {
     // 생성
     @PostMapping
     public ResponseEntity<Map<String, Object>> submitPathMap(@RequestParam String title,
-                                                            @RequestParam String request) throws ParseException {
+                                                             @RequestParam String request,
+                                                             @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
         log.info("title : {}", title);
 
-        pathMapService.insertPath("나", title, request);
+        pathMapService.insertPath(userContext.getUsername(), title, request);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
@@ -48,7 +51,8 @@ public class PathMapApiController {
     @PutMapping
     public ResponseEntity<Map<String, Object>> updatePathMap(@RequestParam String title,
                                                              @RequestParam String request,
-                                                             @RequestParam Long pathId) throws ParseException {
+                                                             @RequestParam Long pathId,
+                                                             @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
         log.info("title : {}, request : {}, pathId : {}", title, request, pathId);
 
@@ -61,7 +65,8 @@ public class PathMapApiController {
 
     // 삭제
     @DeleteMapping
-    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestParam Long pathId){
+    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestParam Long pathId,
+                                                             @AuthenticationPrincipal UserContext userContext){
 
         log.info("pathId : {}", pathId);
 
@@ -105,9 +110,15 @@ public class PathMapApiController {
 
     // 추천 관련 ------------------------------------
     @GetMapping("/favorite")
-    public ResponseEntity<Map<String, Object>> isFavorite(@RequestParam Long pathId){
+    public ResponseEntity<Map<String, Object>> isFavorite(@RequestParam Long pathId,
+                                                          @AuthenticationPrincipal UserContext userContext){
 
-        FavoriteDto favoriteDto = new FavoriteDto("나", pathId);
+        if (userContext == null){
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("response", "Unauthorized");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         boolean isFavorite = favoriteService.isFavorite(favoriteDto);
 
@@ -119,9 +130,10 @@ public class PathMapApiController {
     }
 
     @PostMapping("/favorite")
-    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestParam Long pathId){
+    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestParam Long pathId,
+                                                              @AuthenticationPrincipal UserContext userContext){
 
-        FavoriteDto favoriteDto = new FavoriteDto("나", pathId);
+        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         favoriteService.toggleFavorite(favoriteDto);
 
@@ -141,9 +153,10 @@ public class PathMapApiController {
 
     @PostMapping("/comment")
     public ResponseEntity<Map<String, Object>> submitComment(@RequestParam String comment,
-                                                             @RequestParam Long pathId){
+                                                             @RequestParam Long pathId,
+                                                             @AuthenticationPrincipal UserContext userContext){
 
-        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(pathId, "나", comment);
+        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(pathId, userContext.getUsername(), comment);
 
         pathMapService.insertPathComment(insertPathCommentDto);
 

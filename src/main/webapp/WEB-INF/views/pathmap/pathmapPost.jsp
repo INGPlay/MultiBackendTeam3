@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -90,7 +92,12 @@
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle" disabled>
 
-				<span onclick="window.location.href='/pathmap/update/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">수정</span>
+				<!-- 로그인한 사용자만 수정 가능 -->
+				<sec:authorize access="isAuthenticated()">
+					<c:if test="${authorizedAuthor eq 'true'}">
+						<span onclick="window.location.href='/pathmap/update/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">수정</span>
+					</c:if>
+				</sec:authorize>
 			</div>
 
 			<!-- 패스맵 리스트 -->
@@ -99,17 +106,19 @@
 
 			<!-- 추천, 복사, 댓글 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
-						style="width: 100%; justify-content: center;"
-						type="button" onclick="toggleFavorite()">
-					<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
-				</button>
+				<sec:authorize access="isAuthenticated()">
+					<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
+							style="width: 100%; justify-content: center;"
+							type="button" onclick="toggleFavorite()">
+						<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
+					</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
-						style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
-						type="button">
-					<span class="fs-5 fw-semibold">복사</span>
-				</button>
+					<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
+							style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
+							type="button">
+						<span class="fs-5 fw-semibold">복사</span>
+					</button>
+				</sec:authorize>
 
 				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-25" 
 						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
@@ -147,12 +156,15 @@
 
 				</div>
 				
-				<!-- 댓글 작성 -->
-				<div class="input-group input-group-lg">
-					<input type="text" class="form-control" id = "commentInput">
-	
-					<span type="button" onclick="submitComment()" class="input-group-text">작성</span>
-				</div>
+				<!-- 로그인한 사용자만 댓글 작성 가능 -->
+				<sec:authorize access="isAuthenticated()">
+					<div class="input-group input-group-lg">
+						<input type="text" class="form-control" id = "commentInput">
+		
+						<span type="button" onclick="submitComment()" class="input-group-text">작성</span>
+					</div>
+				</sec:authorize>
+
 			</div>
 
 		</div>
@@ -838,8 +850,12 @@
 							' + comment["content"] + '  \
 							</p> \
 							<p class = "d-flex"> \
-								<small>' + comment["updateDate"] + '</small> \
-								<button class="ms-auto" onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button> \
+								<small>' + comment["updateDate"] + '</small>'
+
+					if (comment["username"] === '${username}'){
+						result += '<button class="ms-auto" onclick="deleteComment(' + comment["commentId"] + ')"> 삭제 </button>'
+					}
+					result += ' \
 							</p> \
 						</dd> \
 					'
