@@ -1,4 +1,4 @@
-package multi.backend.project.security.apiController;
+package multi.backend.project.security.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +36,18 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("registerForm") RegisterForm registerForm,
-                           BindingResult bindingResult){
+                           BindingResult bindingResult,
+                           Model model){
 
-        log.info("{}", bindingResult);
+//        log.info("{}", bindingResult);
 
         if (!registerForm.getPassword().equals(registerForm.getPasswordCheck())){
-            bindingResult.reject("register.passwordCheck", null, "비밀번호 확인이 맞지 않습니다.");
-            return "user/registerForm";
+            bindingResult.reject("NotMatch.passwordCheck", null, "비밀번호와 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         if (bindingResult.hasErrors()){
+            log.info("{}", bindingResult);
+
             return "user/registerForm";
         }
 

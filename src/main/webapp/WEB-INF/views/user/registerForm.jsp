@@ -13,6 +13,12 @@
 
 	<%@ include file="./template/staticTemplate.jsp" %>
 
+    <style>
+        .validText {
+            color: red;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -27,7 +33,7 @@
                     <form:input type="text" class="form-control" id="username" name = "username" aria-describedby="username" 
                                 path="username" placeholder="아이디를 입력하세요" />
 
-                    <div class="form-text">
+                    <div class="form-text validText">
                         <form:errors path = "username" />
                     </div>
                 </div>
@@ -37,7 +43,7 @@
                     <form:input type="password" class="form-control" id="password" name = "password" 
                                 path="password" placeholder="비밀번호를 입력하세요"/>
 
-                    <div class="form-text">
+                    <div class="form-text validText">
                         <form:errors path="password" />
                     </div>
                 </div>
@@ -47,9 +53,21 @@
                     <form:input type="password" class="form-control" id="passwordCheck" name = "passwordCheck" 
                             path="passwordCheck" placeholder="비밀번호 확인" />
 
-                    <div class="form-text">
+                    <div class="form-text validText">
                         <form:errors path="passwordCheck" />
                     </div>
+
+                    <!-- 비밀번호 확인 -->
+                    <div class="form-text validText">
+                        <spring:hasBindErrors name="registerForm">
+                            <c:if test="${errors.hasGlobalErrors() }">
+                                <c:forEach var="globalError" items="${errors.getGlobalErrors()}">
+                                    ${globalError.defaultMessage}
+                                </c:forEach>
+                            </c:if>
+                        </spring:hasBindErrors>	
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
@@ -57,7 +75,7 @@
                     <form:input type="text" class="form-control" id="email" name = "email"
                                 path="email" placeholder="이메일을 입력하세요" />
 
-                    <div class="form-text">
+                    <div class="form-text validText">
                         <form:errors path="email" />
                     </div>
                 </div>
@@ -67,7 +85,7 @@
                     <form:input type="text" class="form-control" id="phone" name = "phone"
                                 path="phone" placeholder="전화번호를 입력하세요" />
                                 
-                    <div class="form-text">
+                    <div class="form-text validText">
                         <form:errors path="phone" />
                     </div>
                 </div>
