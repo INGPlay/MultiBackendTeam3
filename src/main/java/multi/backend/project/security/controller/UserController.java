@@ -11,11 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Slf4j
 @Controller
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -23,7 +25,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginForm(){
-        return "user/loginForm";
+        return "user/loginView";
     }
 
     @GetMapping("/register")
@@ -31,7 +33,8 @@ public class UserController {
 
         model.addAttribute("registerForm", new RegisterForm("", "", "", "", ""));
 
-        return "user/registerForm";
+//        return "user/registerForm";
+        return "user/registerView";
     }
 
     @PostMapping("/register")
@@ -48,7 +51,7 @@ public class UserController {
         if (bindingResult.hasErrors()){
             log.info("{}", bindingResult);
 
-            return "user/registerForm";
+            return "registerView";
         }
 
         // Validation 예정
@@ -63,6 +66,6 @@ public class UserController {
 
         userService.registerUser(registerDto);
 
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 }
