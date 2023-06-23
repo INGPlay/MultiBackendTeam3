@@ -21,6 +21,9 @@ public class Review_CommentVO {
     private String user_name; // 유저 이름
 
 
+    public Review_CommentVO() {
+
+    }
 
     public Review_CommentVO(int comment_id, int review_id, Date created_date, Date update_date, String content, int comment_group, int comment_depth, int user_id) {
         this.comment_id = comment_id;
