@@ -39,6 +39,9 @@ dependencies {
 
 	// JSON 파싱
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+	// Spring Security 태그
+	implementation 'org.springframework.security:spring-security-taglibs'
 }
 
 tasks.named('test') {

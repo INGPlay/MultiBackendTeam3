@@ -1,6 +1,8 @@
 package multi.backend.project.review.Mapper;
 
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.VO.Review_CommentVO;
+
+import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -44,8 +46,19 @@ public interface reviewMapper {
     //    6. 총 게시글 수
     int getTotalCount();
 
+    //    7. 추천수 증가
+    int updateReview_recommends(reviewVO vo);
 
 
+// ========================================
 
+    //     1. 댓글 추가
+    int insert_recommends(Review_CommentVO vo);
+
+    //     2. 댓글 조회
+    List<Review_CommentVO> selectReviewComment(int review_id);
+
+    //      3. 댓글 삭제
+    int deleteComment(int id);
 
 }

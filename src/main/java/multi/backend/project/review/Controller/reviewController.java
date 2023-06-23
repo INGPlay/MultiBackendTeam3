@@ -2,11 +2,12 @@ package multi.backend.project.review.Controller;
 
 
 import lombok.extern.log4j.Log4j2;
-import multi.backend.project.review.Service.reviewServiceImpl;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.Sevice.reviewServiceImpl;
+import multi.backend.project.review.VO.Review_CommentVO;
+
+import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
-import org.apache.catalina.Session;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+
 
 
 @RequestMapping("/review")
@@ -30,6 +33,7 @@ public class reviewController {
     @GetMapping("/list" )
     public String listReview(Model m, Criteria cri, @RequestParam(value="select", required = false, defaultValue = "1") String select, HttpSession session){
         pagingVO vo;
+
         int totalCount =  this.service.getTotalCount(); // 전체 게시글 수
         cri.setSort(Integer.parseInt(select));
 
@@ -41,15 +45,65 @@ public class reviewController {
         return "review/review";
     }
     @GetMapping("/view")
-    public String reviewForm(Model m, HttpServletRequest seq ){
-        String id = seq.getParameter("review_id");
-        reviewVO vo = service.selectReviewOne(Integer.valueOf(id)); // user 찾기
-        int n = service.updateReview_views(vo); // 조회수 증가
+    public String reviewForm(Model m, HttpServletRequest seq,@RequestParam(value = "redirect_id",required = false,defaultValue ="0") String rid){
+        String id;
+        reviewVO vo;
+        if(rid.isEmpty() || rid.equals("0")){
+            id= seq.getParameter("review_id");
+            //System.out.println("초기 id" + id);
+            vo = service.selectReviewOne(Integer.valueOf(id)); // user 찾기
+            int n = service.updateReview_views(vo); // 조회수 증가
+        }else{
+            id=rid;
+            //System.out.println("추천 id" + id);
+            vo = service.selectReviewOne(Integer.valueOf(id)); // user 찾기
+        }
+
         m.addAttribute("vo",vo);
         // pagingVO page = (pagingVO) session.getAttribute("pageVO");
         //m.addAttribute("page",page);
         return "review/review_view";
     }
+
+    @GetMapping(value="/comment", produces="application/json")
+    @ResponseBody
+    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id){
+        System.out.println(review_id);
+        List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id));
+        System.out.println(commentList.toString());
+        return commentList;
+    }
+
+
+    @PostMapping(value="/insert", produces="application/json")
+    @ResponseBody
+    public String insertComment(@RequestBody Review_CommentVO vo) throws Exception {
+        //@RequestParam Review_CommentVO vo
+
+        //System.out.println(vo);
+        int n = service.insert_recommends(vo);
+
+        String str="결과";
+
+        return str;
+    }
+
+    @PostMapping(value="/deleteComment", produces = "application/json")
+    @ResponseBody
+    public String deleteComment(@RequestParam("id")String id) throws Exception{
+        int n = service.deleteComment(Integer.parseInt(id));
+
+        return "";
+    }
+
+
+    @PostMapping("/view")
+    public String reviewForm(Model m, @ModelAttribute reviewVO vo, RedirectAttributes reb){
+        service.updateReview_recommends(vo);
+        reb.addAttribute("redirect_id",vo.getReview_id());
+        return "redirect:/review/view";
+    }
+
     //  게시글 삽입 폼 이동
     @GetMapping("/write")
     public String reviewEdit(HttpSession session){
@@ -98,7 +152,7 @@ public class reviewController {
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute reviewVO vo,HttpSession session,HttpServletRequest seq){
+    public String updateReview(Model m, @ModelAttribute reviewVO vo, HttpSession session, HttpServletRequest seq){
         m.addAttribute("vo",vo);
         int n = service.updateReview(vo);
         //pagingVO page = (pagingVO) session.getAttribute("pageVO");
