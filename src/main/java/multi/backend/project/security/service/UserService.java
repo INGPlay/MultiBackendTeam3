@@ -15,6 +15,18 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    public UserDto getUserByUsername(String username){
+        return userMapper.selectUser(username);
+    }
+
+    public UserDto getUserByUserEmail(String useremail){
+        return userMapper.selectUserByUserEmail(useremail);
+    }
+
+    public UserDto getUserByUserPhone(String userphone){
+        return userMapper.selectUserByUserPhone(userphone);
+    }
+
     private void insertUser(UserDto userDto){
 
         // 암호화 후 저장

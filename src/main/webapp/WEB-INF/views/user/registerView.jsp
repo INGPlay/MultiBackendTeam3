@@ -31,7 +31,7 @@
 <body>
 
 	<!--회원가입 -->
-	<div class="text-center py-1" style="" >
+	<div class="text-center py-1">
 		<div class="container">
 			<div class="row" style="">
 			<div class="mx-auto col-lg-6 col-10">
@@ -48,6 +48,17 @@
 
 						<small class="form-text validText">
 							<form:errors path = "username" />
+						</small>
+						<small class="form-text validText">
+							<spring:hasBindErrors name="registerForm">
+								<c:if test="${errors.hasGlobalErrors() }">
+									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
+										<c:if test="${globalError.getCode() eq 'UniqueCheck.username'}">
+											${globalError.defaultMessage}
+										</c:if>
+									</c:forEach>
+								</c:if>
+							</spring:hasBindErrors>	
 						</small>
 
 					</div>
@@ -76,7 +87,9 @@
 								<spring:hasBindErrors name="registerForm">
 									<c:if test="${errors.hasGlobalErrors() }">
 										<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
-											${globalError.defaultMessage}
+											<c:if test="${globalError.getCode() eq 'NotMatch.passwordCheck'}">
+												${globalError.defaultMessage}
+											</c:if>
 										</c:forEach>
 									</c:if>
 								</spring:hasBindErrors>	
@@ -95,6 +108,17 @@
 						<small class="form-text validText">
 							<form:errors path="phone" />
 						</small>
+						<small class="form-text validText">
+							<spring:hasBindErrors name="registerForm">
+								<c:if test="${errors.hasGlobalErrors() }">
+									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
+										<c:if test="${globalError.getCode() eq 'UniqueCheck.phone'}">
+											${globalError.defaultMessage}
+										</c:if>
+									</c:forEach>
+								</c:if>
+							</spring:hasBindErrors>	
+						</small>
 
 					</div>
 
@@ -106,6 +130,17 @@
 
 						<small class="form-text validText">
 							<form:errors path="email" />
+						</small>
+						<small class="form-text validText">
+							<spring:hasBindErrors name="registerForm">
+								<c:if test="${errors.hasGlobalErrors() }">
+									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
+										<c:if test="${globalError.getCode() eq 'UniqueCheck.email'}">
+											${globalError.defaultMessage}
+										</c:if>
+									</c:forEach>
+								</c:if>
+							</spring:hasBindErrors>	
 						</small>
 
 					</div>

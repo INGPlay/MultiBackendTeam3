@@ -72,6 +72,8 @@
 			</div>
 		</div> -->
 	</div>
+    <a href="/review/list">review</a>
+    <a href="pathmap/">pathmap</a>
 
 
 	<!-- ===================================================== -->
