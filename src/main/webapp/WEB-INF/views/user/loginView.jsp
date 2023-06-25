@@ -8,10 +8,6 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- PAGE settings -->
-	<link rel="icon"
-		href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
-	<title>trip</title>
 
 	<!-- CSS dependencies -->
 	<link rel="stylesheet"
@@ -31,6 +27,19 @@
 		<div class="row justify-content-center">
 			<div class="col-4">
 				<form action="/login-process" method="post">
+
+					<div>
+						<small class="form-text validText" style="color: red;">
+							<c:if test="${param.fail ne null}">
+								<p>
+									로그인에 실패하였습니다. 
+									<br/>
+									아이디와 비밀번호를 확인해주세요.
+								</p>
+							</c:if>
+						</small>
+					</div>
+
 
 					<div class="form-group">
 						<label>아이디</label>

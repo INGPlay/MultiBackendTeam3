@@ -7,9 +7,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- PAGE settings -->
-	<link rel="icon"
-		href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
+
 	<title>trip</title>
 
 	<!-- CSS dependencies -->
@@ -51,7 +49,7 @@
                             light 빛나는 my youth 자유롭게 fly fly 나 숨을 셔 which I enjoy with my whole heart.
                         </p>
         		  	</p>
-					
+
                     <sec:authorize access="isAnonymous()">
                         <a href="/user/login" class="btn btn-lg btn-primary mx-1">로그인</a>
                         <a href="/user/register" class="btn btn-lg btn-primary mx-1">가입하기</a>
