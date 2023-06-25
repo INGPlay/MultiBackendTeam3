@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -11,12 +11,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <%@ include file="./template/staticTemplate.jsp" %>
+    <%@ include file="/WEB-INF/views/template/staticTemplate.jsp" %>
+
+    <!-- 카카오 지도랑 충돌 -->
+    <!-- CSS dependencies -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    type="text/css">
+    <link rel="stylesheet" href="/resources/colorful.css">
 
 </head>
+
 <body>
+    <!-- header -->
+    <%@ include file="/WEB-INF/views/template/header.jsp" %>
+
+
     <div class="container">
-        <div class="d-flex flex-row bd-highlight">
+        <div class="d-flex flex-row bd-highlight mt-2">
             <!-- 조회 조건 -->
             <select class="col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
                 <option value="createDate" selected>최신순</option>
@@ -33,7 +45,7 @@
 
         </div>
 
-        <table class="table table table-hover">
+        <table class="table table table-hover mt-2">
             <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -86,22 +98,20 @@
         </div>
 
         <!--  검색  -->
-        <div class="row justify-content-center">
-            <div class="col-5">
-                <div class="input-group mb-3">
+        <div class="d-flex justify-content-center">
+            <div class="col-5 input-group">
 
-                    <!-- 검색 조건 -->
-                    <select class="col-2" name="searchOption" id="searchOptionSelect">
-                        <option value="title" selected>제목</option>
-                        <option value="author">글쓴이</option>
-                    </select>
+                <!-- 검색 조건 -->
+                <select class="col-3" name="searchOption" id="searchOptionSelect">
+                    <option value="title" selected>제목</option>
+                    <option value="author">글쓴이</option>
+                </select>
 
-                    <!-- 검색할 단어 -->
-                    <input type="text" name="searchWord" class="form-control col-5" id="searchWordInput">
+                <!-- 검색할 단어 -->
+                <input type="text" name="searchWord" class="form-control col-6" id="searchWordInput">
 
-                    <button type="submit" class="btn btn-outline-dark col-2" onclick="search()">검색</button>
+                <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
 
-                </div>
             </div>
         </div>
 

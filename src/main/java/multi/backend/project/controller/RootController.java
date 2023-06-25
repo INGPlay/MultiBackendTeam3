@@ -17,4 +17,9 @@ public class RootController {
     public String testMap(){
         return "map";
     }
+
+    @GetMapping("/header")
+    public String testHeader(){
+        return "header";
+    }
 }

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -12,10 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-	<%@ include file="./template/staticTemplate.jsp" %>
+	<%@ include file="/WEB-INF/views/template/staticTemplate.jsp" %>
 
 	<script type="text/javascript" src='//dapi.kakao.com/v2/maps/sdk.js?appkey=<spring:message code="keys.kakao.map" javaScriptEscape="true" />&libraries=services'></script>
-
 
 	<style>
 		/* 지도 관련 */
@@ -88,14 +87,15 @@
 
 			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
-				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
+				<span onclick="window.location.href='/pathmap'" class="input-group-text main_color" id="inputGroup-sizing-lg">←</span>
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle" disabled>
 
 				<!-- 로그인한 사용자만 수정 가능 -->
 				<sec:authorize access="isAuthenticated()">
 					<c:if test="${authorizedAuthor eq 'true'}">
-						<span onclick="window.location.href='/pathmap/update/' + ${pathId}" class="input-group-text" id="inputGroup-sizing-lg">수정</span>
+						<span onclick="window.location.href='/pathmap/update/' + ${pathId}" 
+							class="input-group-text main_color" id="inputGroup-sizing-lg">수정</span>
 					</c:if>
 				</sec:authorize>
 			</div>
@@ -107,20 +107,20 @@
 			<!-- 추천, 복사, 댓글 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
 				<sec:authorize access="isAuthenticated()">
-					<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
 							style="width: 100%; justify-content: center;"
-							type="button" onclick="toggleFavorite()">
+							type="button" onclick="toggleFavorite()" id="favoriteButton">
 						<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
 					</button>
 
-					<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
 							style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
 							type="button">
 						<span class="fs-5 fw-semibold">복사</span>
 					</button>
 				</sec:authorize>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-25" 
+				<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color" 
 						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
 						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
 					<span class="fs-5 fw-semibold" id = "commentButtonText">댓글</span>
@@ -707,11 +707,14 @@
 			}).done((response) => {
 				console.log(response)
 
+				let favoriteButton = document.getElementById("favoriteButton")
 				let favoriteButtonText = document.getElementById("favoriteButtonText")
 				if (response["isFavorite"] === true) {
 					favoriteButtonText.innerHTML = "추천완료"
+					favoriteButton.classList.replace('main_color', 'main_color_selected')
 				} else {
 					favoriteButtonText.innerHTML = "추천"
+					favoriteButton.classList.replace('main_color_selected', 'main_color')
 				}
 
 			}).fail((error) => {

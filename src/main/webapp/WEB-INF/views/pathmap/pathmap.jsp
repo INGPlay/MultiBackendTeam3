@@ -1,19 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-	<%@ include file="./template/staticTemplate.jsp" %>
+	<%@ include file="/WEB-INF/views/template/staticTemplate.jsp" %>
 
 	<script type="text/javascript" src='//dapi.kakao.com/v2/maps/sdk.js?appkey=<spring:message code="keys.kakao.map" javaScriptEscape="true" />&libraries=services'></script>
-
 
 	<style>
 		/* 지도 관련 */
@@ -32,7 +31,6 @@
 
 		.custom_contentType {position:absolute;top:10px;left:10px;width:520px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_contentType span {display:block;width:64px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
-		.custom_contentType .selected {background-color: burlywood;}
 
 		.custom_searchBar {position:absolute;top:55px;left:10px;overflow:hidden;width:350px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_searchBar span {display:block;width:350px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
@@ -345,7 +343,7 @@
 				console.log(error)
 				console.log(error["responseJSON"]["message"])
 				if (error["status"] === 404){
-					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
+					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 없습니다.", "red")
 				}
 			})
 
@@ -780,7 +778,7 @@
 				let menu = document.getElementById(id)
 
 				if (code === inputCode){
-					menu.className ="selected text-wrap" 
+					menu.className ="main_color_selected text-wrap" 
 				} else {
 					menu.className = "badge text-wrap"
 				}

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -7,33 +7,36 @@
 <html>
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PAGE settings -->
-<link rel="icon"
-	href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
-<title>trip</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- PAGE settings -->
+	<link rel="icon"
+		href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
+	<title>trip</title>
 
-<!-- CSS dependencies -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-	type="text/css">
-<link rel="stylesheet" href="/resources/colorful.css">
+	<!-- CSS dependencies -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		type="text/css">
+	<link rel="stylesheet" href="/resources/colorful.css">
 
-<style>
-	.validText {
-		color: red;
-	}
-</style>
+	<style>
+		.validText {
+			color: red;
+		}
+	</style>
 
 </head>
 
 <body>
 
+	<!-- header -->
+	<%@ include file="/WEB-INF/views/template/header.jsp" %>
+
 	<!--회원가입 -->
 	<div class="text-center py-1">
 		<div class="container">
-			<div class="row" style="">
+			<div class="row">
 			<div class="mx-auto col-lg-6 col-10">
 				<h1 class="text-primary align-items-start text-center">회원가입&nbsp;</h1>
 
@@ -42,14 +45,14 @@
 					<div class="form-group form-row"> 
 						<label for="form16" class="col-sm-2 col-form-label">아이디&nbsp;</label>
 						<div class="col-sm-10">
-							<form:input type="text" class="form-control mt-2 border-secondary border" id="form16"  placeholder="영어 소문자만 입력 가능합니다" required="required"
+							<form:input type="text" class="form-control mt-2 border" id="form16"  placeholder="영어 소문자만 입력 가능합니다" required="required"
 										path="username" name="username"/>
 						</div>
 
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<form:errors path = "username" />
 						</small>
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<spring:hasBindErrors name="registerForm">
 								<c:if test="${errors.hasGlobalErrors() }">
 									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
@@ -67,7 +70,7 @@
 						<div class="form-group col-md-6"> 
 
 							<label for="form19">비밀번호&nbsp;</label> 
-							<form:input type="password" class="form-control border border-secondary" id="form19" placeholder="••••" required="required"
+							<form:input type="password" class="form-control border" id="form19" placeholder="••••" required="required"
 										path="password" name="username"/> 
 
 							<small class="form-text validText">
@@ -79,11 +82,11 @@
 						<div class="form-group col-md-6"> 
 
 							<label for="form20">비밀번호 확인</label> 
-							<form:input type="password" class="form-control border border-secondary" id="form20" placeholder="••••" required="required"
+							<form:input type="password" class="form-control border" id="form20" placeholder="••••" required="required"
 									path="passwordCheck" name="passwordCheck" /> 
 
 							<!-- 비밀번호 확인 -->
-							<small class="form-text validText">
+							<small class="form-text validText" style="color: red;">
 								<spring:hasBindErrors name="registerForm">
 									<c:if test="${errors.hasGlobalErrors() }">
 										<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
@@ -102,13 +105,13 @@
 					<div class="form-group"> 
 
 						<label for="form17">전화번호&nbsp;</label> 
-						<form:input type="" class="form-control" id="form17" placeholder="숫자만 입력해주세요" required="required"
+						<form:input type="" class="form-control border" id="form17" placeholder="숫자만 입력해주세요" required="required"
 								path="phone" name="phone" />
 
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<form:errors path="phone" />
 						</small>
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<spring:hasBindErrors name="registerForm">
 								<c:if test="${errors.hasGlobalErrors() }">
 									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
@@ -125,13 +128,13 @@
 					<div class="form-group"> 
 
 						<label for="form18">당신의&nbsp; 이메일&nbsp;</label> 
-						<input type="email" class="form-control border border-secondary" id="form18" placeholder="abcd@gmail.com" required="required"
+						<input type="email" class="form-control border" id="form18" placeholder="abcd@gmail.com" required="required"
 								path="email" name="email" />
 
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<form:errors path="email" />
 						</small>
-						<small class="form-text validText">
+						<small class="form-text validText" style="color: red;">
 							<spring:hasBindErrors name="registerForm">
 								<c:if test="${errors.hasGlobalErrors() }">
 									<c:forEach var="globalError" items="${errors.getGlobalErrors()}">
