@@ -29,10 +29,10 @@
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-1 border-bottom">
     
             <ul class="nav col-12 col-md-auto justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2 link-secondary">홈</a></li>
+                <li><a href="/" class="nav-link px-2 link-secondary">Trip Over</a></li>
                 <li><a href="/pathmap" class="nav-link px-2 link-dark">지도</a></li>
                 <li><a href="/review/list" class="nav-link px-2 link-dark">리뷰</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">페이지</a></li>
+                <!-- <li><a href="#" class="nav-link px-2 link-dark">페이지</a></li> -->
                 <li><a href="#" class="nav-link px-2 link-dark">팀</a></li>
             </ul>
     
