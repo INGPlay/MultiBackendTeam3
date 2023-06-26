@@ -81,7 +81,7 @@ public class PathMapService {
     }
 
     @Transactional
-    public void insertPath(String username, String title, String requestJson) throws ParseException {
+    public Long insertPath(String username, String title, String requestJson) throws ParseException {
 
         log.info("username : {}, title : {}", username, title);
 
@@ -91,6 +91,8 @@ public class PathMapService {
         log.info("asdfasdf : {}", pathId);
         pathMapMapper.insertPathMap(pathId, username, handleNullOrEmpty(title));
         insertMarks(pathId, requestJson);
+
+        return pathId;
     }
 
     @Transactional
