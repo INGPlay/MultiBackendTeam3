@@ -1,18 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Edit</title>
     <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.hnbhjbjhbjhbjsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- jQuery library -->
     <script
@@ -65,14 +66,35 @@
         .link{
             font-size: 14px;
         }
-        .combtn{
-            background-color: #12bbad;
+        .del{
+            width: 10px;
+            height: 10px;
+            margin-top: auto;
+        }
+        .date{
+            font-size: 10px;
+        }
+        .fontRe{
+            font-size:18px;
+            font-weight: bold;
+            color: #12bbad;
+        }
+
+        button{
+           background-color: #12bbad;
+        }
+        .tableTr{
+            height: 10px;
+        }
+        table{
+            border: 1px;
         }
 
 
     </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 <div class="row">
 
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
@@ -115,48 +137,42 @@
                 </tr>
 
                 <tr>
-                    <td colspan="2" style="border-bottom-style: hidden">
-                        <div onclick="com()"width="100px" height="100px"  class="div">
-                            <img class="img" src="/image/re.png"/>
-                            <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
-                            <span>${vo.review_recommends} </span>
-                        </div>
-                    </td>
+                     <td colspan="2" style="border-bottom-style: hidden">
+                         <div onclick="com()"width="100px" height="100px"  class="div">
+                             <img class="img" src="/image/re.png"/>
+                             <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
+                             <span>${vo.review_recommends} </span>
+                         </div>
+                     </td>
 
                 </tr>
             </table>
         </form>
 
     </div><!-- .col end-->
+</div>
 
-    <div class="row">
-        <div align="center" id="bbs1" class="col-md-8 offset-md-2 my-4">
-            <form>
-                <table class="table table table-hover">
-                    <tr>
-                        <td colspan="2">
-                            <b>댓글()</b> &nbsp;
-                            <a href="#" class="link">등록순</a>
-                            <a href="#" class="link">최신순</a>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td width="90%" height="100px">
-                            <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
-
-                        </td>
-                        <td width="10%"><input type="button" onclick="insertComment()" class="d-flex align-items-center flex-shrink-0 p-2 link-dark text-decoration-none " style="background-color: #12bbad; padding: 5px; margin-top: 25%;" value="등록"/></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
-
-    <div id="comment_list" align="center" id="b" class="col-md-8 offset-md-2 my-4" />
+<div id="comment_list" align="center" id="b" class="col-md-8 offset-md-2 my-4"></div>
 
 </div><!-- .row end-->
-<form method="get" action="list" name="reset" id="reset"></form>
+<div class="row">
+    <div align="center" id="bbs1" class="col-md-8 offset-md-2 my-4">
+    <form>
+        <table class="table table table-hover">
+
+            <tr>
+                <td width="90%" height="100px">
+                    <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
+
+                </td>
+                <td width="10%"><input type="button" onclick="insertComment()" class="d-flex align-items-center flex-shrink-0 p-2 link-dark text-decoration-none " style="background-color: #12bbad; padding: 5px; margin-top: 25%;" value="등록"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+</div>
+    <form method="get" action="list" name="reset" id="reset"></form>
 </body>
 <script>
     const edit = function(){
@@ -185,11 +201,12 @@
             cache:false,
         }).done((res)=>{
             alert("삭제되었습니다.")
-            init();
+            init(1);
         }).fail((err)=>{
             alert(err.status)
         })
     }
+
 
     const insertComment = function(){
         let rid=$('#review_id').val();
@@ -210,39 +227,109 @@
             data:JSON.stringify(jsonData),
             cache: false
         }).done((res)=>{
-            alert("정상적으로 삽입되었습니다.")
-            $('#content').val("");
-            init();
+            alert("댓글을 작성했습니다");
+            document.getElementById("content").value='';
+            init(1);
+        }).fail((err)=>{
+            alert(err.status)
+        })
+
+    }
+
+    const recomment = function(id){
+        var list= id.split('/');
+        var total = list[0]+"re"+list[1];
+        var x = document.getElementById(total);
+        var message="";
+
+
+        if(x.getAttribute("type") == "hidden"){
+            x.setAttribute("type", "text");
+        }else{
+            message=x.value;
+            CheckMessage(list[0],message);
+            x.setAttribute("type","hidden");
+            x.value=null;
+        }
+    }
+
+    const CheckMessage = function(list,message){
+        if(message.trim()!=0){
+            insertCommentRe(list,message);
+        }
+    }
+
+    const insertCommentRe = function(list,message){
+        let jsonData={
+            comment_id:list,
+            content:message
+        };
+
+        $.ajax({
+            type:'post',
+            url:'/review/recomment',
+            dataType:'text',
+            contentType:'application/json; charset=UTF-8',
+            data:JSON.stringify(jsonData),
+            cache: false
+        }).done((res)=>{
+            alert("대댓글이 추가되었습니다.")
+            init(1);
         }).fail((err)=>{
             alert(err.status)
         })
     }
 
+
+
+
     const showComment = function(res){
-        let str = "<table id='table1' style='width: 100%'>"
+        let str = "<table id='table1' style='width: 100%;' >"
+        str+='<tr class="tableTr">';
+        str+='<td colspan="3"><div>';
+        str+='<b>댓글()</b> &nbsp;';
+        str+='<a href="#" class="link" onclick="init(1)">등록순</a> |&nbsp;';
+        str+='<a href="#" class="link" onclick="init(2)">최신순</a></div></td></tr> &nbsp;';
 
         $.each(res,(i,vo)=>{
-            str+='<tr>';
+            str+='<tr class="tableTr"><td colspan="3"><hr style="color: #12bbad;"></td></tr>';
+            str+='<tr style="margin-top: 10px;">';
 
-            str+='<td width="10%">';
+            str+='<td width="10%"><p style="text-align: left">';
+            if(res[i].comment_depth!=0){
+            str+='<span class="fontRe">ㄴ</span> &nbsp;'
+            }
             str+=res[i].user_name;
-            str+='</td>';
+            str+='</p></td>';
 
-            str+='<td width="50%">';
-            str+=res[i].content;
-            str+='</td>';
-
-            str+='<td width=15%>';
+            str+='<td width=10% class="date"><p style="text-align: left">(';
             str+=res[i].create_date;
-            str+='</td>';
+            str+=')</p></td>';
 
-            str+='<td width=15%>';
-            str+=res[i].update_date;
-            str+='</td>';
-            str+='<td width="10%">';
-            str+='<input class = "combtn" type="button" value="삭제" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/>';
-            str+='</td>';
+            str+='<td width="70%">&nbsp; ';
+            str+='<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/></p></td>';
+
             str+='</tr>';
+
+            str+='<tr>';
+            if(res[i].comment_depth!=0) {
+                str+='<td></td>';
+            }
+
+            str+='<td colspan="3"><p>';
+            str+=res[i].content;
+            str+='</p></td>';
+
+            if(res[i].comment_depth==0) {
+                str += '<tr class="tableTr">';
+                str += '<td colspan="3"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
+                str += '</tr>';
+                str += '<tr class="tableTr">';
+                str += '<td colspan="3">';
+                str += '<input  style="width: 100%" type ="hidden" class="re" id="' + res[i].comment_group + 're' + res[i].comment_depth + '">';
+                str += '</td>';
+                str += '</tr>';
+            }
 
         })
         str+='</table>';
@@ -250,13 +337,15 @@
         $('#comment_list').html(str);
     }
 
-    const init = function(){
+    const init = function(i){
         let rid = $('#review_id').val();
         //alert(rid);
         $.ajax({
             type:'get',
             url:'/review/comment',
-            data:{"review_id":rid},
+            data:{"review_id":rid,
+                  "sort":i
+            },
             dataType:'json',
             cache:false
         }).done((res)=>{
@@ -270,7 +359,7 @@
 
 
     $(()=>{
-        init();}
+        init(1);}
     )
 
 </script>

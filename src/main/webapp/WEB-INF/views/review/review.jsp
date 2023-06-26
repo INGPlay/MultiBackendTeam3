@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
@@ -7,6 +7,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,23 +23,21 @@
             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
           type="text/css">
     <link rel="stylesheet" href="/resources/colorful.css">
-
-
     <style>
         .pagination{
             justify-content: center;
         }
 
-        .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
+         .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
     </style>
 </head>
 
 <body>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 <div class="row my-3">
     <div class="col-9 text-right">
         <form name="searchF" action="/review/write" method="get">
@@ -113,26 +112,26 @@
         </tr>
         <div>
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <c:if test="${pageMaker.prev}">
-                        <li class="page-item">
-                            <a class="page-link" href="${pageMaker.startPage -1}">&laquo;</a>&nbsp
-                        </li>
-                    </c:if>
+            <ul class="pagination">
+                <c:if test="${pageMaker.prev}">
+                    <li class="page-item">
+                        <a class="page-link" href="${pageMaker.startPage -1}">&laquo;</a>&nbsp
+                    </li>
+                </c:if>
 
-                    <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                        <li class="page-item ">
-                            <a class="page-link" style="<c:out value="${pageMaker.cri.pageNum == num ? 'background-color: #12bbad' : 'none'}"/> " href="${num}">${num}</a>&nbsp
+                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                    <li class="page-item ">
+                        <a class="page-link" style="<c:out value="${pageMaker.cri.pageNum == num ? 'background-color: #12bbad' : 'none'}"/> " href="${num}">${num}</a>&nbsp
 
-                        </li>
-                    </c:forEach>
+                    </li>
+                </c:forEach>
 
-                    <c:if test="${pageMaker.next}">
-                        <li class="page-item">
-                            <a class="page-link" href="${pageMaker.endPage +1}">&raquo;</a>&nbsp
-                        </li>
-                    </c:if>
-                </ul>
+                <c:if test="${pageMaker.next}">
+                    <li class="page-item">
+                        <a class="page-link" href="${pageMaker.endPage +1}">&raquo;</a>&nbsp
+                    </li>
+                </c:if>
+            </ul>
             </nav>
         </div>
     </div>

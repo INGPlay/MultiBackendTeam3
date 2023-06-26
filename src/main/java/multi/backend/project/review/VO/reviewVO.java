@@ -18,9 +18,6 @@ public class reviewVO {
     private int review_views; // 조회수
     private int review_recommends; // 추천수
 
-
-
-
     @Override
     public String toString() {
         return "reviewVO{" +

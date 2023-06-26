@@ -1,7 +1,6 @@
 package multi.backend.project.review.Sevice;
 
 import multi.backend.project.review.VO.Review_CommentVO;
-
 import multi.backend.project.review.vo.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 
@@ -52,9 +51,24 @@ public interface reviewService {
 
 
     //     2. 댓글 조회
-    List<Review_CommentVO> selectReviewComment(int review_id);
+    List<Review_CommentVO> selectReviewComment(int review_id,int sort);
 
     //    3. 댓글 삭제
 
     int deleteComment(int id);
+
+    // 4. 특정 댓글 찾기
+    Review_CommentVO findReComment(int i);
+
+
+    // 5. 대댓글 넣기
+    int insert_Rerecomment(Review_CommentVO vo);
+
+
+    // 6. 첫 댓글 깊이 증가
+    int update_comment_group(Review_CommentVO vo);
+
+    //
+    int getTotalRecommentCount(int comment_group);
+
 }
