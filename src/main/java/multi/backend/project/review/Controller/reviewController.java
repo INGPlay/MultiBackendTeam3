@@ -7,7 +7,6 @@ import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -67,9 +66,8 @@ public class reviewController {
 
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(@Param("review_id") String review_id,@Param("sort")String sort){
-
-        System.out.println(sort);
+    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort){
+        //System.out.println(sort);
         //System.out.println(review_id);
         List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),Integer.parseInt(sort));
         //System.out.println(commentList.toString());

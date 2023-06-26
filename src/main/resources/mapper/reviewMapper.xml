@@ -91,7 +91,7 @@
 
 
     <!-- 해당 게시글 댓글 조회   -->
-    <select id="selectReviewComment" resultType="commentVO" parameterType="_int">
+    <select id="selectReviewComment" resultType="commentVO" parameterType="_int" >
         select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
         from comment_vi where review_id = #{review_id}
         <if test="sort == 1">
