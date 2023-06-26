@@ -137,21 +137,25 @@
         let PAGE_SEARCHOPTION = searchOptionSelect.options[searchOptionSelect.selectedIndex].value;
         
 
+        let PAGE_ISFAVORITE = false
+
+
         updatePageStaticOption()
 
         
         function updatePageStaticOption(){
-            updatePage(PAGE_PAGE, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
+            updatePage(PAGE_PAGE, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION, PAGE_ISFAVORITE)
         }
 
-        function updatePage(page, size, orderBy, searchWord, searchOption){
+        function updatePage(page, size, orderBy, searchWord, searchOption, isFavorite){
 
             const data = {
                 "page" : page,
                 "size" : size,
                 "orderBy" : orderBy,
                 "searchWord" : searchWord,
-                "searchOption" : searchOption
+                "searchOption" : searchOption,
+                "isFavorite" : isFavorite
             }
 
             $.ajax({
@@ -291,12 +295,12 @@
 
         function toggleFavorites(){
             let favoriteButtonText = document.getElementById("favoriteButtonText")
-            if (PAGE_SEARCHOPTION === 'favorite'){
-                PAGE_SEARCHOPTION = ''
-                favoriteButtonText.innerHTML = '추천한 게시글'
-            } else {
-                PAGE_SEARCHOPTION='favorite';
+            if (PAGE_ISFAVORITE === false){
+                PAGE_ISFAVORITE = true;
                 favoriteButtonText.innerHTML = '돌아가기'
+            } else {
+                PAGE_ISFAVORITE = false;
+                favoriteButtonText.innerHTML = '추천한 게시글'
             }
 
             updatePageStaticOption();

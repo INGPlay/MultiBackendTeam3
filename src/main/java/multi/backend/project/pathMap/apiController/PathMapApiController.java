@@ -85,13 +85,16 @@ public class PathMapApiController {
                                                                                    @RequestParam(defaultValue = "createDate") String orderBy,
                                                                                    @RequestParam(defaultValue = "") String searchWord,
                                                                                    @RequestParam(defaultValue = "title") String searchOption,
+                                                                                   @RequestParam(defaultValue = "false") Boolean isFavorite,
                                                                                    @AuthenticationPrincipal UserContext userContext){
 
-        log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}", page, size, orderBy, searchWord, searchOption);
-        PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord, searchOption);
+        log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}, isFavorite: {}, username: {}",
+                page, size, orderBy, searchWord, searchOption, isFavorite, userContext.getUsername());
 
-        if (searchOption.equals("favorite")){
-            pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, userContext.getUsername(), searchOption);
+        PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord, searchOption, isFavorite, "");
+
+        if (isFavorite){
+            pathThreadPageDto.setUsername(userContext.getUsername());
         }
 
         PathPagingResponse<PathInfoResponse> pathList = pathMapService.getPathInfoList(pathThreadPageDto);
