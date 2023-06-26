@@ -434,7 +434,7 @@
 		}
 
 		function marking(map, posX, posY, callback){
-			var marker = new kakao.maps.Marker({
+			let marker = new kakao.maps.Marker({
 				map: map,
 				position: new kakao.maps.LatLng(posY, posX)
 			});
@@ -442,6 +442,35 @@
 			kakao.maps.event.addListener(marker, "click", callback);
 
 			return marker
+		}
+
+		function promiseMarkingSequenceInMap(info, index){
+			
+		}
+
+		function promiseMarking(map, posX, posY, index, callback){
+			return new Promise(function(resolve, reject){
+				resolve(markingSequence(map, posX, posY, index, callback));
+			})
+		}
+
+		// 1 ~ 15 까지
+		function markingSequence(map, posX, posY, index, callback){
+			// 세 번째 파라메터로 options를 사용.
+			let icon = new kakao.maps.MarkerImage(
+				'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+				new kakao.maps.Size(43, 52),
+				{
+					spriteOrigin: new kakao.maps.Point(315, 52 * index - 1),    
+					spriteSize: new kakao.maps.Size(644, 946) 
+				}
+			);
+
+			let marker = new kakao.maps.Marker({
+				map:map,
+				position: new kakao.maps.LatLng(posY, posX),
+				image : icon
+			})
 		}
 
 		// 인포윈도우 기본 형식
