@@ -65,8 +65,8 @@
             <th width="10%">작성자</th>
             <th width="20%">제목</th>
             <th width="20%">내용</th>
-            <th width="10%">생성 날짜</th>
-            <th width="10%">수정 날짜</th>
+            <th width="10%">생성일</th>
+            <th width="10%">수정일</th>
             <th width="10%">조회수</th>
             <th width="10%">추천수</th>
             </thead>
