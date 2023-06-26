@@ -57,9 +57,9 @@
     </div>
 </div>
 <!-- ------------------------------------------------------- -->
-<div class="row">
+<div class="container">
     <div class='col-10 offset-1'>
-        <table class="table table table-hover" id="table">
+        <table class="table table table-hover mt-2" id="table">
             <thead>
             <th width="10%">번호</th>
             <th width="10%">작성자</th>

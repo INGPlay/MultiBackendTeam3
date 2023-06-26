@@ -1,7 +1,7 @@
 package multi.backend.project.review.Mapper;
 
 import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.vo.reviewVO;
+import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 

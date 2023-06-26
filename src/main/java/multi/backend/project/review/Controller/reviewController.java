@@ -2,9 +2,9 @@ package multi.backend.project.review.Controller;
 
 
 import lombok.extern.log4j.Log4j2;
-import multi.backend.project.review.Sevice.reviewServiceImpl;
+import multi.backend.project.review.Service.reviewServiceImpl;
 import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.vo.reviewVO;
+import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
 import org.springframework.ui.Model;
@@ -116,7 +116,7 @@ public class reviewController {
 
 
     @PostMapping("/view")
-    public String reviewForm(Model m, @ModelAttribute reviewVO vo, RedirectAttributes reb){
+    public String reviewForm(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo, RedirectAttributes reb){
         service.updateReview_recommends(vo);
         reb.addAttribute("redirect_id",vo.getReview_id());
         return "redirect:/review/view";
@@ -130,7 +130,7 @@ public class reviewController {
 
     //    게시글 insert
     @PostMapping("/write")
-    public String insertReiew(Model m, @ModelAttribute reviewVO review){
+    public String insertReiew(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO review){
         // 유저 정보 존재 유무 확인
         String user_name = review.getUser_name();
         //System.out.println(user_name);
@@ -152,7 +152,7 @@ public class reviewController {
     }
     //    게시글 수정&삭제 폼 이동
     @PostMapping("/edit")
-    public String editForm(Model m , @ModelAttribute reviewVO vo, HttpSession session){
+    public String editForm(Model m , @ModelAttribute multi.backend.project.review.VO.reviewVO vo, HttpSession session){
         m.addAttribute("vo",vo);
         //System.out.println(vo.getUser_name());
         return "review/edit";
@@ -170,7 +170,7 @@ public class reviewController {
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute reviewVO vo, HttpSession session, HttpServletRequest seq){
+    public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo, HttpSession session, HttpServletRequest seq){
         m.addAttribute("vo",vo);
         int n = service.updateReview(vo);
         //pagingVO page = (pagingVO) session.getAttribute("pageVO");

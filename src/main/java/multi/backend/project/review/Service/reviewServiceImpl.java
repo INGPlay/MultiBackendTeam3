@@ -1,8 +1,8 @@
-package multi.backend.project.review.Sevice;
+package multi.backend.project.review.Service;
 
 import multi.backend.project.review.Mapper.reviewMapper;
 import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.vo.reviewVO;
+import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

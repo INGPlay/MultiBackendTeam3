@@ -1,4 +1,4 @@
-package multi.backend.project.review.vo;
+package multi.backend.project.review.VO;
 
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
