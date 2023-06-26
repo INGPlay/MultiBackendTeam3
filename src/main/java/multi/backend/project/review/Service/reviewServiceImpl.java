@@ -1,9 +1,8 @@
-package multi.backend.project.review.Sevice;
+package multi.backend.project.review.Service;
 
 import multi.backend.project.review.Mapper.reviewMapper;
 import multi.backend.project.review.VO.Review_CommentVO;
-
-import multi.backend.project.review.vo.reviewVO;
+import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,12 +81,32 @@ public class reviewServiceImpl implements multi.backend.project.review.Sevice.re
     }
 
     @Override
-    public List<Review_CommentVO> selectReviewComment(int review_id) {
-        return mapper.selectReviewComment(review_id);
+    public List<Review_CommentVO> selectReviewComment(int review_id,int sort) {
+        return mapper.selectReviewComment(review_id,sort);
     }
 
     @Override
     public int deleteComment(int id) {
         return mapper.deleteComment(id);
+    }
+
+    @Override
+    public Review_CommentVO findReComment(int i) {
+        return mapper.findReComment(i);
+    }
+
+    @Override
+    public int insert_Rerecomment(Review_CommentVO vo) {
+        return mapper.insertRerecomment(vo);
+    }
+
+    @Override
+    public int update_comment_group(Review_CommentVO vo) {
+        return mapper.update_comment_group(vo);
+    }
+
+    @Override
+    public int getTotalRecommentCount(int comment_group) {
+        return mapper.getTotalRecommentCount(comment_group);
     }
 }

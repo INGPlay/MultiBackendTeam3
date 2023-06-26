@@ -86,20 +86,51 @@
             select TO_NUMBER(Review_Comment_Sequence.nextval) from dual
         </selectKey>
         insert into Review_Comment(comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id)
-        values(#{comment_id}, #{review_id},SYSDATE,SYSDATE,#{content},0,0,#{user_id})
+        values(#{comment_id}, #{review_id},SYSDATE,SYSDATE,#{content},#{comment_id},0,#{user_id})
     </insert>
 
 
     <!-- 해당 게시글 댓글 조회   -->
-    <select id="selectReviewComment" resultType="commentVO" parameterType="_int">
+    <select id="selectReviewComment" resultType="commentVO" parameterType="_int" >
         select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
         from comment_vi where review_id = #{review_id}
+        <if test="sort == 1">
+            order by comment_group asc, comment_depth asc
+        </if><if test="sort == 2">
+        order by comment_group desc, comment_depth desc
+    </if>
     </select>
 
     <!-- 댓글 삭제 -->
     <delete parameterType="_int" id="deleteComment">
         delete from review_comment where comment_id=#{id}
     </delete>
+
+    <!-- 특정 댓글 찾기-->
+    <select id="findReComment" parameterType="_int" resultType="commentVO">
+        select * from review_comment where comment_id=#{id}
+
+    </select>
+
+    <!-- 대댓글 추가하기 -->
+
+    <insert id="insertRerecomment" parameterType="commentVO">
+        <selectKey keyProperty="comment_id" resultType="_int" order="BEFORE">
+            select TO_NUMBER(Review_Comment_Sequence.nextval) from dual
+        </selectKey>
+        insert into Review_Comment(comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id)
+        values(#{comment_id}, #{review_id},SYSDATE,SYSDATE,#{content},#{comment_group},#{comment_depth},#{user_id})
+    </insert>
+
+    <!-- 원본 댓글 깊이 증가-->
+
+    <update id="update_comment_group" parameterType="commentVO">
+        update Review_Comment set COMMENT_DEPTH = COMMENT_DEPTH+1 where comment_group=#{comment_group}
+    </update>
+
+    <select id="getTotalRecommentCount" resultType="_int" parameterType="_int">
+        select count(comment_id) from Review_comment where comment_group = #{comment_group}
+    </select>
 </mapper>
 
 
