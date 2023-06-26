@@ -260,19 +260,19 @@
                 let pageNumId = pageNumIdTemplate + pageNum
 
                 document.getElementById(pageNumId).addEventListener("click", event => {
-                    updatePage(pageNum, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
+                    updatePage(pageNum, PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION, PAGE_ISFAVORITE)
                 })
             })
 
             if (hasPrevious){
                 document.getElementById(previousButtonId).addEventListener("click", event => {
-                    updatePage(response["previousNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
+                    updatePage(response["previousNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION, PAGE_ISFAVORITE)
                 })
             }
 
             if (hasNext){
                 document.getElementById(nextButtonId).addEventListener("click", event => {
-                    updatePage(response["nextNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION)
+                    updatePage(response["nextNum"], PAGE_SIZE, PAGE_ORDERBY, PAGE_SEARCHWORD, PAGE_SEARCHOPTION, PAGE_ISFAVORITE)
                 })
             }
 

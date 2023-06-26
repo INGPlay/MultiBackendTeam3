@@ -88,8 +88,8 @@ public class PathMapApiController {
                                                                                    @RequestParam(defaultValue = "false") Boolean isFavorite,
                                                                                    @AuthenticationPrincipal UserContext userContext){
 
-        log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}, isFavorite: {}, username: {}",
-                page, size, orderBy, searchWord, searchOption, isFavorite, userContext.getUsername());
+        log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}, isFavorite: {}",
+                page, size, orderBy, searchWord, searchOption, isFavorite);
 
         PathThreadPageDto pathThreadPageDto = new PathThreadPageDto(page, size, orderBy, searchWord, searchOption, isFavorite, "");
 
