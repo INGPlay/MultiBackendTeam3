@@ -41,8 +41,8 @@
 					<div class="form-group form-row"> 
 						<label for="form16" class="col-sm-2 col-form-label">아이디&nbsp;</label>
 						<div class="col-sm-10">
-							<form:input type="text" class="form-control mt-2 border" id="form16"  placeholder="영어 소문자만 입력 가능합니다" required="required"
-										path="username" name="username"/>
+							<form:input type="text" class="form-control mt-2 border" id="form16"  placeholder="영어 소문자와 숫자만 입력 가능합니다" required="required"
+										path="username" name="username" oninput="this.value = this.value.replace(/[^A-Za-z0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
 						</div>
 
 						<small class="form-text validText" style="color: red;">
@@ -97,12 +97,12 @@
 						</div>
 
 					</div>
-					
+
 					<div class="form-group"> 
 
 						<label for="form17">전화번호&nbsp;</label> 
-						<form:input type="" class="form-control border" id="form17" placeholder="숫자만 입력해주세요" required="required"
-								path="phone" name="phone" />
+						<form:input type="text" class="form-control border" id="phone" placeholder="숫자만 입력해주세요" required="required"
+								path="phone" name="phone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
 
 						<small class="form-text validText" style="color: red;">
 							<form:errors path="phone" />

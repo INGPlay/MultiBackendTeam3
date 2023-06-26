@@ -49,7 +49,7 @@ public class PathMapController {
             model.addAttribute("username", userContext.getUsername());
         }
 
-        plusPathMapViews(pathId, userContext, request, response);
+        plusPathMapViews(pathId, request, response, userContext);
 
         // 이 게시글의 작성자인지 확인
         model.addAttribute("authorizedAuthor", isPathmapAuthor(userContext, pathId));
@@ -102,7 +102,8 @@ public class PathMapController {
     }
 
     // 조회수
-    private void plusPathMapViews(Long pathId, UserContext userContext, HttpServletRequest request, HttpServletResponse response) {
+    private void plusPathMapViews(Long pathId, HttpServletRequest request, HttpServletResponse response,
+                                  @AuthenticationPrincipal UserContext userContext) {
         // 조회수 중복 방지를 위한 쿠키
         Cookie[] cookies = request.getCookies();
         String cookieName = "pathmapViews";

@@ -814,7 +814,7 @@
 			.done(function(response) {
 				// { "response" : "OK" }
 				console.log(response["response"])
-				window.location.replace("/pathmap");
+				window.location.replace("/pathmap/" + response["pathId"]);
 			})
 			.fail(function(error) {
 				console.log("Error : " + error)

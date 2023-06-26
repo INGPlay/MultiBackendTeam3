@@ -98,7 +98,7 @@
         </div>
 
         <!--  검색  -->
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center pb-5">
             <div class="col-5 input-group">
 
                 <!-- 검색 조건 -->
@@ -108,7 +108,7 @@
                 </select>
 
                 <!-- 검색할 단어 -->
-                <input type="text" name="searchWord" class="form-control col-6" id="searchWordInput">
+                <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
 
                 <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
 
