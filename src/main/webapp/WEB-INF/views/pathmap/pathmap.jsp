@@ -182,7 +182,8 @@
 				strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
 				strokeStyle: 'solid' // 선의 스타일입니다
 			}),
-			"overlayList" : []
+			"overlayList" : [],
+			"sequenceMarker" : []
 		}
 		
 		// {contentId : {
@@ -452,11 +453,7 @@
 				responseinfoWindowBasic(map, info)
 			})
 			.then(marker => {
-				let markInfo = {
-					"marker" : marker,
-					"info" : info
-				}
-				markInfoMap.set(info["contentId"], markInfo);
+				mapObject["sequenceMarker"].push(marker)
 			})
 			.catch(error => {
 				console.log(error);
@@ -486,6 +483,9 @@
 				position: new kakao.maps.LatLng(posY, posX),
 				image : icon
 			})
+			kakao.maps.event.addListener(marker, "click", callback);
+
+			return marker
 		}
 
 		// 인포윈도우 기본 형식
@@ -781,16 +781,23 @@
 
 			const mapPolyLine = mapObject["polyLine"]
 			const mapOverlayList = mapObject["overlayList"]
+			const mapSequenceMarker = mapObject["sequenceMarker"]
 
 			// overlay 초기화
 			mapOverlayList.forEach(o => {
 				o.setMap(null)
 			})
 
+			// 시퀀스마커 초기화
+			mapSequenceMarker.forEach(m => {
+				m.setMap(null)
+			})
+
 			const linePath = []
 			userSelectList.forEach((info, index) => {
 				const pos = new kakao.maps.LatLng(info["posY"], info["posX"])
 
+				// 시퀀스마커 추가
 				promiseMarkingSequenceInMap(info, index)
 
 				// 경로선 추가
