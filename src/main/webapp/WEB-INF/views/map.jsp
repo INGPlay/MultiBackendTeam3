@@ -47,12 +47,20 @@
 		let map = new kakao.maps.Map(container, options);
 
 		for (let i = 0; i < 15; i++){
-					// 세 번째 파라메터로 options를 사용.
+			
+			let pos = new kakao.maps.LatLng(33.450701, 126.570667 + 0.2*i)
+
+
+			setSequenceMarker(i, pos)
+		}
+
+		function setSequenceMarker(index, position){
+			// 세 번째 파라메터로 options를 사용.
 			let icon = new kakao.maps.MarkerImage(
 				'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
 				new kakao.maps.Size(43, 52),
 				{
-					spriteOrigin: new kakao.maps.Point(315, 52 * i),    
+					spriteOrigin: new kakao.maps.Point(315, 52 * index),    
 					spriteSize: new kakao.maps.Size(644, 946) 
 				}
 			);
@@ -61,7 +69,7 @@
 			// 지도를 클릭한 위치에 표출할 마커입니다
 			let marker = new kakao.maps.Marker({ 
 				// 지도 중심좌표에 마커를 생성합니다 
-				position: new kakao.maps.LatLng(33.450701, 126.570667 + 0.2*i) ,
+				position: position,
 				image: icon
 			}); 
 

@@ -410,46 +410,9 @@
 		function promiseMarkingInMap(info) {
 			
 			return promiseMarking(map, info["posX"], info["posY"], function(){
-
-				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
-
-				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
-				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
 				
-				let content = "\
-					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
-						<div class='d-flex flex-row align-items-center'> \
-							<div class='flex-shrink-0'> \
-								<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
-							</div> \
-							<div class='flex-grow-1 ms-1'>\
-								<p class='h5 fw-bold'>" + info["title"] + "</p> \
-								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
-								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-								<div class = 'd-flex flex-row'> \
-									<div class='me-auto d-flex flex-row'> \
-										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
-									</div> \
-									<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
-								</div> \
-							</div> \
-						</div> \
-					</div> \
-				"
-				info
-				// 백틱 템플릿은 왠지 모르게 안된다
-				/*
-				`\
-				<div> \
-					<h5>${info["title"]}</h5>
-					<p>${info["addr1"]} ${info["addr2"]}</p> \
-					<p>${info["tel"]}</p> \
-				</div> \
-				`;
-				*/
-
-				responseinfoWindow(map, info["posX"], info["posY"], content)
+				// 마커를 클릭하면 인포윈도우가 뜬다
+				responseinfoWindowBasic(map, info)
 			})
 			.then(marker => {
 				let markInfo = {
@@ -479,6 +442,48 @@
 			kakao.maps.event.addListener(marker, "click", callback);
 
 			return marker
+		}
+
+		// 인포윈도우 기본 형식
+		function responseinfoWindowBasic(map, info){
+			const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+
+			let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+			const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+
+			let content = "\
+				<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
+					<div class='d-flex flex-row align-items-center'> \
+						<div class='flex-shrink-0'> \
+							<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
+						</div> \
+						<div class='flex-grow-1 ms-1'>\
+							<p class='h5 fw-bold'>" + info["title"] + "</p> \
+							<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
+							<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
+							<div class = 'd-flex flex-row'> \
+								<div class='me-auto d-flex flex-row'> \
+									<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+									<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+								</div> \
+								<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
+							</div> \
+						</div> \
+					</div> \
+				</div> \
+			"
+			// 백틱 템플릿은 왠지 모르게 안된다
+			/*
+			`\
+			<div> \
+				<h5>${info["title"]}</h5>
+				<p>${info["addr1"]} ${info["addr2"]}</p> \
+				<p>${info["tel"]}</p> \
+			</div> \
+			`;
+			*/
+
+			responseinfoWindow(map, info["posX"], info["posY"], content)
 		}
 
 		// 인포윈도우를 띄움
