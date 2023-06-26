@@ -30,15 +30,19 @@
     <div class="container">
         <div class="d-flex flex-row bd-highlight mt-2">
             <!-- 조회 조건 -->
-            <select class="col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
+            <select class="me-auto col-1" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
                 <option value="createDate" selected>최신순</option>
                 <option value="view">조회순</option>
                 <option value="recommend">추천순</option>
             </select>
 
-            <!-- 로그인 한 사용자만 작성가능 -->
+            <!-- 로그인 한 사용자만 -->
             <sec:authorize access="isAuthenticated()">
-                <button class="btn main_color ms-auto" onClick="location.href='/pathmap/mark'">
+                <button class="btn btn-outline-primary" onClick="toggleFavorites()">
+                    <strong id="favoriteButtonText">추천한 게시글</strong>
+                </button>
+
+                <button class="btn main_color" onClick="location.href='/pathmap/mark'">
                     <strong>작성하기</strong>
                 </button>
             </sec:authorize>
@@ -283,6 +287,19 @@
             PAGE_SEARCHOPTION = searchOptionSelect.options[searchOptionSelect.selectedIndex].value;
 
             updatePageStaticOption()
+        }
+
+        function toggleFavorites(){
+            let favoriteButtonText = document.getElementById("favoriteButtonText")
+            if (PAGE_SEARCHOPTION === 'favorite'){
+                PAGE_SEARCHOPTION = ''
+                favoriteButtonText.innerHTML = '추천한 게시글'
+            } else {
+                PAGE_SEARCHOPTION='favorite';
+                favoriteButtonText.innerHTML = '돌아가기'
+            }
+
+            updatePageStaticOption();
         }
     </script>
 </body>
