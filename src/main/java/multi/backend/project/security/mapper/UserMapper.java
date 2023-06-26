@@ -1,9 +1,7 @@
 package multi.backend.project.security.mapper;
 
 import multi.backend.project.security.domain.UserDto;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -28,4 +26,10 @@ public interface UserMapper {
             "from MemberUser \n" +
             "where user_phone = #{userphone}")
     UserDto selectUserByUserPhone(String userphone);
+
+    @Update("UPDATE MemberUser \n" +
+            "SET \n" +
+            "user_pwd = #{password}\n" +
+            "where user_name = #{username}")
+    void updateUserPassword(@Param("username") String username, @Param("password") String password);
 }

@@ -46,7 +46,7 @@
 
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.username" var="username" />
-                        <a href="#" class="btn btn-outline-primary">${username}</a>
+                        <a href="/user/inform" class="btn btn-outline-primary">${username}</a>
                         <a class="btn btn-primary" style="color: white;" onclick="document.getElementById('logout').submit()">로그아웃</a>
 
                         <form action="/user/logout" method="post" id="logout"></form>

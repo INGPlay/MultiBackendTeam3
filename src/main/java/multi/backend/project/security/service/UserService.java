@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.security.domain.RegisterDto;
 import multi.backend.project.security.domain.UserDto;
+import multi.backend.project.security.domain.form.UpdatePasswordForm;
 import multi.backend.project.security.mapper.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,17 @@ public class UserService {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         userMapper.insertUser(userDto);
+    }
+
+    public boolean checkUserPassword(String username, String password){
+
+        UserDto userDto = getUserByUsername(username);
+
+        return passwordEncoder.matches(password, userDto.getPassword());
+    }
+
+    public void updatePassword(String username, UpdatePasswordForm updatePasswordForm){
+        userMapper.updateUserPassword(username, passwordEncoder.encode(updatePasswordForm.getNewPassword()));
     }
 
     public void registerUser(RegisterDto registerDto){
