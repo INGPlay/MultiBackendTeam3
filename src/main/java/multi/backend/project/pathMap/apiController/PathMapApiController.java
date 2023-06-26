@@ -40,10 +40,11 @@ public class PathMapApiController {
 
         log.info("title : {}", title);
 
-        pathMapService.insertPath(userContext.getUsername(), title, request);
+        Long pathId = pathMapService.insertPath(userContext.getUsername(), title, request);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
+        response.put("pathId", pathId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

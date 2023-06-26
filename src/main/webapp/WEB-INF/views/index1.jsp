@@ -1,25 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PAGE settings -->
-<link rel="icon"
-	href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
-<title>trip</title>
-<meta name="description"
-	content="Free Bootstrap 4 Pingendo Smke template single landing page team">
-<meta name="keywords" content="Pingendo smke free template bootstrap 4">
-<!-- CSS dependencies -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-	type="text/css">
-<link rel="stylesheet" href="/resources/colorful.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>trip</title>
+
+	<!-- CSS dependencies -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		type="text/css">
+	<link rel="stylesheet" href="/resources/colorful.css">
+
+
+
 </head>
+
+<!-- header -->
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <body>
 	<!-- 메인 영상화면 -->
@@ -46,9 +48,8 @@
                         <p>
                             light 빛나는 my youth 자유롭게 fly fly 나 숨을 셔 which I enjoy with my whole heart.
                         </p>
-						
+        		  	</p>
 
-          </p>
                     <sec:authorize access="isAnonymous()">
                         <a href="/user/login" class="btn btn-lg btn-primary mx-1">로그인</a>
                         <a href="/user/register" class="btn btn-lg btn-primary mx-1">가입하기</a>
@@ -72,22 +73,12 @@
 			</div>
 		</div> -->
 	</div>
-    <a href="/review/list">review</a>
-    <a href="pathmap/">pathmap</a>
 
 
 	<!-- ===================================================== -->
 
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-		crossorigin="anonymous"></script>
+
     <pingendo onclick="" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
 		멀티	백엔드 3조 &nbsp;&nbsp;
         <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="백엔드3조" height="16">

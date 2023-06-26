@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -47,14 +49,12 @@ public class PathMapController {
             model.addAttribute("username", userContext.getUsername());
         }
 
+        plusPathMapViews(pathId, request, response, userContext);
+
+        // 이 게시글의 작성자인지 확인
         model.addAttribute("authorizedAuthor", isPathmapAuthor(userContext, pathId));
-
-
-
-
-        plusPathMapViews(pathId, request, response);
-
         model.addAttribute("pathId", pathId);
+
         return "pathmap/pathmapPost";
     }
 
@@ -102,12 +102,19 @@ public class PathMapController {
     }
 
     // 조회수
-    private void plusPathMapViews(Long pathId, HttpServletRequest request, HttpServletResponse response) {
+    private void plusPathMapViews(Long pathId, HttpServletRequest request, HttpServletResponse response,
+                                  @AuthenticationPrincipal UserContext userContext) {
         // 조회수 중복 방지를 위한 쿠키
         Cookie[] cookies = request.getCookies();
         String cookieName = "pathmapViews";
         String cookiePath = "/pathmap";
         int cookieMaxAge = 60 * 60 * 24;
+
+        if (userContext != null){
+            // 유저마다 조회수가 각자 갱신되게 함
+            // reserved name 피하기 위한 몸부림
+            cookieName += "_" + UUID.nameUUIDFromBytes(userContext.getUsername().getBytes());
+        }
 
         Cookie viewCookie = null;
         for (Cookie cookie : cookies){
@@ -117,8 +124,9 @@ public class PathMapController {
         }
 
         if (viewCookie != null){
-
-            if (!viewCookie.getValue().contains(pathId.toString())){
+            
+            // 중복 게시글 번호 체크
+            if (!Arrays.asList(viewCookie.getValue().split("_")).contains(pathId.toString())){
 
                 viewCookie.setValue(viewCookie.getValue() + "_" + pathId);
                 viewCookie.setPath(cookiePath);
