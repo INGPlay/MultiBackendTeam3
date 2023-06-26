@@ -66,10 +66,10 @@ public class reviewController {
 
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id,@RequestParam("sort")int sort){
+    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort){
         //System.out.println(sort);
         //System.out.println(review_id);
-        List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),sort);
+        List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),Integer.parseInt(sort));
         //System.out.println(commentList.toString());
 
         return commentList;
