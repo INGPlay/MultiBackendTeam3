@@ -77,7 +77,7 @@ public class reviewController {
 
     @PostMapping(value="/insert", produces="application/json")
     @ResponseBody
-    public String insertComment(@RequestBody Review_CommentVO vo) throws Exception {
+    public String insertComment(@RequestBody Review_CommentVO vo){
         //@RequestParam Review_CommentVO vo
 
         //System.out.println(vo);

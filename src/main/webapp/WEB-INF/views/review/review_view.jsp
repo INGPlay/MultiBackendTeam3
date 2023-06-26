@@ -23,6 +23,13 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="/resources/colorful.css">
+
+
+
     <style>
         #content {
             overflow-y: scroll;
@@ -57,6 +64,9 @@
         }
         .link{
             font-size: 14px;
+        }
+        .combtn{
+            background-color: #12bbad;
         }
 
 
@@ -201,6 +211,7 @@
             cache: false
         }).done((res)=>{
             alert("정상적으로 삽입되었습니다.")
+            $('#content').val("");
             init();
         }).fail((err)=>{
             alert(err.status)
@@ -229,7 +240,7 @@
             str+=res[i].update_date;
             str+='</td>';
             str+='<td width="10%">';
-            str+='<input type="button" value="삭제" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/>';
+            str+='<input class = "combtn" type="button" value="삭제" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/>';
             str+='</td>';
             str+='</tr>';
 
