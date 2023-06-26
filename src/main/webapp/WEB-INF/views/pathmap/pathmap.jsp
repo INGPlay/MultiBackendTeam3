@@ -444,11 +444,26 @@
 			return marker
 		}
 
+		// 순서 마커
 		function promiseMarkingSequenceInMap(info, index){
-			
+			return promiseSequenceMarking(map, info["posX"], info["posY"], index, function(){
+				
+				// 마커를 클릭하면 인포윈도우가 뜬다
+				responseinfoWindowBasic(map, info)
+			})
+			.then(marker => {
+				let markInfo = {
+					"marker" : marker,
+					"info" : info
+				}
+				markInfoMap.set(info["contentId"], markInfo);
+			})
+			.catch(error => {
+				console.log(error);
+			})
 		}
 
-		function promiseMarking(map, posX, posY, index, callback){
+		function promiseSequenceMarking(map, posX, posY, index, callback){
 			return new Promise(function(resolve, reject){
 				resolve(markingSequence(map, posX, posY, index, callback));
 			})
@@ -775,6 +790,8 @@
 			const linePath = []
 			userSelectList.forEach((info, index) => {
 				const pos = new kakao.maps.LatLng(info["posY"], info["posX"])
+
+				promiseMarkingSequenceInMap(info, index)
 
 				// 경로선 추가
 				linePath.push(pos)
