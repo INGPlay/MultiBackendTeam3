@@ -67,7 +67,7 @@ public class reviewController {
 
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(@Param("review_id") String review_id,@Param(value = "sort")String sort){
+    public List<Review_CommentVO> selectComment(@Param("review_id") String review_id,@Param("sort")String sort){
 
         System.out.println(sort);
         //System.out.println(review_id);
