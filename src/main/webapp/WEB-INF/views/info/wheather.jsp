@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>날씨 정보</title>
 
     <%@ include file="./template/staticTemplate.jsp" %>
 
@@ -26,7 +26,6 @@
                 <th scope="col">일 최저기온</th>
                 <th scope="col">일 최고기온</th>
                 <th scope="col">시간 평균 온도</th>
-                <th scope="col">강수량</th>
                 <th scope="col">하늘형태</th>
                 <th scope="col">강수형태</th>
                 <th scope="col">강수확률</th>
@@ -41,6 +40,12 @@
               </tr> -->
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-info" role="status" id="spinner">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -63,10 +68,15 @@
 
             console.log(response)
             viewInfoDetail(response)
+
+            document.getElementById("spinner").style.display = 'none'
+
         }).fail((error) => {
             // {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
             let response = error["responseJSON"];
             console.log(response["message"])
+
+            alert(response["message"])
         })
 
 
@@ -82,7 +92,6 @@
                             <td>" + wheather["dayMinTemparature"] + "</td> \
                             <td>" + wheather["dayMaxTemparature"] + "</td> \
                             <td>" + wheather["hourTemparature"] + "</td> \
-                            <td>" + wheather["rainMilli"] + "</td> \
                             <td>" + wheather["skyForm"] + "</td> \
                             <td>" + wheather["rainForm"] + "</td> \
                             <td>" + wheather["rainProbability"] + "</td> \

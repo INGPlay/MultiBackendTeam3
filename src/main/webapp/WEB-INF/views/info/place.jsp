@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>세부 정보</title>
 
     <%@ include file="./template/staticTemplate.jsp" %>
 
@@ -33,6 +33,12 @@
               </tr> -->
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-info" role="status" id="spinner">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -179,10 +185,13 @@
 
             console.log(response)
             viewInfoDetail(response)
+
+            document.getElementById("spinner").style.display = 'none'
         }).fail((error) => {
             // {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
             let response = error["responseJSON"];
             console.log(response["message"])
+            alert(response["message"])
         })
 
 
