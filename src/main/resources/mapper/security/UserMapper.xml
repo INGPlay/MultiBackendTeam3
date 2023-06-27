@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="multi.backend.project.security.mapper.UserMapper">
+
+    <!-- 동적쿼리 -->
+    <select id="selectUserList"
+            parameterType="multi.backend.project.security.domain.UserInfoPageDto"
+            resultType="multi.backend.project.security.domain.UserInfoResponse">
+
+        Select user_id, user_name, user_email, user_phone, user_role
+        FROM MEMBERUSER m
+        where 1 = 1
+        <if test="searchWord != null and searchWord != ''">
+            <if test=" 'username'.equals(searchOption) ">
+                and m.user_name like '%${searchWord}%'
+            </if>
+            <if test=" 'email'.equals(searchOption) ">
+                and m.user_email like '%${searchWord}%'
+            </if>
+            <if test=" 'phone'.equals(searchOption) ">
+                and m.user_phone like '%${searchWord}%'
+            </if>
+            <if test=" 'role'.equals(searchOption) ">
+                and m.user_role like '%${searchWord}%'
+            </if>
+        </if>
+
+        <if test=" 'username'.equals(orderBy) ">
+            Order by m.user_name desc
+        </if>
+        <if test=" 'email'.equals(orderBy) ">
+            Order by m.user_email asc
+        </if>
+        <if test=" 'phone'.equals(orderBy) ">
+            Order by m.user_phone desc
+        </if>
+        <if test=" 'role'.equals(orderBy) ">
+            Order by m.user_role asc
+        </if>
+
+    </select>
+
+</mapper>

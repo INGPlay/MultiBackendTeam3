@@ -1,5 +1,6 @@
-package multi.backend.project.security.domain;
+package multi.backend.project.security.domain.context;
 
+import multi.backend.project.security.domain.ContextDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

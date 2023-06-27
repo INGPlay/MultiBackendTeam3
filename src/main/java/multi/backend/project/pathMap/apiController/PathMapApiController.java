@@ -5,14 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.favorite.FavoriteDto;
 import multi.backend.project.pathMap.domain.pathmap.*;
-import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
+import multi.backend.project.pathMap.domain.pathmap.paging.PagingResponse;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
 import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
-import multi.backend.project.security.domain.UserContext;
+import multi.backend.project.security.domain.context.UserContext;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,13 +80,13 @@ public class PathMapApiController {
 
     // 조회
     @GetMapping
-    public ResponseEntity<PathPagingResponse<PathInfoResponse>> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
-                                                                                   @RequestParam(defaultValue = "10") int size,
-                                                                                   @RequestParam(defaultValue = "createDate") String orderBy,
-                                                                                   @RequestParam(defaultValue = "") String searchWord,
-                                                                                   @RequestParam(defaultValue = "title") String searchOption,
-                                                                                   @RequestParam(defaultValue = "false") Boolean isFavorite,
-                                                                                   @AuthenticationPrincipal UserContext userContext){
+    public ResponseEntity<PagingResponse<PathInfoResponse>> selectPathInfoList(@RequestParam(defaultValue = "1") int page,
+                                                                               @RequestParam(defaultValue = "10") int size,
+                                                                               @RequestParam(defaultValue = "createDate") String orderBy,
+                                                                               @RequestParam(defaultValue = "") String searchWord,
+                                                                               @RequestParam(defaultValue = "title") String searchOption,
+                                                                               @RequestParam(defaultValue = "false") Boolean isFavorite,
+                                                                               @AuthenticationPrincipal UserContext userContext){
 
         log.info("page: {}, size: {}, orderBy: {}, searchWord: {}, searchOption: {}, isFavorite: {}",
                 page, size, orderBy, searchWord, searchOption, isFavorite);
@@ -97,7 +97,7 @@ public class PathMapApiController {
             pathThreadPageDto.setUsername(userContext.getUsername());
         }
 
-        PathPagingResponse<PathInfoResponse> pathList = pathMapService.getPathInfoList(pathThreadPageDto);
+        PagingResponse<PathInfoResponse> pathList = pathMapService.getPathInfoList(pathThreadPageDto);
 
         return new ResponseEntity<>(pathList, HttpStatus.OK);
     }

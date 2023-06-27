@@ -24,7 +24,7 @@ public class Initializer implements InitializingBean {
 
         log.info("[InitializaingBean] 지역코드 DB 등록 완료");
         
-        // 어드민 계정 등록
+//         어드민 계정 등록
 //        userService.registerAdmin(new RegisterDto("나", "1111", "asdf@asdf", "01010101010"));
     }
 }

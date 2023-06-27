@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
-public class PathPagingResponse<T> {
+public class PagingResponse<T> {
     private final List<T> pathInfoResponses;
 
     private final int totalCount;
@@ -27,7 +27,7 @@ public class PathPagingResponse<T> {
     private final Integer previousNum;
     private final Integer nextNum;
 
-    public PathPagingResponse(List<T> pathInfoResponses, int currentPageNum, int pageSize) {
+    public PagingResponse(List<T> pathInfoResponses, int currentPageNum, int pageSize) {
         this.totalCount = pathInfoResponses.size();
 
         this.currentPageNum = currentPageNum;
