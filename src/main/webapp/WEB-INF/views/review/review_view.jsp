@@ -86,9 +86,7 @@
         .tableTr{
             height: 10px;
         }
-        table{
-            border: 1px;
-        }
+
 
 
     </style>
@@ -237,25 +235,35 @@
     }
 
     const recomment = function(id){
+        //alert(id);
         var list= id.split('/');
-        var total = list[0]+"re"+list[1];
-        var x = document.getElementById(total);
+        var x = document.getElementsByClassName(list[0]+"div");
         var message="";
 
 
-        if(x.getAttribute("type") == "hidden"){
-            x.setAttribute("type", "text");
-        }else{
-            message=x.value;
-            CheckMessage(list[0],message);
-            x.setAttribute("type","hidden");
-            x.value=null;
+        var i;
+        for (i=0; i < x.length; i++) {
+        var obj=x[i];
+            if (obj.style.display == "none") {
+                obj.style.display = "block";
+            } else {
+                obj.value=null;
+                obj.style.display = "none";
+            }
         }
     }
 
-    const CheckMessage = function(list,message){
+    const CheckMessage = function(id){
+        var list= id.split('btn');
+        var total = list[0]+"re"+list[1];
+        var x = document.getElementById(total);
+        var reset = list[0]+"/"+list[1];
+        var message = x.value;
+
         if(message.trim()!=0){
-            insertCommentRe(list,message);
+            insertCommentRe(list[0],message);
+        }else{
+            recomment(reset);
         }
     }
 
@@ -284,15 +292,15 @@
 
 
     const showComment = function(res){
-        let str = "<table id='table1' style='width: 100%;' >"
+        let str = "<table id='table1' style='width: 100%;'  border='1px'>"
         str+='<tr class="tableTr">';
-        str+='<td colspan="3"><div>';
+        str+='<td colspan="4"><div>';
         str+='<b>댓글()</b> &nbsp;';
         str+='<a href="#" class="link" onclick="init(1)">등록순</a> |&nbsp;';
         str+='<a href="#" class="link" onclick="init(2)">최신순</a></div></td></tr> &nbsp;';
 
         $.each(res,(i,vo)=>{
-            str+='<tr class="tableTr"><td colspan="3"><hr style="color: #12bbad;"></td></tr>';
+            str+='<tr class="tableTr"><td colspan="4"><hr style="color: #12bbad;"></td></tr>';
             str+='<tr style="margin-top: 10px;">';
 
             str+='<td width="10%"><p style="text-align: left">';
@@ -306,7 +314,7 @@
             str+=res[i].create_date;
             str+=')</p></td>';
 
-            str+='<td width="70%">&nbsp; ';
+            str+='<td width="70%" colspan="2">&nbsp; ';
             str+='<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/></p></td>';
 
             str+='</tr>';
@@ -325,12 +333,14 @@
                 str += '<td colspan="3"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
                 str += '</tr>';
                 str += '<tr class="tableTr">';
-                str += '<td colspan="3">';
-                str += '<input  style="width: 100%" type ="hidden" class="re" id="' + res[i].comment_group + 're' + res[i].comment_depth + '">';
-                str += '</td>';
+                str += '<td colspan="4"><div style="display: none" class="'+res[i].comment_group+'div">';
+                str += '<input class="re" id="' + res[i].comment_group + 're' + res[i].comment_depth + '">';
+                str+='</div></td>';
+                str+='<td colspan="1"><div style="display: none" class="'+res[i].comment_group+'div">';
+                str+='<button onclick="CheckMessage(this.id)" id="' + res[i].comment_group + 'btn' + res[i].comment_depth + '"> 등록</input>';
+                str += '</div></td>';
                 str += '</tr>';
             }
-
         })
         str+='</table>';
 
