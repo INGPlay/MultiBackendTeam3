@@ -3,7 +3,7 @@ package multi.backend.project.security.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.security.domain.ContextDto;
-import multi.backend.project.security.domain.UserContext;
+import multi.backend.project.security.domain.context.UserContext;
 import multi.backend.project.security.domain.UserDto;
 import multi.backend.project.security.mapper.UserMapper;
 import org.springframework.security.core.GrantedAuthority;

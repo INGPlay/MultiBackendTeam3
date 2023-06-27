@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>플래너</title>
 
 	<%@ include file="/WEB-INF/views/template/staticTemplate.jsp" %>
 
@@ -202,7 +202,8 @@
 				strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
 				strokeStyle: 'solid' // 선의 스타일입니다
 			}),
-			"overlayList" : []
+			"overlayList" : [],
+			"sequenceMarker": []
 		}
 		
 		// {contentId : {
@@ -460,42 +461,9 @@
 		function promiseMarkingInMap(info) {
 			
 			return promiseMarking(map, info["posX"], info["posY"], function(){
+				
+				responseinfoWindowBasic(map, info)
 
-				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
-
-				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
-				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
-				let content = "\
-					<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
-						<div class='d-flex flex-row align-items-center'> \
-							<div class='flex-shrink-0'> \
-								<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
-							</div> \
-							<div class='flex-grow-1 ms-1'>\
-								<p class='h5 fw-bold'>" + info["title"] + "</p> \
-								<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
-								<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
-								<div class='me-auto d-flex flex-row'> \
-									<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-									<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
-								</div> \
-							</div> \
-						</div> \
-					</div> \
-				"
-				info
-				// 백틱 템플릿은 왠지 모르게 안된다
-				/*
-				`\
-				<div> \
-					<h5>${info["title"]}</h5>
-					<p>${info["addr1"]} ${info["addr2"]}</p> \
-					<p>${info["tel"]}</p> \
-				</div> \
-				`;
-				*/
-
-				responseinfoWindow(map, info["posX"], info["posY"], content)
 			})
 			.then(marker => {
 				let markInfo = {
@@ -527,6 +495,49 @@
 			return marker
 		}
 
+				// 순서 마커
+				function promiseMarkingSequenceInMap(info, index){
+			return promiseSequenceMarking(map, info["posX"], info["posY"], index, function(){
+				
+				// 마커를 클릭하면 인포윈도우가 뜬다
+				responseinfoWindowBasic(map, info)
+			})
+			.then(marker => {
+				mapObject["sequenceMarker"].push(marker)
+			})
+			.catch(error => {
+				console.log(error);
+			})
+		}
+
+		function promiseSequenceMarking(map, posX, posY, index, callback){
+			return new Promise(function(resolve, reject){
+				resolve(markingSequence(map, posX, posY, index, callback));
+			})
+		}
+
+		// 1 ~ 15 까지
+		function markingSequence(map, posX, posY, index, callback){
+			// 세 번째 파라메터로 options를 사용.
+			let icon = new kakao.maps.MarkerImage(
+				'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+				new kakao.maps.Size(43, 52),
+				{
+					spriteOrigin: new kakao.maps.Point(315, 52 * index - 1),    
+					spriteSize: new kakao.maps.Size(644, 946) 
+				}
+			);
+
+			let marker = new kakao.maps.Marker({
+				map:map,
+				position: new kakao.maps.LatLng(posY, posX),
+				image : icon
+			})
+			kakao.maps.event.addListener(marker, "click", callback);
+
+			return marker
+		}
+
 		// 인포윈도우를 띄움
 		function responseinfoWindow(map, posX, posY, content){
 
@@ -536,6 +547,45 @@
 				content: content,
 				removable: true
 			})
+		}
+
+		// 인포윈도우 기본 형식
+		function responseinfoWindowBasic(map, info){
+			const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
+
+			let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
+			const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
+			let content = "\
+				<div class='container pt-1 pb-1' style='background-color: white; outline: solid 1px black; width: 320px;'> \
+					<div class='d-flex flex-row align-items-center'> \
+						<div class='flex-shrink-0'> \
+							<img src= '" + info["firstImageURI2"] + "'  style='width:150px; height:auto;'> \
+						</div> \
+						<div class='flex-grow-1 ms-1'>\
+							<p class='h5 fw-bold'>" + info["title"] + "</p> \
+							<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
+							<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
+							<div class='me-auto d-flex flex-row'> \
+								<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+								<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+							</div> \
+						</div> \
+					</div> \
+				</div> \
+			"
+
+			// 백틱 템플릿은 왠지 모르게 안된다
+			/*
+			`\
+			<div> \
+				<h5>${info["title"]}</h5>
+				<p>${info["addr1"]} ${info["addr2"]}</p> \
+				<p>${info["tel"]}</p> \
+			</div> \
+			`;
+			*/
+
+			responseinfoWindow(map, info["posX"], info["posY"], content)
 		}
 
 		// 인포윈도우에서 추가를 선택했을 때 실행
@@ -946,15 +996,24 @@
 
 			const mapPolyLine = mapObject["polyLine"]
 			const mapOverlayList = mapObject["overlayList"]
+			const mapSequenceMarker = mapObject["sequenceMarker"]
 
 			// overlay 초기화
 			mapOverlayList.forEach(o => {
 				o.setMap(null)
 			})
 
+			// 시퀀스마커 초기화
+			mapSequenceMarker.forEach(m => {
+				m.setMap(null)
+			})
+
 			const linePath = []
 			userSelectList.forEach((info, index) => {
 				const pos = new kakao.maps.LatLng(info["posY"], info["posX"])
+
+				// 시퀀스마커 추가
+				promiseMarkingSequenceInMap(info, index)
 
 				// 경로선 추가
 				linePath.push(pos)
