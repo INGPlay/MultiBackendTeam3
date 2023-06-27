@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+
 <!-- ckeditor 4 cdn ------------------------------------------------------- -->
 <script src="https://cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 <!-- ---------------------------------------------------------------------- -->
@@ -15,12 +17,17 @@
         src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      type="text/css">
+<link rel="stylesheet" href="/resources/colorful.css">
 <style>
     #btn{
         text-align: center;
     }
 
 </style>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <div class="row">
     <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
@@ -39,11 +46,11 @@
                         <input type="text" name="place" id="place"  class="form-control">
                     </td>
                 </tr><tr>
-                <td style="width:20%"><b>작성자</b></td>
-                <td style="width:80%">
-                    <input type="text" name="user_name" id="username" class="form-control">
-                </td>
-            </tr>
+                    <td style="width:20%"><b>작성자</b></td>
+                    <td style="width:80%">
+                        <input type="text" name="user_name" id="username" class="form-control">
+                    </td>
+                </tr>
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">

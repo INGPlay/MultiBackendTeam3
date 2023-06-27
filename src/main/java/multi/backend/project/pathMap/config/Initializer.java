@@ -4,6 +4,7 @@ package multi.backend.project.pathMap.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.service.TourCodeService;
+import multi.backend.project.security.domain.RegisterDto;
 import multi.backend.project.security.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class Initializer implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         log.info("[InitializingBean] 지역코드 DB 등록 시작");
 
-//        tourCodeService.initAreaCode();
+        //tourCodeService.initAreaCode();
 
         log.info("[InitializaingBean] 지역코드 DB 등록 완료");
         
