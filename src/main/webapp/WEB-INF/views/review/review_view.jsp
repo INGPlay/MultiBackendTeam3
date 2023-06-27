@@ -86,18 +86,18 @@
         .tableTr{
             height: 10px;
         }
-
+        .center{
+            text-align: center;
+        }
 
 
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/template/header.jsp" %>
-<div class="row">
-
-    <div align="center" id="bbs" class="col-md-8 offset-md-2 my-4">
-        <h2>Review view</h2>
-        <p>
+<div class ="container" style="margin-top: 30px">
+        <h2 class="center">Review view</h2>
+        <p class="center">
             <a href="#" onclick="edit()">글수정</a>| <a href = "#" onclick="goList()">글목록</a>
         <p>
 
@@ -113,14 +113,14 @@
             <!-- -------------------------------------------- -->
             <table class="table">
                 <tr>
-                    <td style="width:20%"><b>제목</b></td>
+                    <td style="width:20%" class="center"><b>제목</b></td>
                     <td style="width:80%">
                         <input type="text" name="review_title" id="review_title" class="form-control" value="${vo.review_title}" readonly>
                     </td>
 
                 </tr>
                 <tr>
-                    <td style="width:20%"><b>작성자</b></td>
+                    <td style="width:20%" class="center"><b>작성자</b></td>
                     <td style="width:80%">
                         <input type="hidden" name="user_id" id="user_id" value="${vo.user_id}" readonly />
                         <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
@@ -128,7 +128,7 @@
                 </tr>
 
                 <tr>
-                    <td style="width:20%"><b>글내용</b></td>
+                    <td style="width:20%" class="center"><b>글내용</b></td>
                     <td style="width:80%; border-bottom-style: hidden ">
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
@@ -147,14 +147,13 @@
             </table>
         </form>
 
-    </div><!-- .col end-->
-</div>
 
-<div id="comment_list" align="center" id="b" class="col-md-8 offset-md-2 my-4"></div>
+
+<div id="comment_list" align="center" id="b" class="container"></div>
 
 </div><!-- .row end-->
 <div class="row">
-    <div align="center" id="bbs1" class="col-md-8 offset-md-2 my-4">
+    <div align="center" id="bbs1" class="container">
     <form>
         <table class="table table table-hover">
 
@@ -163,7 +162,7 @@
                     <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
 
                 </td>
-                <td width="10%"><input type="button" onclick="insertComment()" class="d-flex align-items-center flex-shrink-0 p-2 link-dark text-decoration-none " style="background-color: #12bbad; padding: 5px; margin-top: 25%;" value="등록"/>
+                <td width="10%" class="center"><input type="button" onclick="insertComment()"  style="background-color: #12bbad;" value="등록"/>
                 </td>
             </tr>
         </table>
@@ -171,6 +170,7 @@
     </div>
 </div>
     <form method="get" action="list" name="reset" id="reset"></form>
+</div>
 </body>
 <script>
     const edit = function(){
@@ -296,8 +296,8 @@
         str+='<tr class="tableTr">';
         str+='<td colspan="4"><div>';
         str+='<b>댓글()</b> &nbsp;';
-        str+='<a href="#" class="link" onclick="init(1)">등록순</a> |&nbsp;';
-        str+='<a href="#" class="link" onclick="init(2)">최신순</a></div></td></tr> &nbsp;';
+        str+='<a class="link" onclick="init(1)">등록순</a> |&nbsp;';
+        str+='<a class="link" onclick="init(2)">최신순</a></div></td></tr> &nbsp;';
 
         $.each(res,(i,vo)=>{
             str+='<tr class="tableTr"><td colspan="4"><hr style="color: #12bbad;"></td></tr>';
