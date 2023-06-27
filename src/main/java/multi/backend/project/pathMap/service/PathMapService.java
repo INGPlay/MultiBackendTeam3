@@ -3,7 +3,7 @@ package multi.backend.project.pathMap.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.domain.pathmap.*;
-import multi.backend.project.pathMap.domain.pathmap.paging.PathPagingResponse;
+import multi.backend.project.pathMap.domain.pathmap.paging.PagingResponse;
 import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
@@ -34,13 +34,10 @@ public class PathMapService {
 
     // 동적 쿼리
     @Transactional
-    public PathPagingResponse<PathInfoResponse> getPathInfoList(PathThreadPageDto pathThreadPageDto){
+    public PagingResponse<PathInfoResponse> getPathInfoList(PathThreadPageDto pathThreadPageDto){
         List<PathInfoResponse> pathInfoResponses = pathMapMapper.selectPathInfoList(pathThreadPageDto);
-        int totalCount = pathInfoResponses.size();
 
-        PathPagingResponse<PathInfoResponse> pathPagingResponse = new PathPagingResponse<PathInfoResponse>(pathInfoResponses, pathThreadPageDto.getPage(), pathThreadPageDto.getSize());
-
-        return pathPagingResponse;
+        return new PagingResponse<PathInfoResponse>(pathInfoResponses, pathThreadPageDto.getPage(), pathThreadPageDto.getSize());
     }
 
     @Transactional

@@ -12,7 +12,6 @@ public class WheatherResponse {
     private String dayMaxTemparature;
 
     private String hourTemparature;
-    private String rainMilli;
     private String skyForm;
 
     private String rainForm;

@@ -43,39 +43,40 @@
 			level: 3
 		};
 
+
 		let map = new kakao.maps.Map(container, options);
 
-		// 지도를 클릭한 위치에 표출할 마커입니다
-		let marker = new kakao.maps.Marker({ 
-			// 지도 중심좌표에 마커를 생성합니다 
-			position: map.getCenter() 
-		}); 
-
-		// 지도에 마커를 표시합니다
-		marker.setMap(map);
+		for (let i = 0; i < 15; i++){
+			
+			let pos = new kakao.maps.LatLng(33.450701, 126.570667 + 0.2*i)
 
 
-		let tempList = [];
-		// 지도에 클릭 이벤트를 등록합니다
-		// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-		kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-			
-			// 클릭한 위도, 경도 정보를 가져옵니다 
-			var latlng = mouseEvent.latLng; 
-			
-			// 마커 위치를 클릭한 위치로 옮깁니다
-			marker.setPosition(latlng);
-			
-			let temp = {"위도" : latlng.getLat(), "경도" : latlng.getLng()} 
-			
-			alert(temp["위도"] + " " + temp["경도"]);
-			
-			// tempList.push(temp);
+			setSequenceMarker(i, pos)
+		}
 
-			// tempList.forEach(function(f){
-			// 	console.log(f["위도"] + " " + f["경도"])
-			// })
-		});
+		function setSequenceMarker(index, position){
+			// 세 번째 파라메터로 options를 사용.
+			let icon = new kakao.maps.MarkerImage(
+				'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+				new kakao.maps.Size(43, 52),
+				{
+					spriteOrigin: new kakao.maps.Point(315, 52 * index),    
+					spriteSize: new kakao.maps.Size(644, 946) 
+				}
+			);
+
+
+			// 지도를 클릭한 위치에 표출할 마커입니다
+			let marker = new kakao.maps.Marker({ 
+				// 지도 중심좌표에 마커를 생성합니다 
+				position: position,
+				image: icon
+			}); 
+
+			// 지도에 마커를 표시합니다
+			marker.setMap(map);
+		}
+		
 	</script>
 </body>
 </html>

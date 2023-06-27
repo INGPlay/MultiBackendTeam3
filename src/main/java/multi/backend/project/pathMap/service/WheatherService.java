@@ -129,7 +129,7 @@ public class WheatherService {
 
                 case "PTY":        // 강수형태 : 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
 
-                    wheatherResponse.setRainForm(forecastValue);
+                    wheatherResponse.setRainForm(changePTYcodeToWord(forecastValue));
                     break;
 
                 /**
@@ -157,7 +157,7 @@ public class WheatherService {
 
                 case "SKY":        // 하늘상태 : 맑음(1), 구름많음(3), 흐림(4)
 
-                    wheatherResponse.setSkyForm(forecastValue);
+                    wheatherResponse.setSkyForm(changeSKYcodToWord(forecastValue));
                     break;
 
                 case "TMP":        // 1시간 기온 (C)
@@ -188,6 +188,63 @@ public class WheatherService {
         Collections.sort(result, (o1, o2) -> {
             return o1.getForecastDateTime().compareTo(o2.getForecastDateTime());
         });
+
+        return result;
+    }
+
+    private String changeSKYcodToWord(String code){
+        String result;
+
+        switch (code){
+            case "1" :
+                result = "맑음";
+                break;
+
+            case "3" :
+                result = "구름많음";
+                break;
+
+            case "4" :
+                result = "흐림";
+                break;
+
+            default:
+                result = "맑음";
+                break;
+        }
+
+        return result;
+    }
+
+    private String changePTYcodeToWord(String code){
+
+        String result;
+
+        switch (code){
+            case "0" :
+                result = "없음";
+                break;
+
+            case "1" :
+                result = "비";
+                break;
+
+            case "2" :
+                result = "비/눈";
+                break;
+
+            case "3" :
+                result = "눈";
+                break;
+
+            case "4" :
+                result = "소나기";
+                break;
+
+            default:
+                result = "없음";
+                break;
+        }
 
         return result;
     }

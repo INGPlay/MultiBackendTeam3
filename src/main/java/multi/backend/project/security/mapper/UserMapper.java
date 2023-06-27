@@ -1,9 +1,11 @@
 package multi.backend.project.security.mapper;
 
 import multi.backend.project.security.domain.UserDto;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import multi.backend.project.security.domain.UserInfoPageDto;
+import multi.backend.project.security.domain.UserInfoResponse;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -28,4 +30,17 @@ public interface UserMapper {
             "from MemberUser \n" +
             "where user_phone = #{userphone}")
     UserDto selectUserByUserPhone(String userphone);
+
+    @Update("UPDATE MemberUser \n" +
+            "SET \n" +
+            "user_pwd = #{password}\n" +
+            "where user_name = #{username}")
+    void updateUserPassword(@Param("username") String username, @Param("password") String password);
+
+
+    @Delete("Delete from MemberUser m where m.user_id = ${userId}")
+    void deleteUser(Long userId);
+
+    // xml 매핑
+    List<UserInfoResponse> selectUserList(UserInfoPageDto userInfoPageDto);
 }

@@ -36,8 +36,12 @@
                 <li><a href="#" class="nav-link px-2 link-dark">팀</a></li>
             </ul>
     
-            <div class="col-md-3 text-end d-flex flex-row-reverse">
+            <div class="col-md-5 text-end d-flex flex-row-reverse">
                 <div>
+
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <a href="/admin" class="btn btn-danger">관리자</a>
+                    </sec:authorize>
 
                     <sec:authorize access="isAnonymous()">
                         <a href="/user/login" class="btn btn-outline-primary">로그인</a>
@@ -46,7 +50,7 @@
 
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.username" var="username" />
-                        <a href="#" class="btn btn-outline-primary">${username}</a>
+                        <a href="/user/inform" class="btn btn-outline-primary">${username}</a>
                         <a class="btn btn-primary" style="color: white;" onclick="document.getElementById('logout').submit()">로그아웃</a>
 
                         <form action="/user/logout" method="post" id="logout"></form>

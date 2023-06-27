@@ -3,7 +3,7 @@ package multi.backend.project.pathMap.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.service.PathMapService;
-import multi.backend.project.security.domain.UserContext;
+import multi.backend.project.security.domain.context.UserContext;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
