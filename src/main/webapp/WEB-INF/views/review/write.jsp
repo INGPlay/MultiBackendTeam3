@@ -70,3 +70,5 @@
         </form>
     </div><!-- .col end-->
 </div><!-- .row end-->
+<!-- footer -->
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>
