@@ -52,6 +52,18 @@
                             회원정보가 수정되었습니다!
                         </h4>
                     </c:if>
+                    <spring:hasBindErrors name="updatePasswordForm">
+                        <c:if test="${errors.hasGlobalErrors()}">
+                            <c:forEach var="globalError" items="${errors.getGlobalErrors()}">
+                                <c:if test="${globalError.getCode() eq 'Duplicated.newPassword'}">
+                                    <h4 class="row justify-content-center text-danger">
+                                        ${globalError.defaultMessage}
+                                    </h4>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                    </spring:hasBindErrors>
+
 
                     
                     <div class="mb-3">
