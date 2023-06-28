@@ -5,9 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import multi.backend.project.review.Service.reviewServiceImpl;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.commonUtil.CommonUtil;
 import multi.backend.project.review.paging.Criteria;
 import multi.backend.project.review.paging.pagingVO;
-import multi.backend.project.security.domain.UserContext;
+
+import multi.backend.project.security.domain.context.UserContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
+import java.util.Objects;
 
 
 @RequestMapping("/review")
@@ -27,6 +30,9 @@ public class reviewController {
 
     @Resource(name = "reviewService")
     private reviewServiceImpl service;
+
+    @Autowired
+    private CommonUtil util;
 
 
 
@@ -53,9 +59,8 @@ public class reviewController {
         try {
             m.addAttribute("user_name",ux.getUsername());
         }catch (NullPointerException e){
-            System.out.println(e);
-            return "redirect:/review/list";
-            // "로그인 하세요를 예외 처리 "
+            String str = "로그인이 필요합니다";
+            return util.addMasBack(m,str);
         }
         return "review/write";
     }
@@ -64,68 +69,68 @@ public class reviewController {
 
     //    게시글 insert
     @PostMapping("/write")
-    @ResponseBody
-    public String insertReiew(@ModelAttribute multi.backend.project.review.VO.reviewVO review,@AuthenticationPrincipal UserContext ux){
+    public String insertReiew(Model m,@ModelAttribute multi.backend.project.review.VO.reviewVO review,@AuthenticationPrincipal UserContext ux){
         int user_id = service.getUserId(ux.getUsername()); // userName으로 userID 찾아오기
         review.setUser_id(user_id);
         int n = service.insertReview(review);
-        String str= (n>0)? "게시글이 등록되었습니다";
-        String loc = (n>0)? ""
-        return "redirect:/review/list";
+        String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
+        String loc = (n>0)? "/review/list":"javascript:history.back()";
+        return util.addMsgLoc(m,str,loc);
     }
 
-
-
-
+    // 게시글 상세보기
     @GetMapping("/view")
-    public String reviewForm(Model m, HttpServletRequest seq,@RequestParam(value = "redirect_id",required = false,defaultValue ="0") String rid){
+    public String reviewForm(Model m, HttpServletRequest seq,@RequestParam(value = "redirect_id",required = false,defaultValue ="0") String rid,@AuthenticationPrincipal UserContext ux){
         String id;
         reviewVO vo;
-        if(rid.isEmpty() || rid.equals("0")){
-            id= seq.getParameter("review_id");
-            //System.out.println("초기 id" + id);
-            vo = service.selectReviewOne(Integer.valueOf(id)); // 해당 게시글 찾기
-            service.updateReview_views(vo); // 조회수 증가
-        }else{
-            id=rid;
-            //System.out.println("추천 id" + id);
-            vo = service.selectReviewOne(Integer.valueOf(id)); // 해당 게시글 찾기
+        try {
+            if (rid.isEmpty() || rid.equals("0")) {
+                id = seq.getParameter("review_id");
+                //System.out.println("초기 id" + id);
+                vo = service.selectReviewOne(Integer.valueOf(id)); // 해당 게시글 찾기
+                service.updateReview_views(vo); // 조회수 증가
+            } else {
+                id = rid;
+                //System.out.println("추천 id" + id);
+                vo = service.selectReviewOne(Integer.valueOf(id)); // 해당 게시글 찾기
+            }
+            String result = (vo.getUser_name().equals(ux.getUsername())|| service.getUserId(ux.getUsername())==1)? "yes":"no";
+            m.addAttribute("vo", vo);
+            m.addAttribute("result",result);
+            m.addAttribute("ConnectUserName",service.getUserId(ux.getUsername()));
+            System.out.println(ux.getUsername());
+            System.out.println();
+            return "review/review_view";
         }
-
-        m.addAttribute("vo",vo);
-        // pagingVO page = (pagingVO) session.getAttribute("pageVO");
-        //m.addAttribute("page",page);
-        return "review/review_view";
+        catch (NullPointerException e){
+            String str = "로그인을 하셔야 해당 기능을 사용하실 수 있습니다";
+            return util.addMasBack(m, str);
+        }
     }
 
 //    수정
     @PostMapping("/view")
     public String reviewForm(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo, RedirectAttributes reb){
+
         service.updateReview_recommends(vo);
         reb.addAttribute("redirect_id",vo.getReview_id());
         return "redirect:/review/view";
     }
 
-
-
-
-
-
+/* 댓글 조회 */
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort){
-        //System.out.println(sort);
-        //System.out.println(review_id);
+    public List<Review_CommentVO> selectComment(Model m,@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort,@AuthenticationPrincipal UserContext ux){
+        m.addAttribute("connectUserName",ux.getUsername());
         List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),Integer.parseInt(sort));
-        //System.out.println(commentList.toString());
-
         return commentList;
     }
 
 
     @PostMapping(value="/insert", produces="application/json")
     @ResponseBody
-    public String insertComment(@RequestBody Review_CommentVO vo) throws Exception {
+    public String insertComment(@RequestBody Review_CommentVO vo,@AuthenticationPrincipal UserContext ux) throws Exception {
+        vo.setUser_id(service.getUserId(ux.getUsername()));
         service.insert_recommends(vo);
         String str="결과";
         return str;
@@ -141,53 +146,39 @@ public class reviewController {
 
     @PostMapping(value="/recomment",produces="application/json")
     @ResponseBody
-    public String recomment(@RequestBody Review_CommentVO vo) throws Exception{
+    public String recomment(@RequestBody Review_CommentVO vo,@AuthenticationPrincipal UserContext ux) throws Exception{
 
         Review_CommentVO pvo = service.findReComment(vo.getComment_id());
-        //System.out.println("처음"+pvo);
-        // 원본 댓글 깊이 증가
-        //service.update_comment_group(pvo);
         int totalNum = service.getTotalRecommentCount(pvo.getComment_group());
-        //pvo = service.findReComment(vo.getComment_id());
+        pvo.setUser_id(service.getUserId(ux.getUsername()));
         pvo.setContent(vo.getContent());
         pvo.setComment_depth(pvo.getComment_depth()+totalNum);
-        int n = service.insert_Rerecomment(pvo);
-
+        service.insert_Rerecomment(pvo);
         return "";
     }
-
-
-
-
-
-
 
     //    게시글 수정&삭제 폼 이동
     @PostMapping("/edit")
     public String editForm(Model m , @ModelAttribute multi.backend.project.review.VO.reviewVO vo, HttpSession session){
         m.addAttribute("vo",vo);
-        //System.out.println(vo.getUser_name());
         return "review/edit";
     }
 
     @PostMapping("/delete")
     public String deleteReview(Model m , HttpServletRequest seq){
-        //pagingVO page = (pagingVO) session.getAttribute("pageVO");
-        //int select = page.getCri().getSort();
         String id = seq.getParameter("review_id");
         int n = service.deleteReview(Integer.parseInt(id));
         String str = (n>0)? "정상적으로 삭제 완료":"삭제 실패 지져스";
-        //return "redirect:/review/list?pageNum="+page.getCri().getPageNum()+"&select="+select;
-        return "redirect:/review/list";
+        String loc = (n>0)? "/review/list":"javascript:history.back()";
+
+        return util.addMsgLoc(m,str,loc);
     }
 
     @PostMapping("/update")
     public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo, HttpSession session, HttpServletRequest seq){
         m.addAttribute("vo",vo);
         int n = service.updateReview(vo);
-        //pagingVO page = (pagingVO) session.getAttribute("pageVO");
-        //int select = page.getCri().getSort();
-        //return "redirect:/review/list?pageNum="+page.getCri().getPageNum()+"&select="+select;
+
         return "review/review_view";
     }
 }

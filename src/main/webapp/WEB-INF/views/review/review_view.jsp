@@ -91,14 +91,18 @@
         }
 
 
+
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/template/header.jsp" %>
 <div class ="container" style="margin-top: 30px">
         <h2 class="center">Review view</h2>
-        <p class="center">
-            <a href="#" onclick="edit()">글수정</a>| <a href = "#" onclick="goList()">글목록</a>
+        <p class="center" >
+            <c:if test="${result eq 'yes'}">
+            <a href="#" onclick="edit()">글수정</a>|
+
+                </c:if><a href = "#" onclick="goList()">글목록</a>
         <p>
 
         <form name="bf" id="bf" role="form">
@@ -142,6 +146,9 @@
                              <span>${vo.review_recommends} </span>
                          </div>
                      </td>
+                    <td>
+                        <input type="hidden" name="review_recommends" id="ConnectUserName" value="${ConnectUserName}" readonly />
+                    </td>
 
                 </tr>
             </table>
@@ -152,22 +159,20 @@
 <div id="comment_list" align="center" id="b" class="container"></div>
 
 </div><!-- .row end-->
-<div class="row">
-    <div align="center" id="bbs1" class="container">
+<div class="container" style="color: #12bbad">
+
     <form>
         <table class="table table table-hover">
-
-            <tr>
+            <tr id="commentInsert">
                 <td width="90%" height="100px">
                     <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
-
                 </td>
-                <td width="10%" class="center"><input type="button" onclick="insertComment()"  style="background-color: #12bbad;" value="등록"/>
+                <td width="10%" class="center" style="vertical-align: middle"><div style="color: #12bbad;"><input type="button" onclick="insertComment()"  style="background-color: #12bbad;height: 100% " value="등록"/></div>
                 </td>
             </tr>
         </table>
     </form>
-    </div>
+
 </div>
     <form method="get" action="list" name="reset" id="reset"></form>
 </div>
@@ -238,19 +243,24 @@
         //alert(id);
         var list= id.split('/');
         var x = document.getElementsByClassName(list[0]+"div");
-        var message="";
-
-
+        var y = document.getElementById(list[0]+"re"+list[1]);
+        var main = document.getElementById('commentInsert');
         var i;
         for (i=0; i < x.length; i++) {
         var obj=x[i];
             if (obj.style.display == "none") {
+                main.style.display='none';
                 obj.style.display = "block";
-            } else {
-                obj.value=null;
+
+            }
+            else {
+                y.value="" ;
+                main.style.display='';
                 obj.style.display = "none";
+
             }
         }
+
     }
 
     const CheckMessage = function(id){
@@ -268,6 +278,7 @@
     }
 
     const insertCommentRe = function(list,message){
+        var main = document.getElementById('commentInsert');
         let jsonData={
             comment_id:list,
             content:message
@@ -282,6 +293,7 @@
             cache: false
         }).done((res)=>{
             alert("대댓글이 추가되었습니다.")
+            main.style.display='block';
             init(1);
         }).fail((err)=>{
             alert(err.status)
@@ -289,57 +301,71 @@
     }
 
 
-
-
     const showComment = function(res){
-        let str = "<table id='table1' style='width: 100%;'  border='1px'>"
+        let CUS=$('#ConnectUserName').val();
+        let str = "<table id='table1' style='width: 100%;' >"
+        /* 1행 */
         str+='<tr class="tableTr">';
-        str+='<td colspan="4"><div>';
-        str+='<b>댓글()</b> &nbsp;';
-        str+='<a class="link" onclick="init(1)">등록순</a> |&nbsp;';
-        str+='<a class="link" onclick="init(2)">최신순</a></div></td></tr> &nbsp;';
+            str+='<td colspan="4">';
+            str+='<div><b>댓글()</b> &nbsp;';
+            str+='<a class="link" onclick="init(1)">등록순</a> |&nbsp;';
+            str+='<a class="link" onclick="init(2)">최신순</a></div>';
+            str+='</td>';
+        str+='</tr>';
 
         $.each(res,(i,vo)=>{
-            str+='<tr class="tableTr"><td colspan="4"><hr style="color: #12bbad;"></td></tr>';
-            str+='<tr style="margin-top: 10px;">';
+            /* 2행 */
+            str+='<tr class="tableTr">';
+                str+='<td colspan="4">';
+                str+='<hr style="color: #12bbad;">';
+                str+='</td>';
+            str+='</tr>';
 
-            str+='<td width="10%"><p style="text-align: left">';
+
+            /* 3행 */
+            str+='<tr style="margin-top: 10px;">';
+            str+='<td colspan="2"><span style="text-align: left">';
             if(res[i].comment_depth!=0){
             str+='<span class="fontRe">ㄴ</span> &nbsp;'
             }
             str+=res[i].user_name;
-            str+='</p></td>';
-
-            str+='<td width=10% class="date"><p style="text-align: left">(';
+            str+='</span><span class="date" style="text-align: left">&nbsp;&nbsp;(';
             str+=res[i].create_date;
-            str+=')</p></td>';
+            str+=')</span>';
+            str+='</td>';
 
-            str+='<td width="70%" colspan="2">&nbsp; ';
-            str+='<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="'+res[i].comment_id+'"/></p></td>';
+            str+='<td class="date">';
 
+
+            if( res[i].user_id == CUS || CUS=="1"){
+                str+='<td colspan="2">';
+                str += '<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="' + res[i].comment_id + '"/></p>';
+                str+='</td>'
+            }
             str+='</tr>';
 
-            str+='<tr>';
-            if(res[i].comment_depth!=0) {
-                str+='<td></td>';
-            }
 
-            str+='<td colspan="3"><p>';
+            /* 4행 */
+            str+='<tr>';
+            str+='<td colspan="4"><p>';
             str+=res[i].content;
             str+='</p></td>';
 
+
             if(res[i].comment_depth==0) {
+                /* 5행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
-                str += '<td colspan="3"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
+                str += '<td colspan="4"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
                 str += '</tr>';
+                /* 6행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
-                str += '<td colspan="4"><div style="display: none" class="'+res[i].comment_group+'div">';
-                str += '<input class="re" id="' + res[i].comment_group + 're' + res[i].comment_depth + '">';
+                str += '<td colspan="3""><div style="display: none; text-align: center" class="'+res[i].comment_group+'div">';
+                str += '<input id="' + res[i].comment_group + 're' +res[i].comment_depth+'" style="width: 100%;">';
                 str+='</div></td>';
-                str+='<td colspan="1"><div style="display: none" class="'+res[i].comment_group+'div">';
+                str+='<td colspan="1"><div style="display: none;text-align: right" class="'+res[i].comment_group+'div">';
                 str+='<button onclick="CheckMessage(this.id)" id="' + res[i].comment_group + 'btn' + res[i].comment_depth + '"> 등록</input>';
                 str += '</div></td>';
-                str += '</tr>';
+                str += '</tr><tfoot></tfoot>';
             }
         })
         str+='</table>';

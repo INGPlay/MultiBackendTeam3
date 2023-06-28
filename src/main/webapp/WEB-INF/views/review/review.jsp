@@ -35,7 +35,9 @@
 
 
          .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
-
+         .font{
+             font-size: 10px;
+         }
     </style>
 </head>
 
@@ -62,7 +64,7 @@
 
 
         <table class="table table table-hover mt-2" id="table">
-            <thead>
+            <thead >
             <th width="10%">번호</th>
             <th width="10%">작성자</th>
             <th width="20%">제목</th>
@@ -75,7 +77,7 @@
             <tbody>
             <%-- 테이블에 게시글이 없을 경우 --%>
             <c:if test="${list eq null or empty list}">
-                <div class = "slert alert-danger">
+                <div class = "alert alert-danger">
                     <h3>해당 글은 없습니다.</h3>
                 </div>
             </c:if>
@@ -83,7 +85,7 @@
             <%-- 테이블에 게시글이 있을 경우 --%>
             <c:if test="${list ne null and not empty list}">
                 <c:forEach var="vo" items="${list}">
-                    <tr id="${vo.review_id}">
+                    <tr id="${vo.review_id}" class="font">
                         <td width="10%"><c:out value="${vo.review_id}"/></td>
                         <td width="10%"><c:out value="${vo.user_name}"/></td>
                         <td width="20%"><c:out value="${vo.review_title}"/></td>
