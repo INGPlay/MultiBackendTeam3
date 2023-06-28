@@ -189,7 +189,7 @@
                         <th scope='row'>" + path['pathId'] +"</th> \
                         <td>" + path['pathTitle'] + "</td> \
                         <td>" + path['username'] + "</td> \
-                        <td>" + path['createDate'] + "</td> \
+                        <td>" + path['updateDate'] + "</td> \
                         <td>" + path['pathRecommends'] + "</td> \
                         <td>" + path['pathViews'] + "</td> \
                     </tr> \
