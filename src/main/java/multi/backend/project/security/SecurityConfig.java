@@ -33,13 +33,13 @@ public class SecurityConfig {
 
                 .authorizeRequests(a -> a
 //                       뷰 페이지
+//                        - 패스맵 관련
                         .antMatchers("/user/login", "/user/register").anonymous()
                         .antMatchers("/user/inform/", "/pathmap/update/*").hasRole("USER")
                         .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
 //                        -- 정보 관련
                         .antMatchers("/info/place/**", "/info/wheather/**").hasRole("USER")
-
-
+                        
 //                        api
 //                        - 패스맵 관련
 //                        -- 게시판 관련
