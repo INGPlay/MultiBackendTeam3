@@ -165,17 +165,21 @@ public class reviewController {
     }
 
     @PostMapping("/delete")
-    public String deleteReview(Model m , HttpServletRequest seq){
-        String id = seq.getParameter("review_id");
-        int n = service.deleteReview(Integer.parseInt(id));
+    public String deleteReview(Model m , HttpServletRequest seq,@AuthenticationPrincipal UserContext ux){
+        String reviewId = seq.getParameter("review_id");
+        reviewVO vo = service.selectReviewOne(Integer.parseInt(reviewId));
+
+        if((ux.getUsername().equals(vo.getUser_name()) || (service.getUserId(ux.getUsername()))== 1)){
+        int n = service.deleteReview(Integer.parseInt();
         String str = (n>0)? "정상적으로 삭제 완료":"삭제 실패 지져스";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
+            return util.addMsgLoc(m,str,loc);
+        }
 
-        return util.addMsgLoc(m,str,loc);
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo, HttpSession session, HttpServletRequest seq){
+    public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo,@AuthenticationPrincipal UserContext ux){
         m.addAttribute("vo",vo);
         int n = service.updateReview(vo);
 

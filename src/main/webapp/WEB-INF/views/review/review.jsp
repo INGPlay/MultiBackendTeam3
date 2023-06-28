@@ -139,9 +139,23 @@
             </ul>
 
             </nav>
+        </div>
+    <div class="d-flex justify-content-center pb-5">
+        <div class="col-5 input-group">
 
+            <!-- 검색 조건 -->
+            <select class="col-3" name="searchOption" id="searchOptionSelect">
+                <option value="title" selected>제목</option>
+                <option value="author">작성자</option>
+            </select>
+
+            <!-- 검색할 단어 -->
+            <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
+
+            <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
 
         </div>
+    </div>
 
 
 

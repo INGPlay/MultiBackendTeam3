@@ -98,6 +98,8 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/views/template/header.jsp" %>
+
+
 <div class ="container" style="margin-top: 30px">
         <h2 class="center">Review view</h2>
         <p class="center" >
@@ -132,6 +134,14 @@
                         <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
                     </td>
                 </tr>
+                <tr>
+                    <td style="width:20%" class="center"><b>장소</b></td>
+                    <td align="left">
+                        <input id="keywordSearch" type="text" class="form-control" style="width: 70%">
+                        <button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+                    </td>
+                </tr>
+
 
                 <tr>
                     <td style="width:20%" class="center"><b>글내용</b></td>
@@ -139,6 +149,7 @@
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
                     </td>
                 </tr>
+
 
                 <tr>
                      <td colspan="2" style="border-bottom-style: hidden">
@@ -180,6 +191,60 @@
 </div>
 </body>
 <script>
+    document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            searchTourInfoKeyword(this.value)
+            alert(this);
+        }
+    });
+
+    function searchTourInfoKeyword(keyword){
+        areaLargeSelect = document.getElementById("areaLargeSelect")
+        areaSmallSelect = document.getElementById("areaSmallSelect")
+
+        let data = {
+            "keyword" : keyword,
+            "areaLargeCode" : areaLargeSelect.value,
+            "areaSmallCode" : areaSmallSelect.value,
+            "pageSize" : 100,
+            "pageNo" : 1,
+            "contentTypeCode" : markContentTypeCode
+        }
+
+        $.ajax({
+            url : "/api/tour/keyword",
+            type : "GET",
+            data : data,
+            contentType : "application/json",
+            dataType : "json"
+        }).done((response) => {
+
+            let resultText = ""
+            if (areaLargeSelect.value){
+                areaLargeText = areaLargeSelect.options[areaLargeSelect.selectedIndex].text
+                areaSmallText = areaSmallSelect.options[areaSmallSelect.selectedIndex].text
+
+                resultText += areaLargeText + " " + areaSmallText + "에 존재하는 ";
+            }
+            resultText += response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다."
+
+            resultAlert(resultText, "green")
+
+            updateMarkingInMapByResponse(response, true)
+
+        }).fail((error) => {
+            console.log(error)
+            console.log(error["responseJSON"]["message"])
+            if (error["status"] === 404){
+                resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+            }
+        })
+    }
+
+
+
+
     const edit = function(){
         bf.method='post';
         bf.action='edit'
@@ -246,18 +311,18 @@
         var list= id.split('/');
         var x = document.getElementsByClassName(list[0]+"div");
         var y = document.getElementById(list[0]+"re"+list[1]);
-        var main = document.getElementById('commentInsert');
+
         var i;
         for (i=0; i < x.length; i++) {
         var obj=x[i];
             if (obj.style.display == "none") {
-                main.style.display='none';
+
                 obj.style.display = "block";
 
             }
             else {
                 y.value="" ;
-                main.style.display='';
+
                 obj.style.display = "none";
 
             }
