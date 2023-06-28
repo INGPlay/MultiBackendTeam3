@@ -12,14 +12,4 @@ public class RootController {
     public String testJsp(){
         return "index1";
     }
-
-    @GetMapping("/map")
-    public String testMap(){
-        return "map";
-    }
-
-    @GetMapping("/header")
-    public String testHeader(){
-        return "header";
-    }
 }

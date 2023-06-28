@@ -2,7 +2,9 @@ package multi.backend.project.security.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.security.domain.*;
+import multi.backend.project.security.domain.RegisterDto;
+import multi.backend.project.security.domain.RegisterForm;
+import multi.backend.project.security.domain.UserDto;
 import multi.backend.project.security.domain.context.UserContext;
 import multi.backend.project.security.domain.form.UpdatePasswordForm;
 import multi.backend.project.security.domain.form.UserInformDto;
@@ -52,14 +54,9 @@ public class UserController {
             bindingResult.reject("NotMatch.passwordCheck", null, "비밀번호와 일치하지 않습니다. 다시 확인해주세요.");
         }
 
-        if (bindingResult.hasErrors()){
-            log.info("{}", bindingResult);
-
-            return "user/registerView";
-        }
-
         // 유니크 체크
         checkUniqueInformation(bindingResult, registerForm);
+
         if (bindingResult.hasErrors()){
             log.info("{}", bindingResult);
 
@@ -137,10 +134,27 @@ public class UserController {
             return "user/userInform";
         }
 
+        // 기존 비밀번호와 비교
+        if (userService.checkUserPassword(userContext.getUsername(), updatePasswordForm.getNewPassword())){
+            bindingResult.reject("Duplicated.newPassword", null, "현재 비밀번호와 새 비밀번호가 중복됩니다");
+        }
+
+        if (bindingResult.hasErrors()){
+            log.info("{}", bindingResult);
+
+            UserDto userDto = userService.getUserByUsername(userContext.getUsername());
+            UserInformDto userInformDto = new UserInformDto(userDto.getUsername(), userDto.getEmail(), userDto.getPhone());
+
+            model.addAttribute("userInform", userInformDto);
+
+            return "user/userInform";
+        }
+
+
 
         userService.updatePassword(userContext.getUsername(), updatePasswordForm);
 
-        redirectAttributes.addAttribute("success");
+        redirectAttributes.addAttribute("success", true);
         return "redirect:/user/inform";
     }
 
