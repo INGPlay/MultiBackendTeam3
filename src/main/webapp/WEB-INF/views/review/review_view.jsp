@@ -89,7 +89,9 @@
         .center{
             text-align: center;
         }
-
+        .rerecom{
+            width: 90%;
+        }
 
 
     </style>
@@ -359,7 +361,7 @@
                 str += '</tr>';
                 /* 6행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
-                str += '<td colspan="3""><div style="display: none; text-align: center" class="'+res[i].comment_group+'div">';
+                str += '<td colspan="3" class="rerecom"><div style="display: none; text-align: center" class="'+res[i].comment_group+'div">';
                 str += '<input id="' + res[i].comment_group + 're' +res[i].comment_depth+'" style="width: 100%;">';
                 str+='</div></td>';
                 str+='<td colspan="1"><div style="display: none;text-align: right" class="'+res[i].comment_group+'div">';
