@@ -39,14 +39,6 @@
                 <option value="phone">전화번호순</option>
             </select>
 
-            <!-- 로그인 한 사용자만 -->
-            <sec:authorize access="isAuthenticated()">
-
-                <button class="btn main_color" onClick="location.href='/pathmap/mark'">
-                    <strong>작성하기</strong>
-                </button>
-            </sec:authorize>
-
         </div>
 
         <table class="table table table-hover mt-2">

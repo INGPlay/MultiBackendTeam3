@@ -48,7 +48,7 @@
                 </tr><tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
-                        <input type="text" name="user_name" id="username" class="form-control">
+                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
                     </td>
                 </tr>
                 <tr>

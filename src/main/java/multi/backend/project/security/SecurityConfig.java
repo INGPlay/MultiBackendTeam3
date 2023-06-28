@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import multi.backend.project.security.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,38 @@ public class SecurityConfig {
                 .cors().disable()
 
                 .authorizeRequests(a -> a
+//                       뷰 페이지
+//                        - 패스맵 관련
+                        .antMatchers("/user/login", "/user/register").anonymous()
+                        .antMatchers("/user/inform/", "/pathmap/update/*").hasRole("USER")
+                        .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
+//                        -- 정보 관련
+                        .antMatchers("/info/place/**", "/info/wheather/**").hasRole("USER")
+                        
+//                        api
+//                        - 패스맵 관련
+//                        -- 게시판 관련
+                        .antMatchers(HttpMethod.GET, "/api/pathmap, /api/pathmap/*").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/pathmap").hasRole("USER")
+                        .antMatchers(HttpMethod.PUT, "/api/pathmap").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/api/pathmap").hasRole("USER")
+//                        -- 추천(즐겨찾기) 관련
+                        .antMatchers("/api/favorite").hasRole("USER")
+//                        -- 댓글 관련
+                        .antMatchers(HttpMethod.GET, "/api/comment").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/comment").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/api/comment").hasRole("USER")
+//                        -- 정보 관련
+                        .antMatchers("/api/wheather").hasRole("USER")       // 날씨 정보
+                        .antMatchers("/api/tour/**").hasRole("USER")        // 장소 정보
+
+//                        - admin 관련
+                        .antMatchers(HttpMethod.GET, "/api/admin/user").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/api/admin/user").hasRole("ADMIN")
+                        
+//                        - 투어코드 이니셜라이저
+                        .antMatchers("/api/tour").hasRole("ADMIN")
+
 //                        // 기본 페이지
 //                        .antMatchers("/", "/login", "/register", "/error",
 //                                "/css/*", "/js/*", "resources/*", "/favicon.ico").permitAll()
@@ -42,7 +75,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin(f -> f
-                        .loginPage("/user/login?success")
+                        .loginPage("/user/login")
                         .defaultSuccessUrl("/")
                         .failureUrl("/user/login?fail")
                         .usernameParameter("username")

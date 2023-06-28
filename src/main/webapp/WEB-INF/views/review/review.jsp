@@ -30,37 +30,41 @@
     <style>
         .pagination{
             justify-content: center;
+            display: inline-block;
         }
 
+
          .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
+         .font{
+             font-size: 10px;
+         }
     </style>
 </head>
 
 <body>
 <%@ include file="/WEB-INF/views/template/header.jsp" %>
-<div class="row my-3">
-    <div class="col-9 text-right">
-        <form name="searchF" action="/review/write" method="get">
-            <div >
-                <button class="d-flex align-items-center flex-shrink-0 p-2 link-dark text-decoration-none " style="background-color: #12bbad; padding: 5px; float: right; height: 60%">작성</button>
-            </div>
-        </form>
-    </div>
-    <div class="col-3 text-left">
-        <form name="psF" id="psF" action="/review/list" method="get">
-            <select name="select" id ="select" style="padding:5px" onchange="check()" class="d-flex flex-row bd-highlight">
+<div class="container" style="margin-top: 10px">
+
+    <div class="d-flex flex-row bd-highlight mt-2 justify-content-between">
+
+        <form name="psF" id="psF" action="/review/list" method="get" class="d-flex justify-content-start" >
+            <select name="select" id ="select" onchange="check()" class="col-auto bd-highlight ms-auto" style="height: 100%" >
                 <option value="1" <c:if test="${select eq '1'}">selected</c:if>>최신순</option>
                 <option value="2" <c:if test="${select eq '2'}">selected</c:if>>조회순</option>
                 <option value="3" <c:if test="${select eq '3'}">selected</c:if>>추천순</option>
             </select>
         </form>
+
+        <form  name="searchF" action="/review/write" method="get" class="d-flex justify-content-end"style="margin-right: 15px">
+            <button class="btn main_color ms-auto ml-auto" ><strong>작성하기</strong></button>
+        </form>
     </div>
-</div>
+
 <!-- ------------------------------------------------------- -->
-<div class="container">
-    <div class='col-10 offset-1'>
+
+
         <table class="table table table-hover mt-2" id="table">
-            <thead>
+            <thead >
             <th width="10%">번호</th>
             <th width="10%">작성자</th>
             <th width="20%">제목</th>
@@ -73,7 +77,7 @@
             <tbody>
             <%-- 테이블에 게시글이 없을 경우 --%>
             <c:if test="${list eq null or empty list}">
-                <div class = "slert alert-danger">
+                <div class = "alert alert-danger">
                     <h3>해당 글은 없습니다.</h3>
                 </div>
             </c:if>
@@ -81,7 +85,7 @@
             <%-- 테이블에 게시글이 있을 경우 --%>
             <c:if test="${list ne null and not empty list}">
                 <c:forEach var="vo" items="${list}">
-                    <tr id="${vo.review_id}">
+                    <tr id="${vo.review_id}" class="font">
                         <td width="10%"><c:out value="${vo.review_id}"/></td>
                         <td width="10%"><c:out value="${vo.user_name}"/></td>
                         <td width="20%"><c:out value="${vo.review_title}"/></td>
@@ -131,14 +135,18 @@
                         <a class="page-link" href="${pageMaker.endPage +1}">&raquo;</a>&nbsp
                     </li>
                 </c:if>
+
             </ul>
+
             </nav>
-        </div>
+
+      </div>
     </div>
 </div>
 
 <!-- footer -->
 <%@ include file="/WEB-INF/views/template/footer.jsp" %>
+
 
 <style>
     #content .jumbotron, #content .navbar{

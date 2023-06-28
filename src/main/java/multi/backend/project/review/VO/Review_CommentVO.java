@@ -19,20 +19,23 @@ public class Review_CommentVO {
     private int comment_depth; // 댓글 깊이
     private int user_id; // 유저 아이디
     private String user_name; // 유저 이름
+    private String ConnectUSerName;// 접속한 유저 이름
 
 
     public Review_CommentVO() {
 
     }
 
-    public Review_CommentVO(int comment_id, int review_id, Date created_date, Date update_date, String content, int comment_group, int comment_depth, int user_id) {
+    public Review_CommentVO(int comment_id, int review_id, Date create_date, Date update_date, String content, int comment_group, int comment_depth, int user_id, String user_name, String connectUSerName) {
         this.comment_id = comment_id;
         this.review_id = review_id;
-        this.create_date = created_date;
+        this.create_date = create_date;
         this.update_date = update_date;
         this.content = content;
         this.comment_group = comment_group;
         this.comment_depth = comment_depth;
         this.user_id = user_id;
+        this.user_name = user_name;
+        ConnectUSerName = connectUSerName;
     }
 }
