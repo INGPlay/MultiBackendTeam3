@@ -16,7 +16,9 @@
 </head>
 <body>
 
+
 <footer>
+    <div class="container">
     <nav>
         <a href='https://github.com/INGPlay/MultiBackendTeam3' target="_blank">Github</a>
     </nav>
@@ -24,6 +26,7 @@
         <span>저자 : Multicampus 3rd team</span><br>
         <span>Copyright 2023 Multicampus 3rd team. All Rights Reserved </span>
     </p>
+    </div>
 </footer>
 
 </body>

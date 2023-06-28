@@ -109,7 +109,7 @@
                 <select class="col-3" name="searchOption" id="searchOptionSelect">
                     <option value="username" selected>유저명</option>
                     <option value="email">이메일</option>
-                    <option value="role">역할명</option>
+        `            <option value="role">역할명</option>
                     <option value="phone">전화번호</option>
                 </select>
 
@@ -122,6 +122,8 @@
         </div>
 
     </div>
+    <!-- footer -->
+    <%@ include file="/WEB-INF/views/template/footer.jsp" %>
 
     <script>
 
