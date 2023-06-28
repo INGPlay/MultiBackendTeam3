@@ -36,7 +36,7 @@
 
          .pagination li{ margin: 1px; padding: 1px; background-color: #ffffff; }
          .font{
-             font-size: 10px;
+             font-size: 15px;
          }
     </style>
 </head>
@@ -90,8 +90,8 @@
                         <td width="10%"><c:out value="${vo.user_name}"/></td>
                         <td width="20%"><c:out value="${vo.review_title}"/></td>
                         <td width="20%"><c:out value="${vo.review_content}"/></td>
-                        <td width="10%"><c:out value="${vo.create_date}"/></td>
-                        <td width="10%"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
+                        <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
                         <td width="10%"><c:out value="${vo.review_views}"/></td>
                         <td width="10%"><c:out value="${vo.review_recommends}"/></td>
                     </tr>
@@ -140,6 +140,7 @@
 
             </nav>
         </div>
+
     <div class="d-flex justify-content-center pb-5">
         <div class="col-5 input-group">
 
@@ -147,6 +148,7 @@
             <select class="col-3" name="searchOption" id="searchOptionSelect">
                 <option value="title" selected>제목</option>
                 <option value="author">작성자</option>
+                <option value="place">장소</option>
             </select>
 
             <!-- 검색할 단어 -->
@@ -156,8 +158,6 @@
 
         </div>
     </div>
-
-
 
 </div>
 <style>

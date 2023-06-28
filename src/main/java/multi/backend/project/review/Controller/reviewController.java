@@ -56,12 +56,7 @@ public class reviewController {
     //  게시글 삽입 폼 이동
     @GetMapping("/write")
     public String reviewEdit(@AuthenticationPrincipal UserContext ux, Model m){
-        try {
-            m.addAttribute("user_name",ux.getUsername());
-        }catch (NullPointerException e){
-            String str = "로그인이 필요합니다";
-            return util.addMasBack(m,str);
-        }
+        m.addAttribute("user_name",ux.getUsername());
         return "review/write";
     }
 
@@ -169,19 +164,22 @@ public class reviewController {
         String reviewId = seq.getParameter("review_id");
         reviewVO vo = service.selectReviewOne(Integer.parseInt(reviewId));
 
-        if((ux.getUsername().equals(vo.getUser_name()) || (service.getUserId(ux.getUsername()))== 1)){
-        int n = service.deleteReview(Integer.parseInt();
-        String str = (n>0)? "정상적으로 삭제 완료":"삭제 실패 지져스";
-        String loc = (n>0)? "/review/list":"javascript:history.back()";
-            return util.addMsgLoc(m,str,loc);
+        if((!ux.getUsername().equals(vo.getUser_name()) || (service.getUserId(ux.getUsername()))!= 1)){
+            return util.addMasBack(m,"Error");
         }
-
+        int n = service.deleteReview(Integer.parseInt(reviewId));
+        String str = (n>0)? "정상적으로 삭제 완료":"삭제 실패하였습니다";
+        String loc = (n>0)? "/review/list":"javascript:history.back()";
+        return util.addMsgLoc(m,str,loc);
     }
 
     @PostMapping("/update")
     public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo,@AuthenticationPrincipal UserContext ux){
+        if((!ux.getUsername().equals(vo.getUser_name()) || (service.getUserId(ux.getUsername()))!= 1)){
+            return util.addMasBack(m,"Error");
+        }
         m.addAttribute("vo",vo);
-        int n = service.updateReview(vo);
+        service.updateReview(vo);
 
         return "review/review_view";
     }
