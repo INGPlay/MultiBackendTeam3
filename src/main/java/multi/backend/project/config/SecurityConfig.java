@@ -1,4 +1,4 @@
-package multi.backend.project.security;
+package multi.backend.project.config;
 
 import lombok.RequiredArgsConstructor;
 import multi.backend.project.security.service.CustomUserDetailService;
