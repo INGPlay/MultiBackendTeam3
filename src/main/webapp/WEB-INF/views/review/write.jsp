@@ -201,6 +201,7 @@
                 result += "<option value='"+ r["contentId"] +"'>" + r["title"] + "</option>"
             })
             ars.innerHTML = result;
+            document.getElementById("keywordSearch").value="장소를 선택하세요";
 
         }).fail((error) => {
             if (error["status"] === 404){
