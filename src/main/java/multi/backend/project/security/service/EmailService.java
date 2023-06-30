@@ -35,7 +35,7 @@ public class EmailService {
             throw new IllegalArgumentException();
         }
 
-        return createKey();
+        return key;
     }
 
     private MimeMessage createCertificationMessage(String to, String key) throws MessagingException, UnsupportedEncodingException {
@@ -44,14 +44,18 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         message.addRecipients(MimeMessage.RecipientType.TO, to);
-        message.setSubject("이메일 인증 테스트");
+        
+        // 제목
+        message.setSubject("이메일 인증 번호입니다.");
 
+        // 내용
         String messageContent = "" +
-                "<div>sendMessage입니다.</div>";
+                "<div>인증 번호 : " + key + "</div>";
+        message.setText(messageContent, "UTF-8", "HTML");       // 내용 및 형식
 
-        message.setText(messageContent, "UTF-8", "HTML");       // 형식
+        // 계정
         message.setFrom(
-                new InternetAddress(id, "i")
+                new InternetAddress(id, "Tour Over")
         );
 
         return message;
