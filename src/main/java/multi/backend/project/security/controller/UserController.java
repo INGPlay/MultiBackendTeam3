@@ -45,7 +45,8 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("registerForm") RegisterForm registerForm,
-                           BindingResult bindingResult){
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes){
 
 //        log.info("{}", bindingResult);
 
@@ -74,6 +75,7 @@ public class UserController {
 
         userService.registerUser(registerDto);
 
+        redirectAttributes.addAttribute("success", true);
         return "redirect:/user/login";
     }
 

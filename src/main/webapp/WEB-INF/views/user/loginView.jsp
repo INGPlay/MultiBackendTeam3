@@ -35,11 +35,17 @@
 								<p>
 									로그인에 실패하였습니다. 
 									<br/>
-									아이디와 비밀번호를 확인해주세요.
+									아이디와 비밀번호를 확인해주세요
 								</p>
 							</c:if>
 						</small>
 					</div>
+
+					<c:if test="${param.success ne null}">
+                        <h4 class="row justify-content-center text-success">
+                            가입에 성공하였습니다
+                        </h4>
+                    </c:if>
 
 
 					<div class="form-group">
