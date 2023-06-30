@@ -66,7 +66,7 @@
                         </select>
 
                         <input id="keywordSearch" name ="placeName" type="text" class="form-control" style="width: 70%">
-                        <button type="button" onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+                        <button style="text-align: right" type="button" onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
                     </td>
                 </tr>
                 <tr>
@@ -194,7 +194,9 @@
             console.log(error)
             console.log(error["responseJSON"]["message"])
             if (error["status"] === 404){
-                resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+                let ars = document.getElementById("areaResultSelect")
+                let result = "<option value=''>검색 결과가 없습니다</option>";
+                ars.innerHTML = result;
             }
         })
     }

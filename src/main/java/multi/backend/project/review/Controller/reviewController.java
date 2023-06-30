@@ -137,14 +137,5 @@ public class reviewController {
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
     }
-
     // ============================================================================ 서비스 계층으로 옮긴것
-
-
-
-
-
-
-
-
 }
