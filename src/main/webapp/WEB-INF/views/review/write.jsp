@@ -41,19 +41,9 @@
                     </td>
                 </tr>
                 <tr>
-<<<<<<< HEAD
-=======
-                    <td style="width:20%"><b>장소</b></td>
-                    <td style="width:80%">
-                        <input type="text" name="place" id="place"  class="form-control">
-                    </td>
-                </tr>
-                <tr>
-
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
-                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
-
+                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name}">
                     </td>
                 </tr>
                 <tr>
@@ -70,7 +60,7 @@
                             <option value="">검색 내용</option>
                         </select>
 
-                        <input id="keywordSearch" name ="placeName" type="text" class="form-control" style="width: 70%">
+                        <input id="keywordSearch" name ="placeName" type="text" class="form-control" style="width: 70%" onclick="resetText()">
                         <button style="text-align: right" type="button" onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
                     </td>
                 </tr>
@@ -99,12 +89,24 @@
     renewAreaLargeCode();
     let markContentTypeCode = "12";
 
+    function resetText(){
+        document.getElementById("keywordSearch").value="";
+    }
+
+
     function check(){
-        if(!('$areaResultSelect >option:selected').val()){
-            alert("장소를 선택해주세요");
+        var txtEle = $('#areaResultSelect').val();
+        var review_title = $('#review_title').val();
+        var review_content = $('#review_content').val();
+
+        if((review_title=="") || (review_content=="")){
+            alert("내용을 채워주세요");
+            return false;
+        }else if((txtEle=="")){
+            alert("장소를 선택하지 않았습니다");
             return false;
         }
-        document.getElementById('bf').submit()
+        $('#bf').submit();
     }
     <%--  장소 검색 이벤트 지정--%>
     document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
@@ -197,7 +199,7 @@
             //alert(JSON.stringify(res))
             let ars = document.getElementById("areaResultSelect")
             ars.innerHTML = ""
-            let result = "<option value=''>장소</option>";
+            let result = "<option value=''>장소를 선택하세요</option>";
             res.forEach(r => {
                 result += "<option value='"+ r["contentId"] +"'>" + r["title"] + "</option>"
             })
@@ -208,20 +210,14 @@
             console.log(error)
             console.log(error["responseJSON"]["message"])
             if (error["status"] === 404){
-
                 let ars = document.getElementById("areaResultSelect")
                 let result = "<option value=''>검색 결과가 없습니다</option>";
                 document.getElementById("keywordSearch").value="검색 결과가 없습니다";
                 ars.innerHTML = result;
-
-                alert("조건에 만족하는 결과를 찾지 못하였습니다.")
-
             }
         })
     }
 
-
-
-<!-- footer -->
+</script>
 <%@ include file="/WEB-INF/views/template/footer.jsp" %>
 

@@ -135,17 +135,10 @@
                         <a class="page-link" href="${pageMaker.endPage +1}">&raquo;</a>&nbsp
                     </li>
                 </c:if>
-
             </ul>
-
-<<<<<<< HEAD
             </nav>
-<<<<<<< HEAD
-        </div>
-=======
-        </nav>
     </div>
->>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
+
 
     <div class="d-flex justify-content-center pb-5">
         <div class="col-5 input-group">
@@ -164,15 +157,6 @@
 
         </div>
     </div>
-<<<<<<< HEAD
-
-=======
-
-      </div>
-    </div>
->>>>>>> 6539586f981f2b7a9da6e86f911c71bc0ba04812
-=======
->>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
 </div>
 
 <!-- footer -->
