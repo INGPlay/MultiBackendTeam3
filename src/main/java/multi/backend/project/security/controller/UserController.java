@@ -51,11 +51,17 @@ public class UserController {
 
         // Validation
         if (!registerForm.getPassword().equals(registerForm.getPasswordCheck())){
-            bindingResult.reject("NotMatch.passwordCheck", null, "비밀번호와 일치하지 않습니다. 다시 확인해주세요.");
+            bindingResult.reject("NotMatch.passwordCheck", null, "비밀번호와 일치하지 않습니다.");
         }
 
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setUsername(registerForm.getUsername());
+        registerDto.setPassword(registerForm.getPassword());
+        registerDto.setEmail(registerForm.getEmail());
+        registerDto.setPhone(registerForm.getPhone().replaceAll("\\s", ""));       // 공백 제거
+
         // 유니크 체크
-        checkUniqueInformation(bindingResult, registerForm);
+        checkUniqueInformation(bindingResult, registerDto);
 
         if (bindingResult.hasErrors()){
             log.info("{}", bindingResult);
@@ -64,13 +70,7 @@ public class UserController {
         }
 
 //        log.info("{}, {}, {}, {}, {}",
-//                registerForm.getUsername(), registerForm.getPassword(), registerForm.getPasswordCheck(), registerForm.getEmail(), registerForm.getPhone());
-
-        RegisterDto registerDto = new RegisterDto();
-        registerDto.setUsername(registerForm.getUsername());
-        registerDto.setPassword(registerForm.getPassword());
-        registerDto.setEmail(registerForm.getEmail());
-        registerDto.setPhone(registerForm.getPhone());
+//                registerForm.getUsername(), registerForm.getPassword(), registerForm.getPasswordCheck(), registerForm.getEmail(), registerForm.getPhone())
 
         userService.registerUser(registerDto);
 
@@ -159,11 +159,11 @@ public class UserController {
     }
 
 
-    private void checkUniqueInformation(BindingResult bindingResult, RegisterForm registerForm){
+    private void checkUniqueInformation(BindingResult bindingResult, RegisterDto registerDto){
 
-        UserDto userByUsername = userService.getUserByUsername(registerForm.getUsername());
-        UserDto userByUserEmail = userService.getUserByUserEmail(registerForm.getEmail());
-        UserDto userByUserPhone = userService.getUserByUserPhone(registerForm.getPhone());
+        UserDto userByUsername = userService.getUserByUsername(registerDto.getUsername());
+        UserDto userByUserEmail = userService.getUserByUserEmail(registerDto.getEmail());
+        UserDto userByUserPhone = userService.getUserByUserPhone(registerDto.getPhone());
 
         if (userByUsername != null){
             bindingResult.reject("UniqueCheck.username", null, "이미 존재하는 아이디입니다");
