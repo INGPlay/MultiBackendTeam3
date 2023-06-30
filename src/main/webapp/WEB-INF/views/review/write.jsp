@@ -89,6 +89,7 @@
 
     </div><!-- .col end-->
 </div><!-- .row end-->
+
 <script>
     renewAreaLargeCode();
     let markContentTypeCode = "12";
@@ -209,3 +210,6 @@
 
 
 </script>
+
+<!-- footer -->
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

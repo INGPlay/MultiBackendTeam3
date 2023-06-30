@@ -154,12 +154,18 @@
             <!-- 검색할 단어 -->
             <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
 
+      </div>
+    </div>
+</div>
+
+<!-- footer -->
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>
+
             <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
 
         </div>
     </div>
 
-</div>
 <style>
     #content .jumbotron, #content .navbar{
         display:none;

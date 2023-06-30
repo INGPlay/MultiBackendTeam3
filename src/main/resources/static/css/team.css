@@ -1,0 +1,26 @@
+.list{
+    background-color: #547abe;
+    padding-top: 160px;
+    padding-bottom: 150px;
+    color: white;
+}
+
+.main-content{
+    width: 600px;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-content h1{
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.main-content p{
+    letter-spacing: 1px; /* 글 간격 */
+    line-height: 30px;
+    font-size: 19px;
+    margin-bottom: 40px;
+}
+
