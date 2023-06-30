@@ -69,6 +69,13 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="width:20%" class="center"><b>장소</b></td>
+                    <td align="left">
+                        <span>${PlaceName}</span>
+                        <input  type="hidden" name="contentId" id="contentId" value="${vo.contentId}"/>
+                    </td>
+                </tr>
+                <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control">${vo.review_content}</textarea>

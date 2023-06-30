@@ -137,9 +137,9 @@
                 <tr>
                     <td style="width:20%" class="center"><b>장소</b></td>
                     <td align="left">
-                        <input id="keywordSearch" type="text" class="form-control" style="width: 70%">
-                        <button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+                        <span>${PlaceName}</span>
                     </td>
+                    <td><input type="hidden" name="contentId" id="contentId" value="${vo.contentId}"></td>
                 </tr>
 
 
@@ -156,7 +156,7 @@
                          <div onclick="com()"width="100px" height="100px"  class="div">
                              <img class="img" src="/image/re.png"/>
                              <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
-                             <span>${vo.review_recommends} </span>
+                             <span id="resultRecommends">${vo.review_recommends} </span>
                          </div>
                      </td>
                     <td>
@@ -191,60 +191,6 @@
 </div>
 </body>
 <script>
-    document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            searchTourInfoKeyword(this.value)
-            alert(this);
-        }
-    });
-
-    function searchTourInfoKeyword(keyword){
-        areaLargeSelect = document.getElementById("areaLargeSelect")
-        areaSmallSelect = document.getElementById("areaSmallSelect")
-
-        let data = {
-            "keyword" : keyword,
-            "areaLargeCode" : areaLargeSelect.value,
-            "areaSmallCode" : areaSmallSelect.value,
-            "pageSize" : 100,
-            "pageNo" : 1,
-            "contentTypeCode" : markContentTypeCode
-        }
-
-        $.ajax({
-            url : "/api/tour/keyword",
-            type : "GET",
-            data : data,
-            contentType : "application/json",
-            dataType : "json"
-        }).done((response) => {
-
-            let resultText = ""
-            if (areaLargeSelect.value){
-                areaLargeText = areaLargeSelect.options[areaLargeSelect.selectedIndex].text
-                areaSmallText = areaSmallSelect.options[areaSmallSelect.selectedIndex].text
-
-                resultText += areaLargeText + " " + areaSmallText + "에 존재하는 ";
-            }
-            resultText += response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다."
-
-            resultAlert(resultText, "green")
-
-            updateMarkingInMapByResponse(response, true)
-
-        }).fail((error) => {
-            console.log(error)
-            console.log(error["responseJSON"]["message"])
-            if (error["status"] === 404){
-                resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
-            }
-        })
-    }
-
-
-
-
     const edit = function(){
         bf.method='post';
         bf.action='edit'
@@ -257,9 +203,22 @@
 
     const com = function(){
         alert("추천하였습니다.");
-        bf.method='post';
-        bf.action='view';
-        bf.submit();
+        // bf.method='post';
+        // bf.action='view';
+        // bf.submit();
+        const review_id = document.getElementById('review_id').value;
+
+        $.ajax({
+            type:'post',
+            url:'/review/view',
+            dataType:'text',
+            data:{"review_id":review_id},
+            cache:false
+        }).done((res)=>{
+            $("#resultRecommends").text(res);
+        }).fail((err)=>{
+            alert(err.status);
+        })
     }
 
     const deleteComment = function(id){
@@ -283,6 +242,10 @@
         let con=$('#content').val();
         let uid=$('#user_id').val();
 
+        if(con==""){
+            alert("내용을 넣어주세요");
+            return false;
+        }
         let jsonData={
             review_id:rid,
             content:con,

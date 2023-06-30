@@ -7,9 +7,23 @@
         <selectKey keyProperty="review_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Sequence.nextval) from dual
         </selectKey>
-        insert into review(review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends)
-        values(#{review_id}, #{user_id},#{review_title},#{review_content},SYSDATE,SYSDATE,0,0)
+        insert into review(review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends,contentId)
+        values(#{review_id}, #{user_id},#{review_title},#{review_content},SYSDATE,SYSDATE,0,0,#{contentId})
     </insert>
+
+    <select id ="checkContentName" parameterType="_int" resultType="_int">
+        select count(contentId) from place where contentId=#{contentId}
+    </select>
+
+    <!-- place 테이블 추가-->
+    <insert id="insertPlace" parameterType="PlaceVO">
+        insert into place(CONTENTID, CONTENTNAME) values(#{contentId},#{contentName})
+    </insert>
+
+    <!-- contentId로 contentName 가져오기-->
+    <select id="getPlaceName" parameterType="_int" resultType="String">
+        select CONTENTNAME from place where contentId=#{contentId}
+    </select>
 
     <!-- 사용자 이름으로 사용자 계정 존재 유무 가져오기    -->
     <select id="isUser" resultType="_int" parameterType="String">

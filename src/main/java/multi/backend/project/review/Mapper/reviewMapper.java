@@ -1,5 +1,6 @@
 package multi.backend.project.review.Mapper;
 
+import multi.backend.project.review.VO.PlaceVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
@@ -19,11 +20,17 @@ public interface reviewMapper {
     //    1. insert ( 게시글 추가하기 )
     int insertReview(reviewVO vo);
 
-    //    1_2. insert 하기 위해 user 존재 여부 확인
-    int isUser(String user_name);
-
-    //    1_3 insert를 위한 user_id 가져오기
+    //    1_1 insert를 위한 user_id 가져오기
     int getUserId(String user_name);
+
+    // 1_2. place 테이블 체크
+    int checkContentName(int contentId);
+
+    // i_3. place 테이블 추가
+    int insertPlace(PlaceVO vo);
+
+    // 1_4. contentId로 contentName 가져오기
+    String getPlaceName(int contentId);
 
     //    2. Read (전체 게시판 목록 가져오기)
     List<reviewVO> selectReviewAll();
