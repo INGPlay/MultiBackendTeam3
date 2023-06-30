@@ -63,59 +63,59 @@
 <!-- ------------------------------------------------------- -->
 
 
-        <table class="table table table-hover mt-2" id="table">
-            <thead >
-            <th width="10%">번호</th>
-            <th width="10%">작성자</th>
-            <th width="20%">제목</th>
-            <th width="20%">내용</th>
-            <th width="10%">생성일</th>
-            <th width="10%">수정일</th>
-            <th width="10%">조회수</th>
-            <th width="10%">추천수</th>
-            </thead>
-            <tbody>
-            <%-- 테이블에 게시글이 없을 경우 --%>
-            <c:if test="${list eq null or empty list}">
-                <div class = "alert alert-danger">
-                    <h3>해당 글은 없습니다.</h3>
-                </div>
-            </c:if>
+    <table class="table table table-hover mt-2" id="table">
+        <thead >
+        <th width="10%">번호</th>
+        <th width="10%">작성자</th>
+        <th width="20%">제목</th>
+        <th width="20%">내용</th>
+        <th width="10%">생성일</th>
+        <th width="10%">수정일</th>
+        <th width="10%">조회수</th>
+        <th width="10%">추천수</th>
+        </thead>
+        <tbody>
+        <%-- 테이블에 게시글이 없을 경우 --%>
+        <c:if test="${list eq null or empty list}">
+            <div class = "alert alert-danger">
+                <h3>해당 글은 없습니다.</h3>
+            </div>
+        </c:if>
 
-            <%-- 테이블에 게시글이 있을 경우 --%>
-            <c:if test="${list ne null and not empty list}">
-                <c:forEach var="vo" items="${list}">
-                    <tr id="${vo.review_id}" class="font">
-                        <td width="10%"><c:out value="${vo.review_id}"/></td>
-                        <td width="10%"><c:out value="${vo.user_name}"/></td>
-                        <td width="20%"><c:out value="${vo.review_title}"/></td>
-                        <td width="20%"><c:out value="${vo.review_content}"/></td>
-                        <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
-                        <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
-                        <td width="10%"><c:out value="${vo.review_views}"/></td>
-                        <td width="10%"><c:out value="${vo.review_recommends}"/></td>
-                    </tr>
-                </c:forEach>
-            </c:if>
+        <%-- 테이블에 게시글이 있을 경우 --%>
+        <c:if test="${list ne null and not empty list}">
+            <c:forEach var="vo" items="${list}">
+                <tr id="${vo.review_id}" class="font">
+                    <td width="10%"><c:out value="${vo.review_id}"/></td>
+                    <td width="10%"><c:out value="${vo.user_name}"/></td>
+                    <td width="20%"><c:out value="${vo.review_title}"/></td>
+                    <td width="20%"><c:out value="${vo.review_content}"/></td>
+                    <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
+                    <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
+                    <td width="10%"><c:out value="${vo.review_views}"/></td>
+                    <td width="10%"><c:out value="${vo.review_recommends}"/></td>
+                </tr>
+            </c:forEach>
+        </c:if>
 
-            </tbody>
+        </tbody>
 
 
-        </table>
-        <tr>
-            <form action="/review/view" method="get" id="hidden" hidden="hidden"> <%--hidden="hidden"--%>
-                <input type="text" id="review_id" name="review_id" value="">
-            </form>
+    </table>
+    <tr>
+        <form action="/review/view" method="get" id="hidden" hidden="hidden"> <%--hidden="hidden"--%>
+            <input type="text" id="review_id" name="review_id" value="">
+        </form>
 
-            <form id="actionForm" action="/review/list" method="get" hidden="hidden">
-                <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
-                <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
-                <input type = 'text' name="select" value="${pageMaker.cri.sort}">
+        <form id="actionForm" action="/review/list" method="get" hidden="hidden">
+            <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
+            <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
+            <input type = 'text' name="select" value="${pageMaker.cri.sort}">
 
-            </form>
-        </tr>
-        <div>
-            <nav aria-label="Page navigation example">
+        </form>
+    </tr>
+    <div>
+        <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <c:if test="${pageMaker.prev}">
                     <li class="page-item">
@@ -138,8 +138,8 @@
 
             </ul>
 
-            </nav>
-        </div>
+        </nav>
+    </div>
 
     <div class="d-flex justify-content-center pb-5">
         <div class="col-5 input-group">
@@ -154,17 +154,14 @@
             <!-- 검색할 단어 -->
             <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
 
-      </div>
+            <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
+
+        </div>
     </div>
 </div>
 
 <!-- footer -->
 <%@ include file="/WEB-INF/views/template/footer.jsp" %>
-
-            <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
-
-        </div>
-    </div>
 
 <style>
     #content .jumbotron, #content .navbar{

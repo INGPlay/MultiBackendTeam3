@@ -45,7 +45,8 @@
                     <td style="width:80%">
                         <input type="text" name="place" id="place"  class="form-control">
                     </td>
-                </tr><tr>
+                </tr>
+                <tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
                         <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
@@ -195,7 +196,7 @@
             console.log(error)
             console.log(error["responseJSON"]["message"])
             if (error["status"] === 404){
-                resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+                alert("조건에 만족하는 결과를 찾지 못하였습니다.")
             }
         })
     }
