@@ -41,11 +41,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width:20%"><b>장소</b></td>
-                    <td style="width:80%">
-                        <input type="text" name="place" id="place"  class="form-control">
-                    </td>
-                </tr><tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
                         <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
@@ -79,7 +74,7 @@
 
                 <tr>
                     <td colspan="2" id="btn">
-                        <button type="submit" id="btnWrite" class="align-items-center flex-shrink-0 p-2 link-dark text-decoration-none" style="background-color: #12bbad; padding: 5px;">작성하기</button>
+                        <button type="button" onclick="check()" id="btnWrite" class="align-items-center flex-shrink-0 p-2 link-dark text-decoration-none" style="background-color: #12bbad; padding: 5px;">작성하기</button>
                     </td>
                 </tr>
 
@@ -89,9 +84,18 @@
 
     </div><!-- .col end-->
 </div><!-- .row end-->
+<<<<<<< HEAD
 <script>
     renewAreaLargeCode();
     let markContentTypeCode = "12";
+
+    function check(){
+        if(!('$areaResultSelect >option:selected').val()){
+            alert("장소를 선택해주세요");
+            return false;
+        }
+        document.getElementById('bf').submit()
+    }
     <%--  장소 검색 이벤트 지정--%>
     document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
         if (event.keyCode === 13) {
@@ -200,14 +204,8 @@
             }
         })
     }
-
-
-
-
-
-
-
-
-
-
+    
 </script>
+
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>
+

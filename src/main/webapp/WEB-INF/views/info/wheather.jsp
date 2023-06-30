@@ -47,7 +47,8 @@
             </div>
         </div>
     </div>
-
+    <!-- footer -->
+    <%@ include file="/WEB-INF/views/template/footer.jsp" %>
     <script>
         // Error 무시 : JSP 템플릿 언어임
         const posX = ${posX};

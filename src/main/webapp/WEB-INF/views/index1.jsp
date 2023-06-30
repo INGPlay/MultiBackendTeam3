@@ -76,10 +76,12 @@
 
 
 	<!-- ===================================================== -->
+	<!-- footer -->
+	<%@ include file="/WEB-INF/views/template/footer.jsp" %>
 
 
 
-    <pingendo onclick="" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
+	<pingendo onclick="" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
 		멀티	백엔드 3조 &nbsp;&nbsp;
         <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="백엔드3조" height="16">
     </pingendo>

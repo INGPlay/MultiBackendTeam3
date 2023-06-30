@@ -139,6 +139,7 @@
             </ul>
 
             </nav>
+<<<<<<< HEAD
         </div>
 
     <div class="d-flex justify-content-center pb-5">
@@ -159,7 +160,17 @@
         </div>
     </div>
 
+=======
+
+      </div>
+    </div>
+>>>>>>> 6539586f981f2b7a9da6e86f911c71bc0ba04812
 </div>
+
+<!-- footer -->
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>
+
+
 <style>
     #content .jumbotron, #content .navbar{
         display:none;

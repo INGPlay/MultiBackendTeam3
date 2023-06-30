@@ -19,13 +19,14 @@ public class Initializer implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("[InitializingBean] 지역코드 DB 등록 시작");
 
-        //tourCodeService.initAreaCode();
-
-        log.info("[InitializaingBean] 지역코드 DB 등록 완료");
-        
 //         어드민 계정 등록
-   //     userService.registerAdmin(new RegisterDto("나", "1111", "asdf@asdf", "01010101010"));
+
+        if (userService.getUserByUsername("나") == null){
+            userService.registerAdmin(new RegisterDto("나", "1111", "asdf@asdf", "01010101010"));
+
+            log.info("[InitializaingBean] Admin 계정 생성 : '나'");
+        }
+
     }
 }

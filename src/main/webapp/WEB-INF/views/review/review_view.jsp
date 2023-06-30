@@ -185,10 +185,13 @@
             </tr>
         </table>
     </form>
-
+  
 </div>
     <form method="get" action="list" name="reset" id="reset"></form>
-</div>
+
+<!-- footer -->
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>
+
 </body>
 <script>
     const edit = function(){
