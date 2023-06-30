@@ -113,13 +113,11 @@
         if (event.keyCode === 13) {
             event.preventDefault();
             searchTourInfoKeyword(this.value)
-            alert(this);
         }
     });
 
     function result(){
         const txt = $('#areaResultSelect option:checked').text();
-
         $('#keywordSearch').val(txt);
     }
 
@@ -196,19 +194,15 @@
             contentType : "application/json",
             dataType : "json"
         }).done((res) => {
-            //alert(JSON.stringify(res))
             let ars = document.getElementById("areaResultSelect")
             ars.innerHTML = ""
             let result = "<option value=''>장소를 선택하세요</option>";
             res.forEach(r => {
                 result += "<option value='"+ r["contentId"] +"'>" + r["title"] + "</option>"
             })
-
             ars.innerHTML = result;
 
         }).fail((error) => {
-            console.log(error)
-            console.log(error["responseJSON"]["message"])
             if (error["status"] === 404){
                 let ars = document.getElementById("areaResultSelect")
                 let result = "<option value=''>검색 결과가 없습니다</option>";
