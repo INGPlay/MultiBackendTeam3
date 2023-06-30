@@ -49,11 +49,11 @@
                     </td>
                 </tr>
                 <tr>
->>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
+
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
                         <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
-                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name}">
+
                     </td>
                 </tr>
                 <tr>
@@ -94,7 +94,7 @@
 
     </div><!-- .col end-->
 </div><!-- .row end-->
-<<<<<<< HEAD
+
 <script>
     renewAreaLargeCode();
     let markContentTypeCode = "12";
@@ -208,24 +208,20 @@
             console.log(error)
             console.log(error["responseJSON"]["message"])
             if (error["status"] === 404){
-<<<<<<< HEAD
+
                 let ars = document.getElementById("areaResultSelect")
                 let result = "<option value=''>검색 결과가 없습니다</option>";
                 document.getElementById("keywordSearch").value="검색 결과가 없습니다";
                 ars.innerHTML = result;
-=======
+
                 alert("조건에 만족하는 결과를 찾지 못하였습니다.")
->>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
+
             }
         })
     }
 
-</script>
-<<<<<<< HEAD
-<%@ include file="/WEB-INF/views/template/footer.jsp" %>
 
-=======
 
 <!-- footer -->
 <%@ include file="/WEB-INF/views/template/footer.jsp" %>
->>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
+
