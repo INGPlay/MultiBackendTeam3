@@ -21,12 +21,19 @@ public class Initializer implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
 
 //         어드민 계정 등록
+<<<<<<< HEAD
 
+=======
+>>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
         if (userService.getUserByUsername("나") == null){
             userService.registerAdmin(new RegisterDto("나", "1111", "asdf@asdf", "01010101010"));
 
             log.info("[InitializaingBean] Admin 계정 생성 : '나'");
         }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 14b815d4aeda91ff836ff4fdfcd2d0420f2f19f2
     }
 }
