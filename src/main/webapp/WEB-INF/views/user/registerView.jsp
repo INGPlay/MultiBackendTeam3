@@ -72,7 +72,7 @@
 							<form:input type="password" class="form-control border" id="form19" placeholder="••••" required="required"
 										path="password" name="username"/> 
 
-							<small class="form-text validText">
+							<small class="form-text validText" style="color: red;">
 								<form:errors path="password" />
 							</small>
 
@@ -105,7 +105,7 @@
 
 						<label for="form17">전화번호&nbsp;</label> 
 						<form:input type="text" class="form-control border" id="phone" placeholder="숫자만 입력해주세요" required="required"
-								path="phone" name="phone" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+								path="phone" name="phone" oninput="phoneForm(this)"/>
 
 						<small class="form-text validText" style="color: red;">
 							<form:errors path="phone" />
@@ -178,6 +178,22 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+
+	<script>
+		function phoneForm(target) {
+			let result = target.value
+				.replace(/[^0-9]/g, '');
+			
+			// 넘어가면 자르기
+			if (result.length > 11){
+				
+				result = result.substring(11, -1)
+			}
+
+			target.value = result
+				.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1 $2 $3`);
+		}
+	</script>
 </body>
 
 
