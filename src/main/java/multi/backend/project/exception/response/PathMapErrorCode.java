@@ -1,4 +1,4 @@
-package multi.backend.project.pathMap.exception.response;
+package multi.backend.project.exception.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

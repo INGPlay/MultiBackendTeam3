@@ -1,7 +1,7 @@
-package multi.backend.project.pathMap.exception.exception;
+package multi.backend.project.exception.exception;
 
 import lombok.Getter;
-import multi.backend.project.pathMap.exception.response.PathMapErrorCode;
+import multi.backend.project.exception.response.PathMapErrorCode;
 
 @Getter
 public class UnauthorizedException extends RuntimeException {

@@ -12,7 +12,7 @@ import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
-import multi.backend.project.pathMap.exception.exception.UnauthorizedException;
+import multi.backend.project.exception.exception.UnauthorizedException;
 import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
 import multi.backend.project.security.domain.context.UserContext;
