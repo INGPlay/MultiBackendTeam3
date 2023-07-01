@@ -780,8 +780,10 @@
 
 			$.ajax({
 				url : "/api/pathmap/favorite",
-				data : data,
+				data : JSON.stringify(data),
 				type : "POST",
+				contentType: "application/json",
+				dataType : "json"
 			}).done((response) => {
 				console.log(response)
 
@@ -850,7 +852,7 @@
 
 			let data = {
 				"title" : "[복사] " + title,
-				"request" : JSON.stringify(userSelectList)
+				"markers" : JSON.stringify(userSelectList)
 			}
 
 			console.log("제출")
@@ -858,8 +860,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -933,8 +936,9 @@
 			$.ajax({
 				url: "/api/pathmap/comment",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response){
 				document.getElementById('commentInput').value = null;

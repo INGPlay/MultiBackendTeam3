@@ -3,6 +3,7 @@ package multi.backend.project.pathMap.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.apiController.requestJson.SubmitCommentDto;
 import multi.backend.project.pathMap.domain.favorite.FavoriteDto;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PagingResponse;
@@ -34,13 +35,12 @@ public class PathMapApiController {
 
     // 생성
     @PostMapping
-    public ResponseEntity<Map<String, Object>> submitPathMap(@RequestParam String title,
-                                                             @RequestParam String request,
+    public ResponseEntity<Map<String, Object>> submitPathMap(@RequestBody Map<String, String> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
-        log.info("title : {}", title);
+        log.info("title : {}", requestJson.get("title"));
 
-        Long pathId = pathMapService.insertPath(userContext.getUsername(), title, request);
+        Long pathId = pathMapService.insertPath(userContext.getUsername(), requestJson.get("title"), requestJson.get("markers"));
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
@@ -138,10 +138,10 @@ public class PathMapApiController {
     }
 
     @PostMapping("/favorite")
-    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestBody Map<String, Long> requestJson,
                                                               @AuthenticationPrincipal UserContext userContext){
 
-        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
+        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), requestJson.get("pathId"));
 
         favoriteService.toggleFavorite(favoriteDto);
 
@@ -160,11 +160,13 @@ public class PathMapApiController {
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Map<String, Object>> submitComment(@RequestParam String comment,
-                                                             @RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> submitComment(@RequestBody SubmitCommentDto submitCommentDto,
                                                              @AuthenticationPrincipal UserContext userContext){
 
-        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(pathId, userContext.getUsername(), comment);
+        log.info("{}, {}", submitCommentDto.getComment(), submitCommentDto.getPathId());
+        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(
+                submitCommentDto.getPathId(), userContext.getUsername(), submitCommentDto.getComment()
+        );
 
         pathMapService.insertPathComment(insertPathCommentDto);
 

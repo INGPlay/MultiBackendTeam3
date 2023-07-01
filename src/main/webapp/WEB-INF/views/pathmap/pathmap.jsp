@@ -730,7 +730,7 @@
 
 			let data = {
 				"title" : title,
-				"request" : JSON.stringify(userSelectList)
+				"markers" : JSON.stringify(userSelectList)
 			}
 
 			console.log("제출")
@@ -739,7 +739,8 @@
 				url: "/api/pathmap",
 				type: 'POST',
 				dataType: "json",
-				data : data
+				contentType: "application/json",
+				data : JSON.stringify(data)
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
