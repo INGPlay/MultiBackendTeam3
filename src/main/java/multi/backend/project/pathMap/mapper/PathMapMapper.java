@@ -64,6 +64,12 @@ public interface PathMapMapper {
             "where p.PATH_ID = ${pathId}")
     List<CommentResponse> selectPathComment(Long pathId);
 
+    @Select("select m.user_name, p.content, p.create_date, p.update_date, p.comment_id, p.comment_group, p.comment_depth \n" +
+            "FROM PATH_COMMENT p JOIN MEMBERUSER m \n" +
+            "ON p.user_id = m.user_id \n" +
+            "where p.comment_id = ${commentId}")
+    CommentResponse selectComment(Long commentId);
+
     @Insert("insert into path_comment (comment_id, path_id, create_date, update_date, content, comment_group, comment_depth, user_id) \n" +
             "values ( \n" +
             "Path_Comment_Sequence.nextval,\n" +

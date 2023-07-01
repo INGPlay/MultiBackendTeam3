@@ -12,6 +12,7 @@ import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
+import multi.backend.project.pathMap.exception.exception.UnauthorizedException;
 import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
 import multi.backend.project.security.domain.context.UserContext;
@@ -57,6 +58,12 @@ public class PathMapApiController {
     public ResponseEntity<Map<String, Object>> updatePathMap(@RequestBody UpdatePathMapDto updatePathMapDto,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
+
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(updatePathMapDto.getPathId());
+        if (!isPathMapAuthor(userContext.getUsername(), pathInfo.getPathId())){
+            throw new UnauthorizedException();
+        }
+
         String title = updatePathMapDto.getTitle();
         String markers = updatePathMapDto.getMarkers();
         Long pathId = updatePathMapDto.getPathId();
@@ -70,12 +77,28 @@ public class PathMapApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    private boolean isPathMapAuthor(String username, Long pathId){
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(pathId);
+
+        if (pathInfo.getUsername().equals(username)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // 삭제
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> deletePathMap(@RequestBody Map<String, Long> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext){
 
         Long pathId = requestJson.get("pathId");
+
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(pathId);
+        if (!isPathMapAuthor(userContext.getUsername(), pathInfo.getPathId())){
+            throw new UnauthorizedException();
+        }
+
         log.info("pathId : {}", pathId);
 
         pathMapService.deletePath(pathId);
@@ -128,11 +151,6 @@ public class PathMapApiController {
     public ResponseEntity<Map<String, Object>> isFavorite(@RequestParam Long pathId,
                                                           @AuthenticationPrincipal UserContext userContext){
 
-        if (userContext == null){
-            HashMap<String, Object> response = new HashMap<>();
-            response.put("response", "Unauthorized");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
         FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         boolean isFavorite = favoriteService.isFavorite(favoriteDto);
@@ -163,7 +181,7 @@ public class PathMapApiController {
     @GetMapping("/comment")
     public ResponseEntity<List<CommentResponse>> getCommentList(@RequestParam Long pathId){
 
-        List<CommentResponse> commentResponses = pathMapService.selectComment(pathId);
+        List<CommentResponse> commentResponses = pathMapService.selectPathCommentList(pathId);
 
         return new ResponseEntity<>(commentResponses, HttpStatus.OK);
     }
@@ -185,9 +203,14 @@ public class PathMapApiController {
     }
 
     @DeleteMapping("/comment")
-    public ResponseEntity<Map<String, Object>> deleteComment(@RequestBody Map<String, Long> requestJson){
+    public ResponseEntity<Map<String, Object>> deleteComment(@RequestBody Map<String, Long> requestJson,
+                                                             @AuthenticationPrincipal UserContext userContext){
 
         Long commentId = requestJson.get("commentId");
+
+        if (!pathMapService.selectPathComment(commentId).getUsername().equals(userContext.getUsername())){
+            throw new UnauthorizedException();
+        }
 
         // 계정 검증 후 삭제
         pathMapService.deletePathComment(commentId);

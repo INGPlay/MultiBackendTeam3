@@ -157,10 +157,15 @@ public class PathMapService {
 
 
     @Transactional
-    public List<CommentResponse> selectComment(Long pathId){
+    public List<CommentResponse> selectPathCommentList(Long pathId){
         List<CommentResponse> commentResponses = pathMapMapper.selectPathComment(pathId);
 
         return commentResponses;
+    }
+
+    @Transactional
+    public CommentResponse selectPathComment(Long commentId){
+        return pathMapMapper.selectComment(commentId);
     }
 
     @Transactional
