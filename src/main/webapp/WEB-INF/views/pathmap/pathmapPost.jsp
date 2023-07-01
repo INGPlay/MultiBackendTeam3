@@ -270,7 +270,6 @@
 			$.ajax({
 				url : "/api/pathmap/" + pathId,
 				type : "GET",
-				contentType: "application/json",
 				async:false,		// 비동기로
 			}).done(response => {
 				let title = response["title"]
@@ -384,7 +383,6 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
@@ -752,9 +750,9 @@
 			$.ajax({
 				url : "/api/pathmap/favorite",
 				data : data,
-				type : "GET",
-				contentType: "application/json",
-			}).done((response) => {
+				type : "GET"
+			})
+			.done((response) => {
 				console.log(response)
 
 				let favoriteButton = document.getElementById("favoriteButton")
@@ -833,8 +831,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType :"application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -958,8 +957,9 @@
 			$.ajax({
 				url : "/api/pathmap/comment",
 				type : 'DELETE',
-				dataType : "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType : "json"
 			})
 			.done(function(response){
 				
@@ -1067,9 +1067,9 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response)
 				
 				let areaLargeSelect = document.getElementById("areaLargeSelect")
@@ -1091,9 +1091,9 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response);
 
 				let areaSmallSelect = document.getElementById("areaSmallSelect")
@@ -1128,9 +1128,9 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				
 				let resultText = ""
 				if (areaLargeSelect.value){

@@ -284,7 +284,7 @@
 			$.ajax({
 				url : "/api/pathmap/" + pathId,
 				type : "GET",
-				contentType: "application/json",
+				dataType:"json",
 				async:false,		// 비동기로
 			}).done(response => {
 				let title = response["title"]
@@ -399,7 +399,6 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
@@ -822,7 +821,7 @@
 
 			let data = {
 				"title" : title,
-				"request" : JSON.stringify(userSelectList),
+				"markers" : JSON.stringify(userSelectList),
 				"pathId" : pathId
 			}
 
@@ -831,8 +830,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'PUT',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -853,9 +853,10 @@
 
 			$.ajax({
 				url: "/api/pathmap",
-				type: "DELETE",
-				dataType: "json",
-				data : data
+				type: 'DELETE',
+				data : JSON.stringify(data),
+				contentType : "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -963,7 +964,6 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response)
@@ -987,7 +987,6 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response);
@@ -1024,7 +1023,6 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				

@@ -93,8 +93,8 @@ public class PathMapService {
     }
 
     @Transactional
-    private void insertMarks(Long pathId, String requestJson) throws ParseException {
-        JSONArray request = (JSONArray) jsonParser.parse(requestJson);
+    private void insertMarks(Long pathId, String markers) throws ParseException {
+        JSONArray request = (JSONArray) jsonParser.parse(markers);
 
         Long markCount = pathMapMapper.getMarkCount();
 
@@ -127,12 +127,12 @@ public class PathMapService {
     }
 
     @Transactional
-    public void updatePath(Long pathId, String title, String requestJson) throws ParseException {
+    public void updatePath(Long pathId, String title, String markers) throws ParseException {
 
         log.info("pathId : {}, title : {}", pathId, title);
 
         pathMapMapper.updatePathMap(pathId, title);
-        updateMarks(pathId, requestJson);
+        updateMarks(pathId, markers);
     }
     
     // 조회수 추가
@@ -141,12 +141,12 @@ public class PathMapService {
         pathMapMapper.updatePathMapViews(pathId);
     }
 
-    private void updateMarks(Long pathId, String requestJson) throws ParseException {
+    private void updateMarks(Long pathId, String markers) throws ParseException {
         // 삭제하고
         pathMapMapper.deleteMarksInPath(pathId);
         
         // 새로 삽입
-        insertMarks(pathId, requestJson);
+        insertMarks(pathId, markers);
     }
 
     @Transactional

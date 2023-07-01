@@ -34,7 +34,9 @@ public class AdminApiController {
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity<Map<String, Object>> deleteUser(@RequestParam Long userId){
+    public ResponseEntity<Map<String, Object>> deleteUser(@RequestBody Map<String, Long> requestJson){
+
+        Long userId = requestJson.get("userId");
 
         adminService.deleteUser(userId);
 

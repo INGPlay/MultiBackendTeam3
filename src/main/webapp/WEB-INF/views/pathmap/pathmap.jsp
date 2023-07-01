@@ -334,9 +334,9 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
 				updateMarkingInMapByResponse(response, false)
 			}).fail((error) => {
@@ -849,7 +849,6 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response)
@@ -873,9 +872,9 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response);
 
 				let areaSmallSelect = document.getElementById("areaSmallSelect")
@@ -910,7 +909,6 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				

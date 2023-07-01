@@ -4,6 +4,7 @@ package multi.backend.project.pathMap.apiController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import multi.backend.project.pathMap.apiController.requestJson.SubmitCommentDto;
+import multi.backend.project.pathMap.apiController.requestJson.UpdatePathMapDto;
 import multi.backend.project.pathMap.domain.favorite.FavoriteDto;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PagingResponse;
@@ -38,9 +39,12 @@ public class PathMapApiController {
     public ResponseEntity<Map<String, Object>> submitPathMap(@RequestBody Map<String, String> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
-        log.info("title : {}", requestJson.get("title"));
+        String title = requestJson.get("title");
+        String markers = requestJson.get("markers");
 
-        Long pathId = pathMapService.insertPath(userContext.getUsername(), requestJson.get("title"), requestJson.get("markers"));
+        log.info("title : {}", title);
+
+        Long pathId = pathMapService.insertPath(userContext.getUsername(), title, markers);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
@@ -50,14 +54,16 @@ public class PathMapApiController {
 
     // 수정
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updatePathMap(@RequestParam String title,
-                                                             @RequestParam String request,
-                                                             @RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> updatePathMap(@RequestBody UpdatePathMapDto updatePathMapDto,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
-        log.info("title : {}, request : {}, pathId : {}", title, request, pathId);
+        String title = updatePathMapDto.getTitle();
+        String markers = updatePathMapDto.getMarkers();
+        Long pathId = updatePathMapDto.getPathId();
 
-        pathMapService.updatePath(pathId, title, request);
+        log.info("title : {}, request : {}, pathId : {}", title, markers, pathId);
+
+        pathMapService.updatePath(pathId, title, markers);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
@@ -66,9 +72,10 @@ public class PathMapApiController {
 
     // 삭제
     @DeleteMapping
-    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestBody Map<String, Long> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext){
 
+        Long pathId = requestJson.get("pathId");
         log.info("pathId : {}", pathId);
 
         pathMapService.deletePath(pathId);
@@ -141,7 +148,9 @@ public class PathMapApiController {
     public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestBody Map<String, Long> requestJson,
                                                               @AuthenticationPrincipal UserContext userContext){
 
-        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), requestJson.get("pathId"));
+        Long pathId = requestJson.get("pathId");
+
+        FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         favoriteService.toggleFavorite(favoriteDto);
 
@@ -176,10 +185,11 @@ public class PathMapApiController {
     }
 
     @DeleteMapping("/comment")
-    public ResponseEntity<Map<String, Object>> deleteComment(@RequestParam Long commentId){
-        
+    public ResponseEntity<Map<String, Object>> deleteComment(@RequestBody Map<String, Long> requestJson){
+
+        Long commentId = requestJson.get("commentId");
+
         // 계정 검증 후 삭제
-        
         pathMapService.deletePathComment(commentId);
 
         HashMap<String, Object> response = new HashMap<>();

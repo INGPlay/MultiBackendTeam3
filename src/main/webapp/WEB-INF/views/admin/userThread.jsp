@@ -154,7 +154,6 @@
                 url : "/api/admin/user",
                 type : "GET",
                 data : data,
-                contentType: "application/json",
                 dataType : "json",
                 async:false
             }).done((response) => {
@@ -314,10 +313,12 @@
             $.ajax({
                 url : "/api/admin/user",
                 type : "DELETE",
-                data : data,
+                data : JSON.stringify(data),
+                contentType : "application/json",
                 dataType : "json",
                 async:false
-            }).done((response) => {
+            })
+            .done((response) => {
                 
                 console.log(response)
 
