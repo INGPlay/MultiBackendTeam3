@@ -130,7 +130,7 @@
 
 			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
-				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
+				<span onclick="window.location.href='/pathmap'" class="input-group-text main_color" id="inputGroup-sizing-lg">←</span>
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 			</div>

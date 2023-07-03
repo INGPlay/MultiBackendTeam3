@@ -68,7 +68,7 @@
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
 	<main class="flex-row">
-		
+
 		<!-- Map이 표시될 자리 -->
 		<div class="mapContainer flex-fill">
 			<!-- 맵 -->
@@ -107,20 +107,20 @@
 			<!-- 추천, 복사, 댓글 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
 				<sec:authorize access="isAuthenticated()">
-					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border"
 							style="width: 100%; justify-content: center;"
 							type="button" onclick="toggleFavorite()" id="favoriteButton">
 						<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
 					</button>
 
-					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border"
 							style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
 							type="button">
 						<span class="fs-5 fw-semibold">복사</span>
 					</button>
 				</sec:authorize>
 
-				<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color" 
+				<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border" 
 						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
 						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
 					<span class="fs-5 fw-semibold" id = "commentButtonText">댓글</span>
@@ -648,7 +648,8 @@
 
 					if (beforeWtmObject !== null || currentWtmObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' \
+							class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer radius_border main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \

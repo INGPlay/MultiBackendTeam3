@@ -151,6 +151,10 @@ public class PathMapApiController {
     public ResponseEntity<Map<String, Object>> isFavorite(@RequestParam Long pathId,
                                                           @AuthenticationPrincipal UserContext userContext){
 
+        if (userContext == null){
+            throw new UnauthorizedException();
+        }
+
         FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         boolean isFavorite = favoriteService.isFavorite(favoriteDto);
