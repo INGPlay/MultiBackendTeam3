@@ -141,7 +141,7 @@
 
 			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex justify-content-center" onclick="submitUserSelectList()">
-				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom main_color"
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom main_color radius_border"
 						style="width: 100%; justify-content: center;">
 					<span class="fs-5 fw-semibold">완료</span>
 				</button>

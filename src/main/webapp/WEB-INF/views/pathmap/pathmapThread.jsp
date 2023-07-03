@@ -55,6 +55,8 @@
                 <th scope="col">ID</th>
                 <th scope="col">제목</th>
                 <th scope="col">작성자</th>
+                <th scope="col">출발지</th>
+                <th scope="col">도착지</th>
                 <th scope="col">작성일</th>
                 <th scope="col">추천수</th>
                 <th scope="col">조회수</th>
@@ -189,6 +191,8 @@
                         <th scope='row'>" + path['pathId'] +"</th> \
                         <td>" + path['pathTitle'] + "</td> \
                         <td>" + path['username'] + "</td> \
+                        <td>" + path['pathStartingArea'] + "</td> \
+                        <td>" + path['pathDestinationArea'] + "</td> \
                         <td>" + path['updateDate'] + "</td> \
                         <td>" + path['pathRecommends'] + "</td> \
                         <td>" + path['pathViews'] + "</td> \

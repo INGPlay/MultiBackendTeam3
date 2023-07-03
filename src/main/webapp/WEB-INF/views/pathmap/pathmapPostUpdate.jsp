@@ -165,13 +165,13 @@
 
 			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75 radius_border"
 						style="width: 100%; justify-content: center;" onclick="updateUserSelectList()"
 						type="button">
 					<span class="fs-5 fw-semibold">수정</span>
 				</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50 radius_border"
 						style="width: 100%; justify-content: center;"
 						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">
 					<span class="fs-5 fw-semibold">삭제</span>
