@@ -493,8 +493,8 @@
 			return marker
 		}
 
-				// 순서 마커
-				function promiseMarkingSequenceInMap(info, index){
+		// 순서 마커
+		function promiseMarkingSequenceInMap(info, index){
 			return promiseSequenceMarking(map, info["posX"], info["posY"], index, function(){
 				
 				// 마커를 클릭하면 인포윈도우가 뜬다
