@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -12,6 +12,7 @@
     <title>플래너 게시판</title>
 
     <%@ include file="/WEB-INF/views/template/staticTemplate.jsp" %>
+    <script type="text/javascript" src='//dapi.kakao.com/v2/maps/sdk.js?appkey=<spring:message code="keys.kakao.map" javaScriptEscape="true" />&libraries=services'></script>
 
     <!-- 카카오 지도랑 충돌 -->
     <!-- CSS dependencies -->
@@ -28,107 +29,112 @@
 
 
     <div class="container">
-        <div class="d-flex flex-row bd-highlight mt-2">
-            <!-- 조회 조건 -->
-            <select class="me-auto col-1 form-select" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
-                <option value="createDate" selected>최신순</option>
-                <option value="view">조회순</option>
-                <option value="recommend">추천순</option>
-            </select>
 
-            <!-- 로그인 한 사용자만 -->
-            <sec:authorize access="isAuthenticated()">
-                <button class="btn btn-outline-primary" onClick="toggleFavorites()">
-                    <strong id="favoriteButtonText">추천한 게시글</strong>
-                </button>
+        <div class="d-flex flex-row height:500px">
 
-                <button class="btn main_color" onClick="location.href='/pathmap/mark'">
-                    <strong>작성하기</strong>
-                </button>
-            </sec:authorize>
-
-        </div>
-
-        <table class="table table table-hover mt-2">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">제목</th>
-                <th scope="col">작성자</th>
-                <th scope="col">출발지</th>
-                <th scope="col">도착지</th>
-                <th scope="col">작성일</th>
-                <th scope="col">추천수</th>
-                <th scope="col">조회수</th>
-              </tr>
-            </thead>
-            <tbody id = "listRow">
-              <!-- <tr>
-                <th scope="row">{id}</th>
-                <td>{title}</td>
-                <td>{username}</td>
-                <td>{createDate}</td>
-                <td>{recommends}</td>
-                <td>{views}</td>
-              </tr> -->
-            </tbody>
-        </table>
-
-        <!-- 페이징 바 -->
-        <div class="d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-
-                <!-- 페이징 리스트 -->
-                <ul class="pagination" id = "pagingButtonList">
-
-                    <!-- 이전 페이지 -->
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    
-                    <!-- 다음 페이지 -->
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </nav>
-        </div>
-
-        <!--  검색  -->
-        <div class="d-flex justify-content-center pb-5">
-            <div class="col-5 input-group">
-
-                <!-- 검색 조건 -->
-                <select class="col-3" name="searchOption" id="searchOptionSelect">
-                    <option value="title" selected>제목</option>
-                    <option value="author">글쓴이</option>
-                </select>
-
-                <!-- 검색할 단어 -->
-                <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
-
-                <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
+            <div class="mt-2" style="width: 49%;">
+                <!-- 지도를 표시할 div 입니다 -->
+                <div id="map" style="width:100%;height:100%;"></div>
 
             </div>
+    
+            <div class="flex-grow-1 ms-2">
+    
+                <div class="d-flex flex-row bd-highlight mt-2">
+                    <!-- 조회 조건 -->
+                    <select class="me-auto col-1 form-select" name="orderBy" id="orderBySelect" onchange="setOrderBy(this)">
+                        <option value="createDate" selected>최신순</option>
+                        <option value="view">조회순</option>
+                        <option value="recommend">추천순</option>
+                    </select>
+        
+                    <!-- 로그인 한 사용자만 -->
+                    <sec:authorize access="isAuthenticated()">
+                        <button class="btn btn-outline-primary" onClick="toggleFavorites()">
+                            <strong id="favoriteButtonText">추천한 게시글</strong>
+                        </button>
+        
+                        <button class="btn main_color" onClick="location.href='/pathmap/mark'">
+                            <strong>작성하기</strong>
+                        </button>
+                    </sec:authorize>
+                </div>
+    
+                <!-- 게시글 리스트 -->
+                <div class="list-group" id="listRow">
+
+                </div>
+        
+                <!-- 페이징 바 -->
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+        
+                        <!-- 페이징 리스트 -->
+                        <ul class="pagination" id = "pagingButtonList">
+        
+                            <!-- 이전 페이지 -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+        
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            
+                            <!-- 다음 페이지 -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+        
+                        </ul>
+                    </nav>
+                </div>
+        
+                <!--  검색  -->
+                <div class="d-flex justify-content-center">
+                    <div class="input-group"  style="width: 70%;">
+        
+                        <!-- 검색 조건 -->
+                        <select class="col-3" name="searchOption" id="searchOptionSelect">
+                            <option value="title" selected>제목</option>
+                            <option value="author">글쓴이</option>
+                        </select>
+        
+                        <!-- 검색할 단어 -->
+                        <input type="text" name="searchWord" class="form-control col-6 border" id="searchWordInput">
+        
+                        <button type="submit" class="btn btn-outline-dark col-3" onclick="search()">검색</button>
+        
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
+
+
 
     </div>
     <!-- footer -->
     <%@ include file="/WEB-INF/views/template/footer.jsp" %>
     <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = { 
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption); 
 
 
         let PAGE_PAGE = 1;
-        let PAGE_SIZE = 10;
+        let PAGE_SIZE = 5;
 
         const orderBySelect  = document.getElementById("orderBySelect");
         let PAGE_ORDERBY = orderBySelect.options[orderBySelect.selectedIndex].value;
@@ -185,19 +191,17 @@
             
             let result = ''
             pathList.forEach(path => {
-
-                result += " \
-                    <tr onclick='window.location.href= \"/pathmap/" + path['pathId'] + "\"'> \
-                        <th scope='row'>" + path['pathId'] +"</th> \
-                        <td>" + path['pathTitle'] + "</td> \
-                        <td>" + path['username'] + "</td> \
-                        <td>" + path['pathStartingArea'] + "</td> \
-                        <td>" + path['pathDestinationArea'] + "</td> \
-                        <td>" + path['updateDate'] + "</td> \
-                        <td>" + path['pathRecommends'] + "</td> \
-                        <td>" + path['pathViews'] + "</td> \
-                    </tr> \
-                "
+                
+                result += ' \
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true"> \
+                        <div class="d-flex w-100 justify-content-between"> \
+                        <h5 class="mb-1">' + path["pathTitle"] + '</h5> \
+                        <small>' + path["updateDate"] + '</small> \
+                        </div> \
+                        <p class="mb-1">' + path["pathStartingArea"] + ' → ' + path["pathDestinationArea"] + '</p> \
+                        <small>' + path["username"] + '</small> \
+                    </a> \
+                '
             })
 
             let listRow = document.getElementById("listRow")
