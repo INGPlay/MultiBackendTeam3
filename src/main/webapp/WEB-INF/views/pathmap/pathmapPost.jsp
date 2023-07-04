@@ -709,7 +709,7 @@
 					</a> \
 					<!-- Info Modal --> \
 					<div class='modal fade' id='info" + i + "' tabindex='-1' aria-hidden='true'> \
-						<div class='modal-dialog'> \
+						<div class='modal-dialog modal-dialog-scrollable modal-lg'> \
 							<div class='modal-content'> \
 							<div class='modal-header'> \
 								<h5 class='modal-title' id='exampleModalLabel'>Modal title</h5> \
@@ -723,11 +723,11 @@
 											<th scope='col'>정보</th> \
 										</tr> \
 									</thead> \
-									<tbody id = 'infoRow" + i + "'> \
+									<tbody id = 'placeRow" + i + "'> \
 									</tbody> \
 								</table> \
 								<div class='d-flex justify-content-center'> \
-									<div class='spinner-border text-info' role='status' id='infoSpinner" + i + "'> \
+									<div class='spinner-border text-info' role='status' id='placeSpinner" + i + "'> \
 										<span class='visually-hidden'>Loading...</span> \
 									</div> \
 								</div> \
@@ -782,6 +782,9 @@
 				userSelectListView.innerHTML += listTemplate
 
 				renewWheather(xy, i)
+
+				console.log(info["contentTypeId"])
+				renewPlace(info["contentTypeId"], info["contentId"], i)
 
 				beforeInfo = info;
 			}
@@ -861,7 +864,7 @@
 			}).done((response) => {
 
 				console.log(response)
-				viewInfoDetail(response, i)
+				viewWheatherInfoDetail(response, i)
 
 				document.getElementById("wheatherSpinner" + i).style.display = 'none'
 
@@ -870,11 +873,11 @@
 				let response = error["responseJSON"];
 				console.log(response["message"])
 
-				alert(response["message"])
+				console.log("날씨 정보 갱신에 실패하였습니다")
 			})
 		}
 
-		function viewInfoDetail(response, i){
+		function viewWheatherInfoDetail(response, i){
             let listRow = document.getElementById("wheatherRow" + i)
 			console.log(listRow)
 
@@ -894,6 +897,53 @@
                             <td>" + wheather["snowAmount"] + "</td> \
                         </tr> \
                     ";
+            })
+
+            listRow.innerHTML = result;
+        }
+
+		function renewPlace(contentTypeId, contentId, i){
+
+			console.log("/api/tour/detail/" + contentTypeId + "/" + contentId)
+			$.ajax({
+				url : "/api/tour/detail/" + contentTypeId + "/" + contentId,
+				type : "GET",
+				contentType: "application/json",
+				dataType : "json"
+			}).done((response) => {
+
+				console.log(response)
+				viewPlaceInfoDetail(response, i)
+
+				document.getElementById("placeSpinner" + i).style.display = 'none'
+			}).fail((error) => {
+				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+				let response = error["responseJSON"];
+				console.log(response["message"])
+				alert(error["message"])
+				alert(response["message"])
+			})
+		}
+
+        function viewPlaceInfoDetail(response, i){
+            let listRow = document.getElementById("placeRow" + i)
+
+            let result = "";
+            Object.entries(response).forEach((entry) => {
+                console.log(entry[0], entry[1])
+                let key = entry[0]
+                let value = entry[1]
+
+                // 등록된 컬럼에 존재하는 경우에만 표시
+                if (contentRowName[key]){
+                    result += " \
+                        <tr> \
+                            <th scope='row'>" + contentRowName[key] + "</th> \
+                            <td>" + value + "</td> \
+                        </tr> \
+                    ";
+                }
+
             })
 
             listRow.innerHTML = result;

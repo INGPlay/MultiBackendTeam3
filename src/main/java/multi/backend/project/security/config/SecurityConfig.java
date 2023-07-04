@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .antMatchers("/user/inform/", "/pathmap/update/*", "/pathmap/mark").hasRole("USER")
                         .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
 //                        -- 정보 관련
-                        .antMatchers("/info/place/**", "/info/wheather/**").permitAll()
+                        .antMatchers("/info/place/**", "/info/wheather/**").hasRole("USER")
                         
 //                        api
 //                        - 패스맵 관련
@@ -54,8 +54,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/api/comment").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/api/comment").hasRole("USER")
 //                        -- 정보 관련
-                        .antMatchers("/api/wheather").hasRole("USER")       // 날씨 정보
-                        .antMatchers("/api/tour/**").hasRole("USER")        // 장소 정보
+                        .antMatchers("/api/wheather", "/api/tour/**").permitAll()
 
 //                        - admin 관련
                         .antMatchers(HttpMethod.GET, "/api/admin/user").hasRole("ADMIN")
