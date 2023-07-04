@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 
 @Service("reviewService")
@@ -168,8 +168,13 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
     @Override
     @Transactional
     public int getSearchPlaceTotalCount(String searchType, List<String> contentId) {
-        ResponseVO vo = new ResponseVO(searchType,contentId);
-        return mapper.getSearchPlaceTotalCount(vo);
+        if(contentId==null || contentId.isEmpty()  ) {
+            return 0;
+        }else{
+            ResponseVO vo = new ResponseVO(searchType, contentId);
+            return mapper.getSearchPlaceTotalCount(vo);
+        }
+
         //return mapper.getTotalCount();
     }
 
@@ -177,7 +182,11 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
     @Override
     @Transactional
     public List<reviewVO> getListWithPaging(Criteria cri,String searchType, List<String> contentId, String keyword) {
-        return mapper.getListWithPaging(cri,searchType,keyword,contentId);
+        if(searchType.equals("3")&& contentId == null){
+           searchType="4";
+        }
+        List<reviewVO> vo = mapper.getListWithPaging(cri, searchType, keyword, contentId);
+        return vo;
     }
 
 

@@ -113,6 +113,11 @@
             <input type = 'hidden' name="select" value="${pageMaker.cri.sort}">
             <input type = 'hidden' name="searchType" value="${searchType}">
             <input type = 'hidden' name="keyword" value="${keyword}">
+            <c:if test="${contentId ne null and not empty contentId}">
+                <c:forEach var="vo" items="${contentId}">
+                    <input type="hidden" name="contentId" value="${vo}">
+                </c:forEach>
+            </c:if>
         </form>
     </tr>
     <div>
@@ -183,10 +188,10 @@
                 dataType : "json",
                 cache:false
             }).done((res)=>{
-                alert(res);
                 $.each(res,(i,vo)=>{
                     str+="<input type='hidden' name='contentId' value='"+res[i].contentId +"'>";
                 })
+
                 $('#changeId').html(str);
                 $('#psF').submit();
             }).fail((err)=>{
@@ -215,11 +220,6 @@
     function changeSearchType(type) {
         $('#searchType').val(type);
     }
-
-
-
-
-
 
     $(()=>{
         var actionForm = $("#actionForm");

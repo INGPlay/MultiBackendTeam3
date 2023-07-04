@@ -152,7 +152,6 @@ public class reviewController {
         }
         else{
             totalCount = service.getSearchTotalCount(searchType,keyword);
-            System.out.println(totalCount);
         }
         cri.setSort(Integer.parseInt(select));
 
@@ -162,6 +161,7 @@ public class reviewController {
         m.addAttribute("pageMaker", vo);
         m.addAttribute("select",vo.getCri().getSort() );
         m.addAttribute("searchType",searchType);
+        m.addAttribute("contentId",contentId);
         m.addAttribute("keyword",keyword);
 
         return "review/review";

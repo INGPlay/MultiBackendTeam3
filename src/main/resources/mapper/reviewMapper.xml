@@ -81,6 +81,9 @@
                         #{i}
                     </foreach>
                 </if>
+                <if test="searchType==4">
+                    and 2=1
+                </if>
             </if>
         <if test="cri.sort == 1">
             order by review_id desc
