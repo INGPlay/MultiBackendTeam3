@@ -1,5 +1,7 @@
 package multi.backend.project.review.Mapper;
 
+import multi.backend.project.review.VO.PlaceVO;
+import multi.backend.project.review.VO.ResponseVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
@@ -19,11 +21,17 @@ public interface reviewMapper {
     //    1. insert ( 게시글 추가하기 )
     int insertReview(reviewVO vo);
 
-    //    1_2. insert 하기 위해 user 존재 여부 확인
-    int isUser(String user_name);
-
-    //    1_3 insert를 위한 user_id 가져오기
+    //    1_1 insert를 위한 user_id 가져오기
     int getUserId(String user_name);
+
+    // 1_2. place 테이블 체크
+    int checkContentName(int contentId);
+
+    // i_3. place 테이블 추가
+    int insertPlace(PlaceVO vo);
+
+    // 1_4. contentId로 contentName 가져오기
+    String getPlaceName(int contentId);
 
     //    2. Read (전체 게시판 목록 가져오기)
     List<reviewVO> selectReviewAll();
@@ -32,7 +40,7 @@ public interface reviewMapper {
     reviewVO selectReviewOne(int user_id);
 
     //    2_2. 페이징 적용한 게시판 목록 가져오기
-    List<reviewVO> getListWithPaging(Criteria cri);
+    List<reviewVO> getListWithPaging(@Param("cri") Criteria cri,@Param("searchType")String searchType,@Param("keyword") String keyword,@Param("contentId") List<String> contentId);
 
     //    3. Update (게시글 수정하기)
     int updateReview(reviewVO vo);
@@ -71,4 +79,15 @@ public interface reviewMapper {
 
     //
     int getTotalRecommentCount(int comment_group);
+
+    // 장소 아이디 존재 여부 확인
+    int checkPlaceId(String placeName);
+
+    // 장소 아이디 가져오기
+    List<PlaceVO> getPlaceId(String placeName);
+
+    // 제목 검색과 글쓴이 검색 총 결과 개수 가져오기
+    int getSearchTotalCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    int getSearchPlaceTotalCount(ResponseVO vo);
 }
