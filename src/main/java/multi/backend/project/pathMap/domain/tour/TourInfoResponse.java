@@ -27,4 +27,6 @@ public class TourInfoResponse {
     private double posY;
 
     private String tel;
+
+    private String area;
 }

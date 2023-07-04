@@ -1,4 +1,4 @@
-package multi.backend.project.security;
+package multi.backend.project.security.config;
 
 import lombok.RequiredArgsConstructor;
 import multi.backend.project.security.service.CustomUserDetailService;
@@ -35,7 +35,7 @@ public class SecurityConfig {
 //                       뷰 페이지
 //                        - 패스맵 관련
                         .antMatchers("/user/login", "/user/register").anonymous()
-                        .antMatchers("/user/inform/", "/pathmap/update/*").hasRole("USER")
+                        .antMatchers("/user/inform/", "/pathmap/update/*", "/pathmap/mark").hasRole("USER")
                         .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
 //                        -- 정보 관련
                         .antMatchers("/info/place/**", "/info/wheather/**").hasRole("USER")
@@ -54,8 +54,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/api/comment").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/api/comment").hasRole("USER")
 //                        -- 정보 관련
-                        .antMatchers("/api/wheather").hasRole("USER")       // 날씨 정보
-                        .antMatchers("/api/tour/**").hasRole("USER")        // 장소 정보
+                        .antMatchers("/api/wheather", "/api/tour/**").permitAll()
 
 //                        - admin 관련
                         .antMatchers(HttpMethod.GET, "/api/admin/user").hasRole("ADMIN")

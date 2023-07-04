@@ -20,4 +20,7 @@ public class PathInfoResponse {
     private String pathTitle;
     private Long pathViews;
     private Long pathRecommends;
+
+    private String pathStartingArea;
+    private String pathDestinationArea;
 }

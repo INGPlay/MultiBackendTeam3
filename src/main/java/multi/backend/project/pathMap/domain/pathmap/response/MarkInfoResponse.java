@@ -26,4 +26,6 @@ public class MarkInfoResponse {
     private String tel;
 
     private Long placeOrder;
+
+    private String area;
 }

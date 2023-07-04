@@ -3,6 +3,8 @@ package multi.backend.project.pathMap.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.apiController.requestJson.SubmitCommentDto;
+import multi.backend.project.pathMap.apiController.requestJson.UpdatePathMapDto;
 import multi.backend.project.pathMap.domain.favorite.FavoriteDto;
 import multi.backend.project.pathMap.domain.pathmap.*;
 import multi.backend.project.pathMap.domain.pathmap.paging.PagingResponse;
@@ -10,6 +12,7 @@ import multi.backend.project.pathMap.domain.pathmap.paging.PathThreadPageDto;
 import multi.backend.project.pathMap.domain.pathmap.response.CommentResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.MarkInfoResponse;
 import multi.backend.project.pathMap.domain.pathmap.response.PathInfoResponse;
+import multi.backend.project.exception.exception.UnauthorizedException;
 import multi.backend.project.pathMap.service.FavoriteService;
 import multi.backend.project.pathMap.service.PathMapService;
 import multi.backend.project.security.domain.context.UserContext;
@@ -34,13 +37,15 @@ public class PathMapApiController {
 
     // 생성
     @PostMapping
-    public ResponseEntity<Map<String, Object>> submitPathMap(@RequestParam String title,
-                                                             @RequestParam String request,
+    public ResponseEntity<Map<String, Object>> submitPathMap(@RequestBody Map<String, String> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
+
+        String title = requestJson.get("title");
+        String markers = requestJson.get("markers");
 
         log.info("title : {}", title);
 
-        Long pathId = pathMapService.insertPath(userContext.getUsername(), title, request);
+        Long pathId = pathMapService.insertPath(userContext.getUsername(), title, markers);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
@@ -50,24 +55,49 @@ public class PathMapApiController {
 
     // 수정
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updatePathMap(@RequestParam String title,
-                                                             @RequestParam String request,
-                                                             @RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> updatePathMap(@RequestBody UpdatePathMapDto updatePathMapDto,
                                                              @AuthenticationPrincipal UserContext userContext) throws ParseException {
 
-        log.info("title : {}, request : {}, pathId : {}", title, request, pathId);
 
-        pathMapService.updatePath(pathId, title, request);
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(updatePathMapDto.getPathId());
+        if (!isPathMapAuthor(userContext.getUsername(), pathInfo.getPathId())){
+            throw new UnauthorizedException();
+        }
+
+        String title = updatePathMapDto.getTitle();
+        String markers = updatePathMapDto.getMarkers();
+        Long pathId = updatePathMapDto.getPathId();
+
+        log.info("title : {}, request : {}, pathId : {}", title, markers, pathId);
+
+        pathMapService.updatePath(pathId, title, markers);
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("response", "OK");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    private boolean isPathMapAuthor(String username, Long pathId){
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(pathId);
+
+        if (pathInfo.getUsername().equals(username)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // 삭제
     @DeleteMapping
-    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> deletePathMap(@RequestBody Map<String, Long> requestJson,
                                                              @AuthenticationPrincipal UserContext userContext){
+
+        Long pathId = requestJson.get("pathId");
+
+        PathInfoResponse pathInfo = pathMapService.getPathInfo(pathId);
+        if (!isPathMapAuthor(userContext.getUsername(), pathInfo.getPathId())){
+            throw new UnauthorizedException();
+        }
 
         log.info("pathId : {}", pathId);
 
@@ -122,10 +152,9 @@ public class PathMapApiController {
                                                           @AuthenticationPrincipal UserContext userContext){
 
         if (userContext == null){
-            HashMap<String, Object> response = new HashMap<>();
-            response.put("response", "Unauthorized");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            throw new UnauthorizedException();
         }
+
         FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
         boolean isFavorite = favoriteService.isFavorite(favoriteDto);
@@ -138,8 +167,10 @@ public class PathMapApiController {
     }
 
     @PostMapping("/favorite")
-    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> toggleFavorite(@RequestBody Map<String, Long> requestJson,
                                                               @AuthenticationPrincipal UserContext userContext){
+
+        Long pathId = requestJson.get("pathId");
 
         FavoriteDto favoriteDto = new FavoriteDto(userContext.getUsername(), pathId);
 
@@ -154,17 +185,19 @@ public class PathMapApiController {
     @GetMapping("/comment")
     public ResponseEntity<List<CommentResponse>> getCommentList(@RequestParam Long pathId){
 
-        List<CommentResponse> commentResponses = pathMapService.selectComment(pathId);
+        List<CommentResponse> commentResponses = pathMapService.selectPathCommentList(pathId);
 
         return new ResponseEntity<>(commentResponses, HttpStatus.OK);
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Map<String, Object>> submitComment(@RequestParam String comment,
-                                                             @RequestParam Long pathId,
+    public ResponseEntity<Map<String, Object>> submitComment(@RequestBody SubmitCommentDto submitCommentDto,
                                                              @AuthenticationPrincipal UserContext userContext){
 
-        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(pathId, userContext.getUsername(), comment);
+        log.info("{}, {}", submitCommentDto.getComment(), submitCommentDto.getPathId());
+        InsertPathCommentDto insertPathCommentDto = new InsertPathCommentDto(
+                submitCommentDto.getPathId(), userContext.getUsername(), submitCommentDto.getComment()
+        );
 
         pathMapService.insertPathComment(insertPathCommentDto);
 
@@ -174,10 +207,16 @@ public class PathMapApiController {
     }
 
     @DeleteMapping("/comment")
-    public ResponseEntity<Map<String, Object>> deleteComment(@RequestParam Long commentId){
-        
+    public ResponseEntity<Map<String, Object>> deleteComment(@RequestBody Map<String, Long> requestJson,
+                                                             @AuthenticationPrincipal UserContext userContext){
+
+        Long commentId = requestJson.get("commentId");
+
+        if (!pathMapService.selectPathComment(commentId).getUsername().equals(userContext.getUsername())){
+            throw new UnauthorizedException();
+        }
+
         // 계정 검증 후 삭제
-        
         pathMapService.deletePathComment(commentId);
 
         HashMap<String, Object> response = new HashMap<>();

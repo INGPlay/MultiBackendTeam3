@@ -51,7 +51,9 @@ public class PathMapService {
                 pathInfoResponse.getUpdateDate(),
                 handleNullOrEmpty(pathInfoResponse.getPathTitle()),
                 pathInfoResponse.getPathViews(),
-                pathInfoResponse.getPathRecommends()
+                pathInfoResponse.getPathRecommends(),
+                pathInfoResponse.getPathStartingArea(),
+                pathInfoResponse.getPathDestinationArea()
         );
     }
 
@@ -72,13 +74,14 @@ public class PathMapService {
                     response.getPosX(),
                     response.getPosY(),
                     handleNullOrEmpty(response.getTel()),
-                    response.getPlaceOrder()
+                    response.getPlaceOrder(),
+                    response.getArea()
             );
         }).collect(Collectors.toList());
     }
 
     @Transactional
-    public Long insertPath(String username, String title, String requestJson) throws ParseException {
+    public Long insertPath(String username, String title, String markers) throws ParseException {
 
         log.info("username : {}, title : {}", username, title);
 
@@ -86,19 +89,22 @@ public class PathMapService {
         Long pathId = pathMapMapper.getPathmapNextval();
 
         log.info("asdfasdf : {}", pathId);
-        pathMapMapper.insertPathMap(pathId, username, handleNullOrEmpty(title));
-        insertMarks(pathId, requestJson);
+        List<Map<String, Object>> markInfoRequests = markInfoRequests(pathId, markers);
+        pathMapMapper.insertPathMap(pathId, username, handleNullOrEmpty(title), (String) markInfoRequests.get(0).get("area"),
+                                    (String) markInfoRequests.get(markInfoRequests.size() -1).get("area"));
+        pathMapMapper.insertMarksBatch(markInfoRequests);
 
         return pathId;
     }
 
     @Transactional
-    private void insertMarks(Long pathId, String requestJson) throws ParseException {
-        JSONArray request = (JSONArray) jsonParser.parse(requestJson);
+    private List<Map<String, Object>> markInfoRequests(Long pathId, String markers) throws ParseException {
+        JSONArray request = (JSONArray) jsonParser.parse(markers);
 
         Long markCount = pathMapMapper.getMarkCount();
 
         List<Map<String, Object>> markInfoRequests = new ArrayList<>();
+
         for (int i = 0; i < request.size(); i++){
             JSONObject info = (JSONObject) request.get(i);
 
@@ -117,36 +123,37 @@ public class PathMapService {
             markInfoRequest.put("posY", (Double) info.get("posY"));
             markInfoRequest.put("tel", handleNullOrEmpty((String) info.get("tel")));
             markInfoRequest.put("placeOrder", i);
+            markInfoRequest.put("area", (String) info.get("area"));
 
             markInfoRequests.add(markInfoRequest);
         }
 
         log.info("{}", markInfoRequests);
 
-        pathMapMapper.insertMarksBatch(markInfoRequests);
+        return markInfoRequests;
     }
 
     @Transactional
-    public void updatePath(Long pathId, String title, String requestJson) throws ParseException {
+    public void updatePath(Long pathId, String title, String markers) throws ParseException {
 
         log.info("pathId : {}, title : {}", pathId, title);
 
-        pathMapMapper.updatePathMap(pathId, title);
-        updateMarks(pathId, requestJson);
+        List<Map<String, Object>> markInfoRequests = markInfoRequests(pathId, markers);
+        log.info("{}", markInfoRequests.size() -1);
+        pathMapMapper.updatePathMap(pathId, title,
+                (String) markInfoRequests.get(0).get("area"), (String) markInfoRequests.get(markInfoRequests.size() - 1).get("area"));
+
+        // 삭제하고
+        pathMapMapper.deleteMarksInPath(pathId);
+
+        // 새로 삽입
+        pathMapMapper.insertMarksBatch(markInfoRequests);
     }
     
     // 조회수 추가
     public void plusPathViews(Long pathId){
 
         pathMapMapper.updatePathMapViews(pathId);
-    }
-
-    private void updateMarks(Long pathId, String requestJson) throws ParseException {
-        // 삭제하고
-        pathMapMapper.deleteMarksInPath(pathId);
-        
-        // 새로 삽입
-        insertMarks(pathId, requestJson);
     }
 
     @Transactional
@@ -157,10 +164,15 @@ public class PathMapService {
 
 
     @Transactional
-    public List<CommentResponse> selectComment(Long pathId){
+    public List<CommentResponse> selectPathCommentList(Long pathId){
         List<CommentResponse> commentResponses = pathMapMapper.selectPathComment(pathId);
 
         return commentResponses;
+    }
+
+    @Transactional
+    public CommentResponse selectPathComment(Long commentId){
+        return pathMapMapper.selectComment(commentId);
     }
 
     @Transactional
