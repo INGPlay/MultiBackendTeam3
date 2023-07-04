@@ -564,7 +564,7 @@
 							<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 							<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 							<div class='me-auto d-flex flex-row'> \
-								<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
+								<button onclick='window.open(\"" + detailUri + "\");'>장소</button> \
 								<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
 							</div> \
 						</div> \
@@ -733,8 +733,7 @@
 								</div> \
 							</div> \
 							<div class='modal-footer'> \
-								<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button> \
-								<button type='button' class='btn btn-primary'>Save changes</button> \
+								<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button> \
 							</div> \
 							</div> \
 						</div> \
