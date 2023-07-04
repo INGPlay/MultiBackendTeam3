@@ -430,7 +430,10 @@
                             <h5 class="mb-1">' + path["pathTitle"] + '</h5> \
                             <small>' + path["updateDate"] + '</small> \
                         </div> \
-                        <p class="mb-1">' + path["pathStartingArea"] + ' → ' + path["pathDestinationArea"] + '</p> \
+                        <div class="d-flex w-100 justify-content-between"> \
+                            <p class="mb-1">' + path["pathStartingArea"] + ' → ' + path["pathDestinationArea"] + '</p> \
+                            <small>추천 ' + path["pathRecommends"] + ' | 조회 ' + path["pathViews"] + ' </small> \
+                        </div> \
                         <div class="d-flex w-100 justify-content-between"> \
                             <small>by ' + path["username"] + '</small> \
                             <button onclick="window.location.href=' + '\'/pathmap/' + path["pathId"] + '\'' + '"> \
