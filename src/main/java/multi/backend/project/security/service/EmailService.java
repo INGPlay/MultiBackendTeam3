@@ -3,6 +3,7 @@ package multi.backend.project.security.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.Random;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-//@PropertySource("classpath:messages/email.properties")
+@PropertySource("classpath:messages/email.properties")
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
