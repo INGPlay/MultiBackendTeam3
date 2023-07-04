@@ -130,7 +130,7 @@
 
 			<!-- 제목 작성 -->
 			<div class="input-group input-group-lg">
-				<span onclick="window.location.href='/pathmap'" class="input-group-text" id="inputGroup-sizing-lg">←</span>
+				<span onclick="window.location.href='/pathmap'" class="input-group-text main_color" id="inputGroup-sizing-lg">←</span>
 				<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"
 					id = "pathmapTitle">
 			</div>
@@ -141,7 +141,7 @@
 
 			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex justify-content-center" onclick="submitUserSelectList()">
-				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom main_color"
+				<button class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom main_color radius_border"
 						style="width: 100%; justify-content: center;">
 					<span class="fs-5 fw-semibold">완료</span>
 				</button>
@@ -334,9 +334,9 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
 				updateMarkingInMapByResponse(response, false)
 			}).fail((error) => {
@@ -730,7 +730,7 @@
 
 			let data = {
 				"title" : title,
-				"request" : JSON.stringify(userSelectList)
+				"markers" : JSON.stringify(userSelectList)
 			}
 
 			console.log("제출")
@@ -739,7 +739,8 @@
 				url: "/api/pathmap",
 				type: 'POST',
 				dataType: "json",
-				data : data
+				contentType: "application/json",
+				data : JSON.stringify(data)
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -848,7 +849,6 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response)
@@ -872,9 +872,9 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response);
 
 				let areaSmallSelect = document.getElementById("areaSmallSelect")
@@ -909,7 +909,6 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				

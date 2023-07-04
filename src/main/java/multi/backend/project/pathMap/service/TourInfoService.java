@@ -2,11 +2,13 @@ package multi.backend.project.pathMap.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.pathMap.domain.area.AreaLargeSmallDto;
 import multi.backend.project.pathMap.domain.area.KeywordDto;
 import multi.backend.project.pathMap.domain.tour.ContentType;
 import multi.backend.project.pathMap.domain.tour.LocationBaseDto;
 import multi.backend.project.pathMap.domain.tour.PageDto;
 import multi.backend.project.pathMap.domain.tour.TourInfoResponse;
+import multi.backend.project.pathMap.mapper.AreaMapper;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,6 +30,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class TourInfoService {
+
+    private final AreaMapper areaMapper;
     private final MessageSource messageSource;
     private final RestTemplate restTemplate;
     private final JSONParser jsonParser;
@@ -182,6 +186,10 @@ public class TourInfoService {
         tourInfoResponse.setContentTypeId((String) tourInfo.get("contenttypeid"));
         tourInfoResponse.setPosX(Double.parseDouble((String) tourInfo.get("mapx")));
         tourInfoResponse.setPosY(Double.parseDouble((String) tourInfo.get("mapy")) );
+
+        AreaLargeSmallDto areaLargeSmallDto = areaMapper.selectAreaByCodes((String) tourInfo.get("areacode"), (String) tourInfo.get("sigungucode"));
+        tourInfoResponse.setArea(areaLargeSmallDto.getLarge_name() + " " + areaLargeSmallDto.getSmall_name());
+
         return tourInfoResponse;
     }
 

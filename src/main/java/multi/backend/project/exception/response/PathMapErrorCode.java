@@ -1,4 +1,4 @@
-package multi.backend.project.pathMap.exception.response;
+package multi.backend.project.exception.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum PathMapErrorCode {
     NOT_FOUND(404, "NOT FOUND"),
+    UNAUTHORIZED(401, "UNAUTHORIZED"),
     JSON_PARSE_ERROR(500, "JSON_PARSE_ERROR"),
     INTERNAL_ERROR(500, "INTERNAL_SERVER_ERROR");
 

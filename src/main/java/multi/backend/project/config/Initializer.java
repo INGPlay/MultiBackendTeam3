@@ -3,7 +3,6 @@ package multi.backend.project.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.pathMap.service.TourCodeService;
 import multi.backend.project.security.domain.RegisterDto;
 import multi.backend.project.security.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Initializer implements InitializingBean {
-    private final TourCodeService tourCodeService;
 
     private final UserService userService;
 

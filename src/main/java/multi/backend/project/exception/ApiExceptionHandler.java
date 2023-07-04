@@ -1,8 +1,9 @@
-package multi.backend.project.pathMap.exception;
+package multi.backend.project.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.pathMap.exception.response.ErrorResponse;
-import multi.backend.project.pathMap.exception.response.PathMapErrorCode;
+import multi.backend.project.exception.exception.UnauthorizedException;
+import multi.backend.project.exception.response.PathMapErrorCode;
+import multi.backend.project.exception.response.ErrorResponse;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(UnauthorizedException exception){
+        log.info("[ExceptionHandler] {}", exception.getMessage());
+        return getErrorResponseEntity(exception.getPathMapErrorCode());
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception){
