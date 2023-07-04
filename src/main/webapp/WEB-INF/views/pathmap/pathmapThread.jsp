@@ -16,9 +16,7 @@
 
     <!-- 카카오 지도랑 충돌 -->
     <!-- CSS dependencies -->
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="/resources/colorful.css">
 
 </head>
@@ -27,8 +25,78 @@
     <!-- header -->
     <%@ include file="/WEB-INF/views/template/header.jsp" %>
 
-
     <div class="container mb-5" style="height: 80%;">
+
+        <!-- Info Modal -->
+        <div class='modal fade' id='place' tabindex='-1' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-scrollable modal-lg'>
+                <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='exampleModalLabel'>장소 정보</h5>
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <table class='table table table-hover'>
+                        <thead>
+                            <tr>
+                                <th scope='col'>항목</th>
+                                <th scope='col'>정보</th>
+                            </tr>
+                        </thead>
+                        <tbody id = 'placeRow'>
+                        </tbody>
+                    </table>
+                    <div class='d-flex justify-content-center'>
+                        <div class='spinner-border text-info' role='status' id='placeSpinner'>
+                            <span class='visually-hidden'>Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Weather Modal -->
+        <div class='modal fade' id='weather' tabindex='-1' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-scrollable modal-lg'>
+                <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='exampleModalLabel'>날씨 정보</h5>
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <table class='table table table-hover'>
+                        <thead>
+                            <tr>
+                                <th scope='col'>예측시간</th>
+                                <th scope='col'>일 최저기온</th>
+                                <th scope='col'>일 최고기온</th>
+                                <th scope='col'>시간 평균 온도</th>
+                                <th scope='col'>하늘형태</th>
+                                <th scope='col'>강수형태</th>
+                                <th scope='col'>강수확률</th>
+                                <th scope='col'>강수량</th>
+                                <th scope='col'>강설량</th>
+                            </tr>
+                        </thead>
+                        <tbody id = 'wheatherRow'>
+                        </tbody>
+                    </table>
+                    <div class='d-flex justify-content-center'>
+                        <div class='spinner-border text-info' role='status' id='wheatherSpinner'>
+                            <span class='visually-hidden'>Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="d-flex flex-row" style="height:100%">
 
@@ -331,8 +399,8 @@
                             <p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
                             <p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
                             <div class='me-auto d-flex flex-row'> \
-                                <button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-                                <button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+								<button data-bs-toggle='modal' data-bs-target='#place' onclick='renewPlace(" + info["contentTypeId"] + ", " + info["contentId"] + ")' class = 'me-1 badge main_color_only'>장소</button> \
+								<button data-bs-toggle='modal' data-bs-target='#weather' onclick='renewWheather(" + info["posX"] + ", " + info["posY"] + ")' class = 'badge main_color_only'>날씨</button> \
                             </div> \
                         </div> \
                     </div> \
@@ -436,7 +504,7 @@
                         </div> \
                         <div class="d-flex w-100 justify-content-between"> \
                             <small>by ' + path["username"] + '</small> \
-                            <button onclick="window.location.href=' + '\'/pathmap/' + path["pathId"] + '\'' + '"> \
+                            <button onclick="window.location.href=' + '\'/pathmap/' + path["pathId"] + '\'' + '" class="badge bg-light text-dark"> \
                                 자세히 보기 \
                             </button> \
                         </div>\
@@ -555,5 +623,7 @@
             updatePageStaticOption();
         }
     </script>
+
+    <script src="<c:url value='/js/bootstrap.bundle.min.js' />" type="text/javascript"></script>
 </body>
 </html>
