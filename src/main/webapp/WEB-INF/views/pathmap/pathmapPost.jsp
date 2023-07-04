@@ -871,9 +871,12 @@
 			}).fail((error) => {
 				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
 				let response = error["responseJSON"];
-				console.log(response["message"])
+				console.log("wheather : " + error)
 
-				console.log("날씨 정보 갱신에 실패하였습니다")
+				let listRow = document.getElementById("wheatherRow" + i)
+				listRow.innerHTML = "날씨 정보 갱신에 실패하였습니다"
+				
+				document.getElementById("wheatherSpinner" + i).style.display = 'none'
 			})
 		}
 
@@ -919,9 +922,11 @@
 			}).fail((error) => {
 				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
 				let response = error["responseJSON"];
-				console.log(response["message"])
-				alert(error["message"])
-				alert(response["message"])
+				console.log("place : " + error)
+
+				let listRow = document.getElementById("placeRow" + i)
+				listRow.innerHTML = "장소 정보 갱신에 실패하였습니다"
+				document.getElementById("placeSpinner" + i).style.display = 'none'
 			})
 		}
 
