@@ -1,5 +1,6 @@
 package multi.backend.project.review.Service;
 
+import multi.backend.project.review.VO.PlaceVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
@@ -27,7 +28,7 @@ public interface reviewService {
     reviewVO selectReviewOne(int review_id,String rid);
 
     //    2_2. 페이징 적용한 게시판 목록 가져오기
-    List<reviewVO> getListWithPaging(Criteria cri);
+    List<reviewVO> getListWithPaging(Criteria cri,String searchType,List<String> contentId, String keyword);
 
     //    3. Update
     reviewVO updateReview(reviewVO vo,String name);
@@ -73,4 +74,8 @@ public interface reviewService {
     //
     int getTotalRecommentCount(int comment_group);
 
+    List<PlaceVO> getPlaceId(String placeName);
+
+    int getSearchTotalCount(String searchType, String keyword);
+    int getSearchPlaceTotalCount(String searchType, List<String> keyword);
 }

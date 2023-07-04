@@ -206,9 +206,6 @@
 
     const com = function(){
         alert("추천하였습니다.");
-        // bf.method='post';
-        // bf.action='view';
-        // bf.submit();
         const review_id = document.getElementById('review_id').value;
 
         $.ajax({
@@ -282,18 +279,13 @@
         for (i=0; i < x.length; i++) {
         var obj=x[i];
             if (obj.style.display == "none") {
-
-                obj.style.display = "block";
-
+                obj.style.display = "";
             }
             else {
                 y.value="" ;
-
                 obj.style.display = "none";
-
             }
         }
-
     }
 
     const CheckMessage = function(id){
@@ -326,7 +318,7 @@
             cache: false
         }).done((res)=>{
             alert("대댓글이 추가되었습니다.")
-            main.style.display='block';
+            main.style.display='';
             init(1);
         }).fail((err)=>{
             alert(err.status)
@@ -377,18 +369,16 @@
             }
             str+='</tr>';
 
-
             /* 4행 */
             str+='<tr>';
             str+='<td colspan="4"><p>';
             str+=res[i].content;
             str+='</p></td>';
 
-
             if(res[i].comment_depth==0) {
                 /* 5행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
-                str += '<td colspan="4"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
+                str += '<td colspan="4"><p style="text-align: left"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
                 str += '</tr>';
                 /* 6행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
@@ -425,7 +415,6 @@
             alert(err.status);
         })
     }
-
 
     $(()=>{
         init(1);}

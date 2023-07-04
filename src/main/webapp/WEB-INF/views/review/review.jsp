@@ -53,6 +53,9 @@
                 <option value="2" <c:if test="${select eq '2'}">selected</c:if>>조회순</option>
                 <option value="3" <c:if test="${select eq '3'}">selected</c:if>>추천순</option>
             </select>
+            <input type="hidden" id="searchType" name="searchType" value="${searchType}"/>
+
+            <div id="changeId"></div>
         </form>
 
         <form  name="searchF" action="/review/write" method="get" class="d-flex justify-content-end"style="margin-right: 15px">
@@ -62,14 +65,12 @@
 
 <!-- ------------------------------------------------------- -->
 
-
     <table class="table table table-hover mt-2" id="table">
         <thead >
         <th width="10%">번호</th>
         <th width="10%">작성자</th>
-        <th width="20%">제목</th>
-        <th width="20%">내용</th>
-        <th width="10%">생성일</th>
+        <th width="15%">제목</th>
+        <th width="25%">장소</th>
         <th width="10%">수정일</th>
         <th width="10%">조회수</th>
         <th width="10%">추천수</th>
@@ -88,9 +89,8 @@
                 <tr id="${vo.review_id}" class="font">
                     <td width="10%"><c:out value="${vo.review_id}"/></td>
                     <td width="10%"><c:out value="${vo.user_name}"/></td>
-                    <td width="20%"><c:out value="${vo.review_title}"/></td>
-                    <td width="20%"><c:out value="${vo.review_content}"/></td>
-                    <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
+                    <td width="15%"><c:out value="${vo.review_title}"/></td>
+                    <td width="25%"><c:out value="${vo.contentName}"/></td>
                     <td width="10%" style="font-size: 10px"><c:out value="${vo.create_date}"/></td>
                     <td width="10%"><c:out value="${vo.review_views}"/></td>
                     <td width="10%"><c:out value="${vo.review_recommends}"/></td>
@@ -107,11 +107,12 @@
             <input type="text" id="review_id" name="review_id" value="">
         </form>
 
-        <form id="actionForm" action="/review/list" method="get" hidden="hidden">
-            <input type = 'text' name="pageNum" value="${pageMaker.cri.pageNum}">
-            <input type = 'text' name="amount" value="${pageMaker.cri.amount}">
-            <input type = 'text' name="select" value="${pageMaker.cri.sort}">
-
+        <form id="actionForm" action="/review/list" method="get" >
+            <input type = 'hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
+            <input type = 'hidden' name="amount" value="${pageMaker.cri.amount}">
+            <input type = 'hidden' name="select" value="${pageMaker.cri.sort}">
+            <input type = 'hidden' name="searchType" value="${searchType}">
+            <input type = 'hidden' name="keyword" value="${keyword}">
         </form>
     </tr>
     <div>
@@ -126,7 +127,6 @@
                 <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
                     <li class="page-item ">
                         <a class="page-link" style="<c:out value="${pageMaker.cri.pageNum == num ? 'background-color: #12bbad' : 'none'}"/> " href="${num}">${num}</a>&nbsp
-
                     </li>
                 </c:forEach>
 
@@ -144,10 +144,10 @@
         <div class="col-5 input-group">
 
             <!-- 검색 조건 -->
-            <select class="col-3" name="searchOption" id="searchOptionSelect">
-                <option value="title" selected>제목</option>
-                <option value="author">작성자</option>
-                <option value="place">장소</option>
+            <select class="col-3" name="searchOption" id="searchOptionSelect" onchange="changeSearchType(this.value)">
+                <option value="1" selected>제목</option>
+                <option value="2">작성자</option>
+                <option value="3">장소</option>
             </select>
 
             <!-- 검색할 단어 -->
@@ -169,14 +169,56 @@
 </style>
 
 <script>
-    function check(){
-        var psF = $('#psF');
-        var numCheck = document.getElementById("select");
+    var psF = $('#psF');
+    function search(){
+        var sort = document.getElementById('searchOptionSelect').value;
+        var search = document.getElementById('searchWordInput').value;
+        if(search==""){alert("검색어를 입력하세요"); return false;}
+        var str="";
+        if(sort=="3"){
+            $.ajax({
+                url : "/review/search",
+                type : "POST",
+                data : {"placeName":search},
+                dataType : "json",
+                cache:false
+            }).done((res)=>{
+                alert(res);
+                $.each(res,(i,vo)=>{
+                    str+="<input type='hidden' name='contentId' value='"+res[i].contentId +"'>";
+                })
+                $('#changeId').html(str);
+                $('#psF').submit();
+            }).fail((err)=>{
+                alert(err.status);
+            })
+        }else{
+            $('#searchType').val(sort);
+            str+="<input type='hidden' name='keyword' value='"+search+"'>";
+            $('#changeId').html(str);
+            $('#psF').submit();
+        }
 
+    }
+
+
+
+    function check(){
+        var numCheck = document.getElementById("select");
         var value = numCheck.options[document.getElementById("select").selectedIndex].value;
         //alert(value+"click 되었습니다");
         return psF.submit();
     }
+
+
+    // 제목, 작성자, 장소를 선택하면 psF로 내용 전달
+    function changeSearchType(type) {
+        $('#searchType').val(type);
+    }
+
+
+
+
 
 
     $(()=>{
@@ -199,11 +241,8 @@
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));
             actionForm.submit();
         });
-
     })
-
 </script>
-
 </body>
 </html>
 

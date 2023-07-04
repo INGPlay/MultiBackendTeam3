@@ -44,7 +44,7 @@
 
     <!-- 모든 게시글 가져오기   -->
     <select id="selectReviewAll" resultType="reviewVO">
-        select review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends
+        select review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends, contentName
         from review_vi
     </select>
 
@@ -65,20 +65,35 @@
     </update>
 
     <select id="getListWithPaging" resultType="reviewVO">
-
-        select review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends
-        from (select rownum rn, review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends
-        from (select * from review_vi
-        <if test="sort == 1">
+        select review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends, contentName
+        from (select rownum rn, review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends, contentName
+        from (select * from review_vi where 1=1
+            <if test='searchType!=null || searchType != " "'>
+                <if test="searchType==1">
+                    and REVIEW_TITLE like '%'||#{keyword} ||'%'
+                </if>
+                <if test="searchType==2">
+                    and USER_NAME like '%'||#{keyword} ||'%'
+                </if>
+                <if test="searchType==3">
+                    and CONTENTID in
+                    <foreach collection="contentId" item="i" separator="," open="(" close=")">
+                        #{i}
+                    </foreach>
+                </if>
+            </if>
+        <if test="cri.sort == 1">
             order by review_id desc
-        </if><if test="sort == 2">
-        order by REVIEW_VIEWS desc ,review_id desc
-    </if><if test="sort == 3">
+        </if>
+        <if test="cri.sort == 2">
+            order by REVIEW_VIEWS desc ,review_id desc
+        </if>
+        <if test="cri.sort == 3">
         order by REVIEW_RECOMMENDS desc,review_id desc
-    </if>
+         </if>
         ))
         <![CDATA[
-        where rn> (#{pageNum}-1)* #{amount} and rn <= #{pageNum} * #{amount}
+        where rn> (#{cri.pageNum}-1)* #{cri.amount} and rn <= #{cri.pageNum} * #{cri.amount}
         ]]>
     </select>
 
@@ -144,6 +159,39 @@
 
     <select id="getTotalRecommentCount" resultType="_int" parameterType="_int">
         select count(comment_id) from Review_comment where comment_group = #{comment_group}
+    </select>
+
+    <!-- 장소 id 존재 여부 확인-->
+    <select id="checkPlaceId" parameterType="String" resultType="_int">
+        select count(CONTENTID) from place where CONTENTNAME like '%'||#{contentName}||'%'
+    </select>
+
+    <!-- 장소 id 가져오기 확인-->
+    <select id="getPlaceId" parameterType="String" resultType="PlaceVO">
+        select distinct CONTENTID, contentName from place where CONTENTNAME like '%'||#{contentName}||'%'
+    </select>
+
+    <!-- 제목, 글쓴이 정보 총 개수 가져오기-->
+    <select id="getSearchTotalCount" parameterType="String" resultType="_int">
+        select count(review_id) from review_vi
+        <if test="searchType == 1">
+        where REVIEW_TITLE like '%'||#{keyword}||'%'
+        </if>
+        <if test="searchType==2">
+        where USER_NAME like '%'|| #{keyword}||'%'
+        </if>
+        <if test="searchType==3">
+            where
+        </if>
+    </select>
+
+
+    <select id="getSearchPlaceTotalCount" parameterType="ResponseVO" resultType="_int">
+        select count(review_id) from review_vi
+            where CONTENTID in
+            <foreach collection="contentId" item="i" separator="," open="(" close=")">
+                #{i}
+            </foreach>
     </select>
 </mapper>
 

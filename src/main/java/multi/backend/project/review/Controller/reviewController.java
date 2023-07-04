@@ -3,6 +3,7 @@ package multi.backend.project.review.Controller;
 
 import lombok.extern.log4j.Log4j2;
 import multi.backend.project.review.Service.reviewServiceImpl;
+import multi.backend.project.review.VO.PlaceVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.commonUtil.CommonUtil;
@@ -33,23 +34,11 @@ public class reviewController {
     //    게시글 insert
     @PostMapping("/write")
     public String insertReiew(Model m,@ModelAttribute multi.backend.project.review.VO.reviewVO review,@RequestParam("placeName")String contentName ,@AuthenticationPrincipal UserContext ux){
-        int n = service.insertReview(review,ux.getUsername(),contentName);
+        int n = service.insertReview(review, ux.getUsername(), contentName);
         String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
 
-    }
-
-    //  게시글 전체 출력
-    @GetMapping("/list" )
-    public String listReview(Model m, Criteria cri, @RequestParam(value="select", required = false, defaultValue = "1") String select) {
-        int totalCount =  this.service.getTotalCount(); // 전체 게시글 수
-        cri.setSort(Integer.parseInt(select));
-        pagingVO vo=new pagingVO(cri,totalCount);
-        m.addAttribute("list",service.getListWithPaging(cri));
-        m.addAttribute("pageMaker", vo);
-        m.addAttribute("select",vo.getCri().getSort() );
-        return "review/review";
     }
 
     //  게시글 삽입 폼 이동
@@ -137,5 +126,47 @@ public class reviewController {
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
     }
+
+    // 장소 id 가져오기
+    @PostMapping(value = "/search" , produces="application/json")
+    @ResponseBody
+    public List<PlaceVO> searchPlaceId(@RequestParam("placeName") String placeName){
+        List<PlaceVO> vo = service.getPlaceId(placeName);
+        return vo;
+    }
+
     // ============================================================================ 서비스 계층으로 옮긴것
+
+    //  게시글 전체 출력
+    @GetMapping("/list" )
+    public String listReview(Model m, Criteria cri, @RequestParam(value="select", required = false, defaultValue = "1") String select,
+                             @RequestParam(value = "searchType" ,required = false,defaultValue = "") String searchType,
+                             @RequestParam(value="contentId", required = false) List<String> contentId,
+                             @RequestParam(value = "keyword", required = false)String keyword) {
+
+        int totalCount=0;
+        if(searchType.isEmpty() || searchType == ""){
+            totalCount = service.getTotalCount(); // 전체 게시글 수
+        }else if(searchType.equals("3")){
+            totalCount = service.getSearchPlaceTotalCount(searchType,contentId);
+        }
+        else{
+            totalCount = service.getSearchTotalCount(searchType,keyword);
+            System.out.println(totalCount);
+        }
+        cri.setSort(Integer.parseInt(select));
+
+        pagingVO vo=new pagingVO(cri,totalCount);
+
+        m.addAttribute("list",service.getListWithPaging(cri,searchType,contentId,keyword));
+        m.addAttribute("pageMaker", vo);
+        m.addAttribute("select",vo.getCri().getSort() );
+        m.addAttribute("searchType",searchType);
+        m.addAttribute("keyword",keyword);
+
+        return "review/review";
+    }
+
+
+
 }

@@ -1,6 +1,7 @@
 package multi.backend.project.review.Mapper;
 
 import multi.backend.project.review.VO.PlaceVO;
+import multi.backend.project.review.VO.ResponseVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
@@ -39,7 +40,7 @@ public interface reviewMapper {
     reviewVO selectReviewOne(int user_id);
 
     //    2_2. 페이징 적용한 게시판 목록 가져오기
-    List<reviewVO> getListWithPaging(Criteria cri);
+    List<reviewVO> getListWithPaging(@Param("cri") Criteria cri,@Param("searchType")String searchType,@Param("keyword") String keyword,@Param("contentId") List<String> contentId);
 
     //    3. Update (게시글 수정하기)
     int updateReview(reviewVO vo);
@@ -78,4 +79,15 @@ public interface reviewMapper {
 
     //
     int getTotalRecommentCount(int comment_group);
+
+    // 장소 아이디 존재 여부 확인
+    int checkPlaceId(String placeName);
+
+    // 장소 아이디 가져오기
+    List<PlaceVO> getPlaceId(String placeName);
+
+    // 제목 검색과 글쓴이 검색 총 결과 개수 가져오기
+    int getSearchTotalCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    int getSearchPlaceTotalCount(ResponseVO vo);
 }

@@ -18,6 +18,7 @@ public class reviewVO {
     private int review_views; // 조회수
     private int review_recommends; // 추천수
     private int contentId; // 장소 id
+    private String contentName; // 장소 이름
 
 
     @Override
@@ -35,4 +36,5 @@ public class reviewVO {
                 ", contentId=" + contentId +
                 '}';
     }
+
 }

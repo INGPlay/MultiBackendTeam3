@@ -14,4 +14,9 @@ public class PlaceVO {
         this.contentId = contentId;
         this.contentName = contentName;
     }
+
+    public PlaceVO() {
+        this.contentId=-1;
+        this.contentName="";
+    }
 }
