@@ -640,15 +640,16 @@
 				if (i > 0){
 
 					// 비동기 함수의 콜백값을 가져오려는 몸부림
-					let beforeWtmObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
-					let currentWtmObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
+					let beforeWCObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
+					let currentWCObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
 
-					console.log("beforeWtm : " + beforeWtmObject["wtmX"] + ", " + beforeWtmObject["wtmY"])
-					console.log("currentWtm : " + currentWtmObject["wtmX"] + ", " + currentWtmObject["wtmY"])
+					console.log("beforeWtm : " + beforeWCObject["wtmX"] + ", " + beforeWCObject["wtmY"])
+					console.log("currentWtm : " + currentWCObject["wtmX"] + ", " + currentWCObject["wtmY"])
 
-					if (beforeWtmObject !== null || currentWtmObject !== null){
+					// 길찾기 버튼
+					if (beforeWCObject !== null || currentWCObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWCObject["wtmX"] + "," + beforeWCObject["wtmY"] + "," + currentWCObject["wtmX"] + "," + currentWCObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' \
 							class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer radius_border main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
@@ -699,16 +700,88 @@
 								\
 								<div class = 'd-flex flex-row'> \
 									<div class='me-auto d-flex flex-row'> \
-										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+										<button data-bs-toggle='modal' data-bs-target='#info" + i + "'>정보</button> \
+										<button data-bs-toggle='modal' data-bs-target='#weather" + i + "'>날씨</button> \
 									</div> \
 								</div> \
 							</div> \
 						</div> \
 					</a> \
+					<!-- Info Modal --> \
+					<div class='modal fade' id='info" + i + "' tabindex='-1' aria-hidden='true'> \
+						<div class='modal-dialog'> \
+							<div class='modal-content'> \
+							<div class='modal-header'> \
+								<h5 class='modal-title' id='exampleModalLabel'>Modal title</h5> \
+								<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button> \
+							</div> \
+							<div class='modal-body'> \
+								<table class='table table table-hover'> \
+									<thead> \
+										<tr> \
+											<th scope='col'>항목</th> \
+											<th scope='col'>정보</th> \
+										</tr> \
+									</thead> \
+									<tbody id = 'infoRow" + i + "'> \
+									</tbody> \
+								</table> \
+								<div class='d-flex justify-content-center'> \
+									<div class='spinner-border text-info' role='status' id='infoSpinner" + i + "'> \
+										<span class='visually-hidden'>Loading...</span> \
+									</div> \
+								</div> \
+							</div> \
+							<div class='modal-footer'> \
+								<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button> \
+								<button type='button' class='btn btn-primary'>Save changes</button> \
+							</div> \
+							</div> \
+						</div> \
+					</div> \
+					<!-- Weather Modal --> \
+					<div class='modal fade' id='weather" + i + "' tabindex='-1' aria-hidden='true'> \
+						<div class='modal-dialog modal-dialog-scrollable modal-xl'> \
+							<div class='modal-content'> \
+							<div class='modal-header'> \
+								<h5 class='modal-title' id='exampleModalLabel'>날씨 정보</h5> \
+								<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button> \
+							</div> \
+							<div class='modal-body'> \
+								<table class='table table table-hover'> \
+									<thead> \
+										<tr> \
+											<th scope='col'>예측시간</th> \
+											<th scope='col'>일 최저기온</th> \
+											<th scope='col'>일 최고기온</th> \
+											<th scope='col'>시간 평균 온도</th> \
+											<th scope='col'>하늘형태</th> \
+											<th scope='col'>강수형태</th> \
+											<th scope='col'>강수확률</th> \
+											<th scope='col'>강수량</th> \
+											<th scope='col'>강설량</th> \
+										</tr> \
+									</thead> \
+									<tbody id = 'wheatherRow" + i + "'> \
+									</tbody> \
+								</table> \
+								<div class='d-flex justify-content-center'> \
+									<div class='spinner-border text-info' role='status' id='wheatherSpinner" + i + "'> \
+										<span class='visually-hidden'>Loading...</span> \
+									</div> \
+								</div> \
+							</div> \
+							<div class='modal-footer'> \
+								<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button> \
+							</div> \
+							</div> \
+						</div> \
+					</div> \
 				"
 				
 				userSelectListView.innerHTML += listTemplate
+
+				renewWheather(xy, i)
 
 				beforeInfo = info;
 			}
@@ -770,6 +843,61 @@
 				console.log(error['status'])
 			})
 		}
+
+		function renewWheather(xy, i){
+
+			console.log(xy)
+
+			let data = {
+				"posX" : xy["x"],
+				"posY" : xy["y"]
+			}
+
+			$.ajax({
+				url : "/api/wheather/",
+				type : "GET",
+				data : data,
+				dataType : "json"
+			}).done((response) => {
+
+				console.log(response)
+				viewInfoDetail(response, i)
+
+				document.getElementById("wheatherSpinner" + i).style.display = 'none'
+
+			}).fail((error) => {
+				// {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+				let response = error["responseJSON"];
+				console.log(response["message"])
+
+				alert(response["message"])
+			})
+		}
+
+		function viewInfoDetail(response, i){
+            let listRow = document.getElementById("wheatherRow" + i)
+			console.log(listRow)
+
+            let result = "";
+            response.forEach(wheather => {
+
+                result += " \
+                        <tr> \
+                            <th scope='row'>" + wheather["forecastDateTime"] + "</th> \
+                            <td>" + wheather["dayMinTemparature"] + "</td> \
+                            <td>" + wheather["dayMaxTemparature"] + "</td> \
+                            <td>" + wheather["hourTemparature"] + "</td> \
+                            <td>" + wheather["skyForm"] + "</td> \
+                            <td>" + wheather["rainForm"] + "</td> \
+                            <td>" + wheather["rainProbability"] + "</td> \
+                            <td>" + wheather["rainAmount"] + "</td> \
+                            <td>" + wheather["snowAmount"] + "</td> \
+                        </tr> \
+                    ";
+            })
+
+            listRow.innerHTML = result;
+        }
 
 		function toggleFavorite(){
 			

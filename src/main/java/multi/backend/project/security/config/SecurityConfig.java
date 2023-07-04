@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .antMatchers("/user/inform/", "/pathmap/update/*", "/pathmap/mark").hasRole("USER")
                         .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
 //                        -- 정보 관련
-                        .antMatchers("/info/place/**", "/info/wheather/**").hasRole("USER")
+                        .antMatchers("/info/place/**", "/info/wheather/**").permitAll()
                         
 //                        api
 //                        - 패스맵 관련
