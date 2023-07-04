@@ -1,4 +1,4 @@
-package multi.backend.project.pathMap.config;
+package multi.backend.project.config;
 
 
 import lombok.RequiredArgsConstructor;

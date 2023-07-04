@@ -192,6 +192,7 @@
             // {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
             let response = error["responseJSON"];
             console.log(response["message"])
+            alert(error["message"])
             alert(response["message"])
         })
 
