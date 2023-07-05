@@ -17,18 +17,24 @@ public class reviewVO {
     private Date update_date; // 수정일
     private int review_views; // 조회수
     private int review_recommends; // 추천수
+    private int contentId; // 장소 id
+    private String contentName; // 장소 이름
+
 
     @Override
     public String toString() {
         return "reviewVO{" +
                 "review_id=" + review_id +
-                ", user_id='" + user_id + '\'' +
+                ", user_id=" + user_id +
+                ", user_name='" + user_name + '\'' +
                 ", review_title='" + review_title + '\'' +
                 ", review_content='" + review_content + '\'' +
                 ", create_date=" + create_date +
                 ", update_date=" + update_date +
                 ", review_views=" + review_views +
                 ", review_recommends=" + review_recommends +
+                ", contentId=" + contentId +
                 '}';
     }
+
 }

@@ -98,6 +98,8 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/views/template/header.jsp" %>
+
+
 <div class ="container" style="margin-top: 30px">
         <h2 class="center">Review view</h2>
         <p class="center" >
@@ -132,6 +134,14 @@
                         <input type="text" name="user_name" id="user_name" value="${vo.user_name}" readonly />
                     </td>
                 </tr>
+                <tr>
+                    <td style="width:20%" class="center"><b>장소</b></td>
+                    <td align="left">
+                        <span>${PlaceName}</span>
+                    </td>
+                    <td><input type="hidden" name="contentId" id="contentId" value="${vo.contentId}"></td>
+                </tr>
+
 
                 <tr>
                     <td style="width:20%" class="center"><b>글내용</b></td>
@@ -140,12 +150,13 @@
                     </td>
                 </tr>
 
+
                 <tr>
                      <td colspan="2" style="border-bottom-style: hidden">
                          <div onclick="com()"width="100px" height="100px"  class="div">
                              <img class="img" src="/image/re.png"/>
                              <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
-                             <span>${vo.review_recommends} </span>
+                             <span id="resultRecommends">${vo.review_recommends} </span>
                          </div>
                      </td>
                     <td>
@@ -195,9 +206,19 @@
 
     const com = function(){
         alert("추천하였습니다.");
-        bf.method='post';
-        bf.action='view';
-        bf.submit();
+        const review_id = document.getElementById('review_id').value;
+
+        $.ajax({
+            type:'post',
+            url:'/review/view',
+            dataType:'text',
+            data:{"review_id":review_id},
+            cache:false
+        }).done((res)=>{
+            $("#resultRecommends").text(res);
+        }).fail((err)=>{
+            alert(err.status);
+        })
     }
 
     const deleteComment = function(id){
@@ -221,6 +242,10 @@
         let con=$('#content').val();
         let uid=$('#user_id').val();
 
+        if(con==""){
+            alert("내용을 넣어주세요");
+            return false;
+        }
         let jsonData={
             review_id:rid,
             content:con,
@@ -249,23 +274,18 @@
         var list= id.split('/');
         var x = document.getElementsByClassName(list[0]+"div");
         var y = document.getElementById(list[0]+"re"+list[1]);
-        var main = document.getElementById('commentInsert');
+
         var i;
         for (i=0; i < x.length; i++) {
         var obj=x[i];
             if (obj.style.display == "none") {
-                main.style.display='none';
-                obj.style.display = "block";
-
+                obj.style.display = "";
             }
             else {
                 y.value="" ;
-                main.style.display='';
                 obj.style.display = "none";
-
             }
         }
-
     }
 
     const CheckMessage = function(id){
@@ -298,7 +318,7 @@
             cache: false
         }).done((res)=>{
             alert("대댓글이 추가되었습니다.")
-            main.style.display='block';
+            main.style.display='';
             init(1);
         }).fail((err)=>{
             alert(err.status)
@@ -349,18 +369,16 @@
             }
             str+='</tr>';
 
-
             /* 4행 */
             str+='<tr>';
             str+='<td colspan="4"><p>';
             str+=res[i].content;
             str+='</p></td>';
 
-
             if(res[i].comment_depth==0) {
                 /* 5행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
-                str += '<td colspan="4"><p style="text-align: right"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
+                str += '<td colspan="4"><p style="text-align: left"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
                 str += '</tr>';
                 /* 6행 메인 댓글일 경우*/
                 str += '<tr class="tableTr">';
@@ -397,7 +415,6 @@
             alert(err.status);
         })
     }
-
 
     $(()=>{
         init(1);}

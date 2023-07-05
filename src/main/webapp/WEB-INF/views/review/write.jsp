@@ -41,14 +41,27 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width:20%"><b>장소</b></td>
-                    <td style="width:80%">
-                        <input type="text" name="place" id="place"  class="form-control">
-                    </td>
-                </tr><tr>
                     <td style="width:20%"><b>작성자</b></td>
                     <td style="width:80%">
-                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name} ">
+                        <input readonly type="text" name="user_name" id="username" class="form-control" value="${user_name}">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:20%" class="center"><b>장소</b></td>
+                    <td align="left">
+                        <select id="areaLargeSelect" class="select" name="areaLarge" onchange="getAreaSmallCode(this.value)">
+                            <option value="">지역</option>
+                        </select>
+
+                        <select id="areaSmallSelect" class="select" name="areaSmall">
+                            <option value="">시군구</option>
+                        </select>
+                        <select id ="areaResultSelect" class="select" name="contentId" onchange="result()">
+                            <option value="">검색 내용</option>
+                        </select>
+
+                        <input id="keywordSearch" name ="placeName" type="text" class="form-control" style="width: 70%" onclick="resetText()">
+                        <button style="text-align: right" type="button" onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
                     </td>
                 </tr>
                 <tr>
@@ -58,17 +71,148 @@
                     </td>
                 </tr>
 
+
                 <tr>
                     <td colspan="2" id="btn">
-                        <button type="submit" id="btnWrite" class="align-items-center flex-shrink-0 p-2 link-dark text-decoration-none" style="background-color: #12bbad; padding: 5px;">작성하기</button>
+                        <button type="button" onclick="check()" id="btnWrite" class="align-items-center flex-shrink-0 p-2 link-dark text-decoration-none" style="background-color: #12bbad; padding: 5px;">작성하기</button>
                     </td>
                 </tr>
 
             </table>
-
-
         </form>
+
+
     </div><!-- .col end-->
 </div><!-- .row end-->
-<!-- footer -->
+
+<script>
+    renewAreaLargeCode();
+    let markContentTypeCode = "12";
+
+    function resetText(){
+        document.getElementById("keywordSearch").value="";
+    }
+
+
+    function check(){
+        var txtEle = $('#areaResultSelect').val();
+        var review_title = $('#review_title').val();
+        var review_content = $('#review_content').val();
+
+        if((review_title=="") || (review_content=="")){
+            alert("내용을 채워주세요");
+            return false;
+        }else if((txtEle=="")){
+            alert("장소를 선택하지 않았습니다");
+            return false;
+        }
+        $('#bf').submit();
+    }
+    <%--  장소 검색 이벤트 지정--%>
+    document.getElementById("keywordSearch").addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            searchTourInfoKeyword(this.value)
+        }
+    });
+
+    function result(){
+        const txt = $('#areaResultSelect option:checked').text();
+        $('#keywordSearch').val(txt);
+    }
+
+    function renewAreaLargeCode(){
+        $.ajax({
+            url : "/api/tour/area/code",
+            type : "GET",
+            contentType: "application/json",
+            dataType : "json"
+        }).done((response) => {
+            console.log(response)
+
+            let areaLargeSelect = document.getElementById("areaLargeSelect")
+
+            areaLargeSelect.innerHTML = ""
+            let result = "<option value=''>지역</option>";
+            response.forEach(r => {
+                result += "<option value='"+ r["code"] +"'>" + r["name"] + "</option>"
+            })
+
+            areaLargeSelect.innerHTML = result;
+
+        }).fail((error) => {
+            console.log(error["responseJSON"]["message"])
+        })
+    }
+
+
+    /* 메인 클릭시 소분류 장소 가져오기*/
+    function getAreaSmallCode(largeCode){
+        $.ajax({
+            url : "/api/tour/area/code/" + largeCode,
+            type : "GET",
+            contentType : "application/json",
+            dataType : "json"
+        }).done((response) => {
+            console.log(response);
+
+            let areaSmallSelect = document.getElementById("areaSmallSelect")
+
+            areaSmallSelect.innerHTML = ""
+            let result = "<option value=''>시군구</option>";
+            response.forEach(r => {
+                result += "<option value='"+ r["code"] +"'>" + r["name"] + "</option>"
+            })
+
+            areaSmallSelect.innerHTML = result;
+
+        }).fail((error) => {
+            console.log(error["responseJSON"]["message"])
+        })
+    }
+
+
+    // 검색 후
+
+    function searchTourInfoKeyword(keyword){
+        areaLargeSelect = document.getElementById("areaLargeSelect")
+        areaSmallSelect = document.getElementById("areaSmallSelect")
+
+        let data = {
+            "keyword" : keyword,
+            "areaLargeCode" : areaLargeSelect.value,
+            "areaSmallCode" : areaSmallSelect.value,
+            "pageSize" : 100,
+            "pageNo" : 1,
+            "contentTypeCode" : markContentTypeCode
+        }
+
+        $.ajax({
+            url : "/api/tour/keyword",
+            type : "GET",
+            data : data,
+            contentType : "application/json",
+            dataType : "json"
+        }).done((res) => {
+            let ars = document.getElementById("areaResultSelect")
+            ars.innerHTML = ""
+            let result = "<option value=''>장소를 선택하세요</option>";
+            res.forEach(r => {
+                result += "<option value='"+ r["contentId"] +"'>" + r["title"] + "</option>"
+            })
+            ars.innerHTML = result;
+            document.getElementById("keywordSearch").value="장소를 선택하세요";
+
+        }).fail((error) => {
+            if (error["status"] === 404){
+                let ars = document.getElementById("areaResultSelect")
+                let result = "<option value=''>검색 결과가 없습니다</option>";
+                document.getElementById("keywordSearch").value="검색 결과가 없습니다";
+                ars.innerHTML = result;
+            }
+        })
+    }
+
+</script>
 <%@ include file="/WEB-INF/views/template/footer.jsp" %>
+

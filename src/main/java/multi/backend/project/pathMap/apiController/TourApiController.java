@@ -34,6 +34,7 @@ public class TourApiController {
     public ResponseEntity<List<AreaResponse>> getAreaLargeCode(){
         List<AreaResponse> largeAreaResponse = tourCodeService.getLargeAreaResponse();
 
+        System.out.println(1);
         return new ResponseEntity<>(largeAreaResponse, HttpStatus.OK);
     }
 
@@ -64,6 +65,13 @@ public class TourApiController {
 
         return new ResponseEntity<>(tourInfoResponses, HttpStatus.OK);
     }
+    // 장소 검색
+//    @GetMapping("/place")
+//    public ResponseEntity<List<TourInfoResponse>> getTourPlace(TourInfoKeywordRequest tour) throws NotFoundException{
+//
+//        return new ResponseEntity<>(tourInfoResponses, HttpStatus.OK);
+//    }
+
 
     @GetMapping("/location")
     public ResponseEntity<List<TourInfoResponse>> getTourInfoBasedLocation(TourInfoLocationRequest tourInfoLocationRequest)
