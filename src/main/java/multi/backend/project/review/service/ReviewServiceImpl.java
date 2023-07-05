@@ -1,10 +1,10 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.service;
 
-import multi.backend.project.review.Mapper.reviewMapper;
-import multi.backend.project.review.VO.PlaceVO;
-import multi.backend.project.review.VO.ResponseVO;
-import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.mapper.ReviewMapper;
+import multi.backend.project.review.vo.PlaceVO;
+import multi.backend.project.review.vo.ResponseVO;
+import multi.backend.project.review.vo.Review_CommentVO;
+import multi.backend.project.review.vo.ReviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ import java.util.*;
 
 
 @Service("reviewService")
-public class reviewServiceImpl implements multi.backend.project.review.Service.reviewService{
+public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
-    public reviewMapper mapper;
+    public ReviewMapper mapper;
 
     @Override
     @Transactional
-    public int insertReview(reviewVO vo,String user_Name,String contentName) {
+    public int insertReview(ReviewVO vo, String user_Name, String contentName) {
         vo.setUser_id(mapper.getUserId(user_Name));
         if(checkContentName(vo.getContentId())<=0){mapper.insertPlace(new PlaceVO(vo.getContentId(),contentName));}
         return mapper.insertReview(vo);
@@ -47,9 +47,9 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public reviewVO selectReviewOne(int review_id,String rid) {
+    public ReviewVO selectReviewOne(int review_id, String rid) {
         if (rid.isEmpty() || rid.equals("0")) {
-            reviewVO vo = mapper.selectReviewOne(Integer.valueOf(review_id)); // 해당 게시글 찾기
+            ReviewVO vo = mapper.selectReviewOne(Integer.valueOf(review_id)); // 해당 게시글 찾기
             mapper.updateReview_views(vo); // 조회수 증가
         }
         return mapper.selectReviewOne(review_id);
@@ -57,17 +57,17 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public reviewVO updateReview(reviewVO vo,String ux) {
+    public ReviewVO updateReview(ReviewVO vo, String ux) {
         if((!ux.equals(vo.getUser_name()) || (getUserId(ux))!= 1)){return vo;}
         mapper.updateReview(vo);
-        reviewVO rvo = mapper.selectReviewOne(vo.getReview_id());
+        ReviewVO rvo = mapper.selectReviewOne(vo.getReview_id());
         return rvo;
     }
 
     @Override
     @Transactional
     public int deleteReview(int id,String userName) {
-        reviewVO vo = mapper.selectReviewOne(id);
+        ReviewVO vo = mapper.selectReviewOne(id);
         if((vo.getUser_name().equals(userName)) ||(getUserId(userName)==1)) {
             return mapper.deleteReview(id);
         }
@@ -88,7 +88,7 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public int updateReview_views(reviewVO vo) {
+    public int updateReview_views(ReviewVO vo) {
         return mapper.updateReview_views(vo);
     }
 
@@ -101,7 +101,7 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public Map<String,Integer> updateReview_recommends(reviewVO vo, int user_id) {
+    public Map<String,Integer> updateReview_recommends(ReviewVO vo, int user_id) {
 
         int i = 0;
         if(mapper.selectRecommentCheck(vo.getReview_id(),user_id)!=0){
@@ -112,7 +112,7 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
             i = 1;
         }
         mapper.updateReview_recommends(vo,i);
-        reviewVO resultvo = mapper.selectReviewOne(vo.getReview_id());
+        ReviewVO resultvo = mapper.selectReviewOne(vo.getReview_id());
         int result = (i==1)? 1:0;
         Map<String,Integer> map = new HashMap<>();
         map.put("review_recommends",resultvo.getReview_recommends());
@@ -204,11 +204,11 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public List<reviewVO> getListWithPaging(Criteria cri,String searchType, List<String> contentId, String keyword) {
+    public List<ReviewVO> getListWithPaging(Criteria cri, String searchType, List<String> contentId, String keyword) {
         if(searchType.equals("3")&& contentId == null){
            searchType="4";
         }
-        List<reviewVO> vo = mapper.getListWithPaging(cri, searchType, keyword, contentId);
+        List<ReviewVO> vo = mapper.getListWithPaging(cri, searchType, keyword, contentId);
         return vo;
     }
 

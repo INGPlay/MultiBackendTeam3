@@ -1,7 +1,7 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.service;
 
 import lombok.extern.slf4j.Slf4j;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.vo.ReviewVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 public class reviewserviceimpltest {
 
     @Resource(name = "reviewService")
-    private reviewServiceImpl service;
+    private ReviewServiceImpl service;
 
     @Test
     public void getUserId(){
@@ -50,7 +50,7 @@ public class reviewserviceimpltest {
     public void test_Recomments(){
         System.out.println("테스트3번 실행");
         int n =0;
-        reviewVO vo = service.selectReviewOne(1,"1");
+        ReviewVO vo = service.selectReviewOne(1,"1");
 
         System.out.println("totalCount"+n+"개");
     }
