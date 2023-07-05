@@ -212,17 +212,20 @@
     }
 
     const com = function(){
-        alert("추천하였습니다.");
         const review_id = document.getElementById('review_id').value;
-
         $.ajax({
             type:'post',
             url:'/review/view',
-            dataType:'text',
+            dataType:'json',
             data:{"review_id":review_id},
             cache:false
         }).done((res)=>{
-            $("#resultRecommends").text(res);
+            $("#resultRecommends").text(res.review_recommends);
+            if(res.result=="1"){
+                alert("추천했습니다");
+            }else{
+                alert("추천을 취소했습니다");
+            }
         }).fail((err)=>{
             alert(err.status);
         })

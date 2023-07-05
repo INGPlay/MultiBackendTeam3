@@ -55,7 +55,7 @@ public interface reviewMapper {
     int getTotalCount();
 
     //    7. 추천수 증가
-    int updateReview_recommends(reviewVO vo);
+    int updateReview_recommends(@Param("vo") reviewVO vo,@Param("i") int i);
 
 
 // ========================================
@@ -93,4 +93,10 @@ public interface reviewMapper {
     int getSearchPlaceTotalCount(ResponseVO vo);
 
     int getTotalRecomment(int reviewId);
+
+    int selectRecommentCheck(@Param("review_id") int review_id, @Param("user_id") int user_id);
+
+    int insert_Review_recommend(@Param("review_id") int review_id, @Param("user_id") int user_id);
+
+    int delete_Review_recommend(@Param("review_id") int review_id, @Param("user_id") int user_id);
 }

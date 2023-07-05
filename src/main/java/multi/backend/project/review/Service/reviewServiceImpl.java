@@ -6,7 +6,6 @@ import multi.backend.project.review.VO.ResponseVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
-import multi.backend.project.review.paging.pagingVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,10 +101,23 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
     @Override
     @Transactional
-    public int updateReview_recommends(reviewVO vo) {
-        mapper.updateReview_recommends(vo);
+    public Map<String,Integer> updateReview_recommends(reviewVO vo, int user_id) {
+
+        int i = 0;
+        if(mapper.selectRecommentCheck(vo.getReview_id(),user_id)!=0){
+            mapper.delete_Review_recommend(vo.getReview_id(),user_id);
+            i=2;
+        }else{
+            mapper.insert_Review_recommend(vo.getReview_id(),user_id);
+            i = 1;
+        }
+        mapper.updateReview_recommends(vo,i);
         reviewVO resultvo = mapper.selectReviewOne(vo.getReview_id());
-        return resultvo.getReview_recommends();
+        int result = (i==1)? 1:0;
+        Map<String,Integer> map = new HashMap<>();
+        map.put("review_recommends",resultvo.getReview_recommends());
+        map.put("result",result);
+        return map;
     }
 
     @Override

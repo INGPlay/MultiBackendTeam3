@@ -1,6 +1,7 @@
 package multi.backend.project.review.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import multi.backend.project.review.VO.reviewVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,15 @@ public class reviewserviceimpltest {
         }
         System.out.println("totalCount"+n+"개");
 
+    }
+
+    @Test
+    public void test_Recomments(){
+        System.out.println("테스트3번 실행");
+        int n =0;
+        reviewVO vo = service.selectReviewOne(1,"1");
+
+        System.out.println("totalCount"+n+"개");
     }
     }
 

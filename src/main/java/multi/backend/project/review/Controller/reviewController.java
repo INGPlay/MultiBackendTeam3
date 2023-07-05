@@ -108,10 +108,10 @@ public class reviewController {
 
     @PostMapping(value="/view", produces="application/json")
     @ResponseBody
-    public String updateReview_view(@RequestParam("review_id") int review_id){
+    public Map<String,Integer> updateReview_view(@RequestParam("review_id") int review_id,@AuthenticationPrincipal UserContext ux){
         reviewVO vo = service.selectReviewOne(review_id,"1");
-        int n = service.updateReview_recommends(vo);
-        return String.valueOf(n);
+        Map<String,Integer> map= service.updateReview_recommends(vo, service.getUserId(ux.getUsername()));
+        return map;
     }
 
     /* 댓글 조회 */

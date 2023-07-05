@@ -4,8 +4,10 @@ import multi.backend.project.review.VO.PlaceVO;
 import multi.backend.project.review.VO.Review_CommentVO;
 import multi.backend.project.review.VO.reviewVO;
 import multi.backend.project.review.paging.Criteria;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface reviewService {
@@ -43,11 +45,12 @@ public interface reviewService {
     int getTotalCount();
 
     //  7. 추천수 증가
-    int updateReview_recommends(reviewVO vo);
-
+    Map<String,Integer> updateReview_recommends(reviewVO vo, int user_id);
 
 
 // ================================================================================
+
+
 
     //     1. 댓글 추가
     int insert_recommends(Review_CommentVO vo);
