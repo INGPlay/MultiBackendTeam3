@@ -176,9 +176,6 @@
                 </tr>
             </table>
         </form>
-
-
-
 <div id="comment_list" align="center" id="b" class="container"></div>
 
 </div><!-- .row end-->
@@ -196,8 +193,6 @@
         </table>
     </form>
 
-
-  
 </div>
     <form method="get" action="list" name="reset" id="reset"></form>
 
@@ -206,8 +201,6 @@
 
 </body>
 <script>
-
-
     const edit = function(){
         bf.method='post';
         bf.action='edit'
@@ -340,13 +333,14 @@
     }
 
 
-    const showComment = function(res){
+    const showComment = function(response){
         let CUS=$('#ConnectUserName').val();
         let str = "<table id='table1' style='width: 100%;' >"
+        let res = response.commentList;
         /* 1행 */
         str+='<tr class="tableTr">';
             str+='<td colspan="4">';
-            str+='<div><b>댓글()</b> &nbsp;';
+            str+=`<div><b>댓글(\${response.totalCount})</b> &nbsp;`;
             str+='<a class="link" onclick="init(1)">등록순</a> |&nbsp;';
             str+='<a class="link" onclick="init(2)">최신순</a></div>';
             str+='</td>';

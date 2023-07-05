@@ -185,6 +185,12 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
 
 
     @Override
+    public int getTotalRecoment(int review_id) {
+        return mapper.getTotalRecomment(review_id);
+    }
+
+
+    @Override
     @Transactional
     public List<reviewVO> getListWithPaging(Criteria cri,String searchType, List<String> contentId, String keyword) {
         if(searchType.equals("3")&& contentId == null){

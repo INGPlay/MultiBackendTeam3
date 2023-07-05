@@ -129,11 +129,12 @@
     <!-- 해당 게시글 댓글 조회   -->
     <select id="selectReviewComment" resultType="commentVO" parameterType="_int" >
         select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
-        from comment_vi where review_id = #{review_id}
+        from comment_vi where review_id = #{review_id} order by
         <if test="sort == 1">
-            order by comment_group asc, comment_depth asc
-        </if><if test="sort == 2">
-        order by comment_group desc, comment_depth desc
+            comment_group asc, comment_depth asc
+        </if>
+        <if test="sort == 2">
+            comment_group desc, comment_depth desc
     </if>
     </select>
 
@@ -199,6 +200,10 @@
             <foreach collection="contentId" item="i" separator="," open="(" close=")">
                 #{i}
             </foreach>
+    </select>
+
+    <select id="getTotalRecomment" resultType="_int" parameterType="_int">
+        select count(comment_id) from comment_vi where review_id = #{reviewId}
     </select>
 </mapper>
 

@@ -78,4 +78,7 @@ public interface reviewService {
 
     int getSearchTotalCount(String searchType, String keyword);
     int getSearchPlaceTotalCount(String searchType, List<String> keyword);
+
+
+    int getTotalRecoment(int review_id);
 }

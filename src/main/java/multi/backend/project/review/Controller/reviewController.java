@@ -117,10 +117,14 @@ public class reviewController {
     /* 댓글 조회 */
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(Model m,@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort,@AuthenticationPrincipal UserContext ux){
+    public Map<String,Object> selectComment(Model m,@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort,@AuthenticationPrincipal UserContext ux){
         m.addAttribute("connectUserName",ux.getUsername());
         List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),Integer.parseInt(sort));
-        return commentList;
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentList",commentList);
+        map.put("totalCount",service.getTotalRecoment(Integer.parseInt(review_id)));
+
+        return map;
     }
 
 

@@ -31,4 +31,22 @@ public class reviewserviceimpltest {
         System.out.println("GetUserID 호출"+n);
 
         }
+
+    @Test
+    public void getCommentCount(){
+        System.out.println("테스트2번 실행");
+        int n = 0;
+        if(service == null){
+            System.out.println("null");
+        }else {
+            n = service.getTotalRecoment(0);
+        }
+        System.out.println("totalCount"+n+"개");
+
     }
+    }
+
+
+
+
+

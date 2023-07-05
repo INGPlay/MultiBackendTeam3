@@ -89,5 +89,8 @@ public interface reviewMapper {
     // 제목 검색과 글쓴이 검색 총 결과 개수 가져오기
     int getSearchTotalCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
 
+
     int getSearchPlaceTotalCount(ResponseVO vo);
+
+    int getTotalRecomment(int reviewId);
 }
