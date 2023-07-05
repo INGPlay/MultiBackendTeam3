@@ -72,9 +72,6 @@ public class reviewController {
             }
 
         }
-
-
-
         int n = service.insertReview(review, ux.getUsername(), contentName);
 
 
