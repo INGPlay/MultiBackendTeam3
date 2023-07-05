@@ -50,6 +50,10 @@ dependencies {
 
 	// Spring Security 태그
 	implementation 'org.springframework.security:spring-security-taglibs'
+
+	implementation 'commons-fileupload:commons-fileupload:1.4'
+	implementation 'commons-io:commons-io:2.6'
+
 }
 
 tasks.named('test') {
