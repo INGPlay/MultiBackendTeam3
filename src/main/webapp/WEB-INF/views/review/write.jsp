@@ -65,6 +65,12 @@
                     </td>
                 </tr>
                 <tr>
+                <td style="width:20%"><b>파일 업로드</b></td>
+                <td>
+                    <input type="file" name="mfilename" id="filename" class="form-control">
+                </td>
+                </tr>
+                <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control"></textarea>

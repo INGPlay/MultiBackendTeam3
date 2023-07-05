@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <!DOCTYPE html>
@@ -142,6 +143,15 @@
                     <td><input type="hidden" name="contentId" id="contentId" value="${vo.contentId}"></td>
                 </tr>
 
+                <tr>
+                    <td style="width:20%" class="center"><b>첨부파일</b></td>
+                    <td style="width:80%" class="center">
+
+                        <c:if test="${vo.filename ne null}">
+                            <img  src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:100px">
+                        </c:if>
+                    </td>
+                </tr>
 
                 <tr>
                     <td style="width:20%" class="center"><b>글내용</b></td>
@@ -185,6 +195,8 @@
             </tr>
         </table>
     </form>
+
+
   
 </div>
     <form method="get" action="list" name="reset" id="reset"></form>
@@ -194,6 +206,8 @@
 
 </body>
 <script>
+
+
     const edit = function(){
         bf.method='post';
         bf.action='edit'
@@ -415,6 +429,7 @@
             alert(err.status);
         })
     }
+
 
     $(()=>{
         init(1);}

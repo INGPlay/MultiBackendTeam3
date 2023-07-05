@@ -7,8 +7,8 @@
         <selectKey keyProperty="review_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Sequence.nextval) from dual
         </selectKey>
-        insert into review(review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends,contentId)
-        values(#{review_id}, #{user_id},#{review_title},#{review_content},SYSDATE,SYSDATE,0,0,#{contentId})
+        insert into review(review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends,contentId,filename,originFilename,filesize)
+        values(#{review_id}, #{user_id},#{review_title},#{review_content},SYSDATE,SYSDATE,0,0,#{contentId},#{filename},#{originFilename},#{filesize})
     </insert>
 
     <select id ="checkContentName" parameterType="_int" resultType="_int">
@@ -50,7 +50,11 @@
 
     <!-- 특정 게시글 가져오기   -->
     <select id="selectReviewOne" resultType="reviewVO" parameterType="_int">
-        select * from review_vi where review_id=#{id}
+        select m.user_name, r.review_id, r.user_id, r.review_title, r.review_content, r.create_date, r.update_date, r.review_views, r.review_recommends, r.contentId, r.filename, r.originFilename, r.filesize
+        from review r
+        join memberuser m
+        on r.user_id=m.user_id
+        where review_id=#{id}
     </select>
 
     <!--  특정 게시글 삭제하기  -->
