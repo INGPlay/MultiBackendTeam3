@@ -127,3 +127,116 @@ const contentRowName = {
     "treatmenu" : "취급메뉴",
     "lcnsno" : "인허가번호"
 }
+
+// 정보 갱신 함수
+function renewWheather(posX, posY){
+
+    document.getElementById("wheatherSpinner").style.display = 'block'
+
+    let xy = dfs_xy_conv("toXY", posY, posX)
+
+    let data = {
+        "posX" : xy["x"],
+        "posY" : xy["y"]
+    }
+
+    $.ajax({
+        url : "/api/wheather/",
+        type : "GET",
+        data : data,
+        dataType : "json"
+    }).done((response) => {
+
+        console.log(response)
+        viewWheatherInfoDetail(response)
+
+        document.getElementById("wheatherSpinner").style.display = 'none'
+
+    }).fail((error) => {
+        // {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+        let response = error["responseJSON"];
+        console.log("wheather : " + error)
+
+        let listRow = document.getElementById("wheatherRow")
+        listRow.innerHTML = "날씨 정보 갱신에 실패하였습니다"
+
+        document.getElementById("wheatherSpinner").style.display = 'none'
+    })
+}
+
+function viewWheatherInfoDetail(response){
+    let listRow = document.getElementById("wheatherRow")
+    console.log(listRow)
+
+    let result = "";
+    response.forEach(wheather => {
+
+        result += " \
+                <tr> \
+                    <th scope='row'>" + wheather["forecastDateTime"] + "</th> \
+                    <td>" + wheather["dayMinTemparature"] + "</td> \
+                    <td>" + wheather["dayMaxTemparature"] + "</td> \
+                    <td>" + wheather["hourTemparature"] + "</td> \
+                    <td>" + wheather["skyForm"] + "</td> \
+                    <td>" + wheather["rainForm"] + "</td> \
+                    <td>" + wheather["rainProbability"] + "</td> \
+                    <td>" + wheather["rainAmount"] + "</td> \
+                    <td>" + wheather["snowAmount"] + "</td> \
+                </tr> \
+            ";
+    })
+
+    listRow.innerHTML = result;
+}
+
+function renewPlace(contentTypeId, contentId){
+    document.getElementById("placeSpinner").style.display = 'block'
+
+    console.log("/api/tour/detail/" + contentTypeId + "/" + contentId)
+    $.ajax({
+        url : "/api/tour/detail/" + contentTypeId + "/" + contentId,
+        type : "GET",
+        contentType: "application/json",
+        dataType : "json"
+    }).done((response) => {
+
+        console.log(response)
+        viewPlaceInfoDetail(response, contentId)
+
+        document.getElementById("placeSpinner").style.display = 'none'
+    }).fail((error) => {
+        // {"readyState":4,"responseText":"{\"status\":404,\"message\":\"NOT FOUND\"}","responseJSON":{"status":404,"message":"NOT FOUND"},"status":404,"statusText":"error"}
+        let response = error["responseJSON"];
+        console.log("place : " + error)
+
+        let listRow = document.getElementById("placeRow")
+        listRow.innerHTML = "장소 정보 갱신에 실패하였습니다"
+        document.getElementById("placeSpinner").style.display = 'none'
+    })
+}
+
+function viewPlaceInfoDetail(response, contentId){
+    document.getElementById("modal-sub").innerHTML = "<a href = '/review/list?select=1&searchType=3&contentId=" + contentId + "' target='_blank' rel='noopener noreferrer' class='link-secondary'>리뷰 보러가기</a>"
+
+    let listRow = document.getElementById("placeRow")
+
+    let result = "";
+    Object.entries(response).forEach((entry) => {
+        console.log(entry[0], entry[1])
+        let key = entry[0]
+        let value = entry[1]
+
+        // 등록된 컬럼에 존재하는 경우에만 표시
+        if (contentRowName[key]){
+            result += " \
+                <tr> \
+                    <th scope='row'>" + contentRowName[key] + "</th> \
+                    <td>" + value + "</td> \
+                </tr> \
+            ";
+        }
+
+    })
+
+    listRow.innerHTML = result;
+}
