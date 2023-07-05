@@ -33,7 +33,7 @@
                 <li><a href="/pathmap" class="nav-link px-2 link-dark">지도</a></li>
                 <li><a href="/review/list" class="nav-link px-2 link-dark">리뷰</a></li>
                 <!-- <li><a href="#" class="nav-link px-2 link-dark">페이지</a></li> -->
-                <li><a href="#" class="nav-link px-2 link-dark">팀</a></li>
+                <li><a href="/team" class="nav-link px-2 link-dark">팀</a></li>
             </ul>
     
             <div class="col-md-5 text-end d-flex flex-row-reverse">

@@ -33,7 +33,6 @@ public class RegisterForm {
     private String email;
 
     @NotNull
-    @Size(min = 10, max = 12)
-    @Pattern(regexp = "^([0-9]*)$")
+    @Pattern(regexp = "^\\d{2,3}\\s{1}\\d{3,4}\\s{1}\\d{4}$")
     private String phone;
 }

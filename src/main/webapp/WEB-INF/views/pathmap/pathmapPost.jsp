@@ -65,10 +65,80 @@
 
 </head>
 <body style="height: 100%;">
+
+	<!-- Info Modal -->
+	<div class='modal fade' id='place' tabindex='-1' aria-hidden='true'>
+		<div class='modal-dialog modal-dialog-scrollable modal-lg'>
+			<div class='modal-content'>
+			<div class='modal-header'>
+				<h5 class='modal-title' id='exampleModalLabel'>장소 정보 <small id="modal-sub" class="link-secondary"></small></h5>
+				<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+			</div>
+			<div class='modal-body'>
+				<table class='table table table-hover'>
+					<thead>
+						<tr>
+							<th scope='col'>항목</th>
+							<th scope='col'>정보</th>
+						</tr>
+					</thead>
+					<tbody id = 'placeRow'>
+					</tbody>
+				</table>
+				<div class='d-flex justify-content-center'>
+					<div class='spinner-border text-info' role='status' id='placeSpinner'>
+						<span class='visually-hidden'>Loading...</span>
+					</div>
+				</div>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!-- Weather Modal -->
+	<div class='modal fade' id='weather' tabindex='-1' aria-hidden='true'>
+		<div class='modal-dialog modal-dialog-scrollable modal-xl'>
+			<div class='modal-content'>
+			<div class='modal-header'>
+				<h5 class='modal-title' id='exampleModalLabel'>날씨 정보</h5>
+				<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+			</div>
+			<div class='modal-body'>
+				<table class='table table table-hover'>
+					<thead>
+						<tr>
+							<th scope='col'>예측시간</th>
+							<th scope='col'>일 최저기온</th>
+							<th scope='col'>일 최고기온</th>
+							<th scope='col'>시간 평균 온도</th>
+							<th scope='col'>하늘형태</th>
+							<th scope='col'>강수형태</th>
+							<th scope='col'>강수확률</th>
+							<th scope='col'>강수량</th>
+							<th scope='col'>강설량</th>
+						</tr>
+					</thead>
+					<tbody id = 'wheatherRow'>
+					</tbody>
+				</table>
+				<div class='d-flex justify-content-center'>
+					<div class='spinner-border text-info' role='status' id='wheatherSpinner'>
+						<span class='visually-hidden'>Loading...</span>
+					</div>
+				</div>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+			</div>
+			</div>
+		</div>
+	</div>
 	  
 	<!-- <main> 지우면 Sidebar 스크롤 기능 꺼짐 -->
 	<main class="flex-row">
-		
+
 		<!-- Map이 표시될 자리 -->
 		<div class="mapContainer flex-fill">
 			<!-- 맵 -->
@@ -107,20 +177,20 @@
 			<!-- 추천, 복사, 댓글 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
 				<sec:authorize access="isAuthenticated()">
-					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border"
 							style="width: 100%; justify-content: center;"
 							type="button" onclick="toggleFavorite()" id="favoriteButton">
 						<span class="fs-5 fw-semibold" id = "favoriteButtonText">추천</span>
 					</button>
 
-					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color"
+					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border"
 							style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
 							type="button">
 						<span class="fs-5 fw-semibold">복사</span>
 					</button>
 				</sec:authorize>
 
-				<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color" 
+				<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border" 
 						style="width: 100%; justify-content: center;" onclick="hideUserSelectListView()" 
 						type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
 					<span class="fs-5 fw-semibold" id = "commentButtonText">댓글</span>
@@ -270,7 +340,6 @@
 			$.ajax({
 				url : "/api/pathmap/" + pathId,
 				type : "GET",
-				contentType: "application/json",
 				async:false,		// 비동기로
 			}).done(response => {
 				let title = response["title"]
@@ -384,7 +453,6 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
@@ -495,8 +563,8 @@
 			return marker
 		}
 
-				// 순서 마커
-				function promiseMarkingSequenceInMap(info, index){
+		// 순서 마커
+		function promiseMarkingSequenceInMap(info, index){
 			return promiseSequenceMarking(map, info["posX"], info["posY"], index, function(){
 				
 				// 마커를 클릭하면 인포윈도우가 뜬다
@@ -566,8 +634,8 @@
 							<p class='text-muted lh-sm font-monospace' style='font-size:13px;'>" + info["contentType"] + "</p> \
 							<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 							<div class='me-auto d-flex flex-row'> \
-								<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-								<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+								<button data-bs-toggle='modal' data-bs-target='#place' onclick='renewPlace(" + info["contentTypeId"] + ", " + info["contentId"] + ")' class = 'me-1 badge main_color_only'>장소</button> \
+								<button data-bs-toggle='modal' data-bs-target='#weather' onclick='renewWheather(" + info["posX"] + ", " + info["posY"] + ")' class = 'badge main_color_only'>날씨</button> \
 							</div> \
 						</div> \
 					</div> \
@@ -642,15 +710,17 @@
 				if (i > 0){
 
 					// 비동기 함수의 콜백값을 가져오려는 몸부림
-					let beforeWtmObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
-					let currentWtmObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
+					let beforeWCObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
+					let currentWCObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
 
-					console.log("beforeWtm : " + beforeWtmObject["wtmX"] + ", " + beforeWtmObject["wtmY"])
-					console.log("currentWtm : " + currentWtmObject["wtmX"] + ", " + currentWtmObject["wtmY"])
+					console.log("beforeWtm : " + beforeWCObject["wtmX"] + ", " + beforeWCObject["wtmY"])
+					console.log("currentWtm : " + currentWCObject["wtmX"] + ", " + currentWCObject["wtmY"])
 
-					if (beforeWtmObject !== null || currentWtmObject !== null){
+					// 길찾기 버튼
+					if (beforeWCObject !== null || currentWCObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-actio py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWCObject["wtmX"] + "," + beforeWCObject["wtmY"] + "," + currentWCObject["wtmX"] + "," + currentWCObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' \
+							class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer radius_border main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \
@@ -663,7 +733,7 @@
 						"
 					} else {
 						listTemplate += " \
-							<div class='d-flex flex-column align-items-center'> \
+							<div class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer radius_border main_color'> \
 								<div> \
 									길찾기 \
 								</div> \
@@ -678,9 +748,6 @@
 
 				const detailUri = "/pathmap/detail/" + info["contentTypeId"] + "/" + info["contentId"]
 				console.log(detailUri)
-
-				let xy = dfs_xy_conv("toXY", info["posY"], info["posX"])
-				const wheatherUri = "/info/wheather/" + xy["x"] + "/" + xy["y"]
 
 				// 가져올 때는 .userSelectContainer로 가져오기
 				listTemplate += " \
@@ -700,8 +767,8 @@
 								\
 								<div class = 'd-flex flex-row'> \
 									<div class='me-auto d-flex flex-row'> \
-										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+										<button data-bs-toggle='modal' data-bs-target='#place' onclick='renewPlace(" + info["contentTypeId"] + ", " + info["contentId"] + ")' class = 'me-1 badge main_color_only'>장소</button> \
+										<button data-bs-toggle='modal' data-bs-target='#weather' onclick='renewWheather(" + info["posX"] + ", " + info["posY"] + ")' class = 'badge main_color_only'>날씨</button> \
 									</div> \
 								</div> \
 							</div> \
@@ -710,6 +777,9 @@
 				"
 				
 				userSelectListView.innerHTML += listTemplate
+
+				// renewWheather(xy, i)
+				// renewPlace(info["contentTypeId"], info["contentId"], i)
 
 				beforeInfo = info;
 			}
@@ -752,9 +822,9 @@
 			$.ajax({
 				url : "/api/pathmap/favorite",
 				data : data,
-				type : "GET",
-				contentType: "application/json",
-			}).done((response) => {
+				type : "GET"
+			})
+			.done((response) => {
 				console.log(response)
 
 				let favoriteButton = document.getElementById("favoriteButton")
@@ -768,7 +838,7 @@
 				}
 
 			}).fail((error) => {
-				console.log("error : " + error)
+				console.log(error['status'])
 			})
 		}
 
@@ -780,8 +850,10 @@
 
 			$.ajax({
 				url : "/api/pathmap/favorite",
-				data : data,
+				data : JSON.stringify(data),
 				type : "POST",
+				contentType: "application/json",
+				dataType : "json"
 			}).done((response) => {
 				console.log(response)
 
@@ -831,8 +903,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType :"application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -850,7 +923,7 @@
 
 			let data = {
 				"title" : "[복사] " + title,
-				"request" : JSON.stringify(userSelectList)
+				"markers" : JSON.stringify(userSelectList)
 			}
 
 			console.log("제출")
@@ -858,8 +931,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -933,8 +1007,9 @@
 			$.ajax({
 				url: "/api/pathmap/comment",
 				type: 'POST',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response){
 				document.getElementById('commentInput').value = null;
@@ -954,8 +1029,9 @@
 			$.ajax({
 				url : "/api/pathmap/comment",
 				type : 'DELETE',
-				dataType : "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType : "json"
 			})
 			.done(function(response){
 				
@@ -1063,9 +1139,9 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response)
 				
 				let areaLargeSelect = document.getElementById("areaLargeSelect")
@@ -1087,9 +1163,9 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				console.log(response);
 
 				let areaSmallSelect = document.getElementById("areaSmallSelect")
@@ -1124,9 +1200,9 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
-			}).done((response) => {
+			})
+			.done((response) => {
 				
 				let resultText = ""
 				if (areaLargeSelect.value){

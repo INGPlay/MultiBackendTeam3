@@ -63,6 +63,77 @@
 
 </head>
 <body style="height: 100%;">
+
+	<!-- Info Modal -->
+	<div class='modal fade' id='place' tabindex='-1' aria-hidden='true'>
+		<div class='modal-dialog modal-dialog-scrollable modal-lg'>
+			<div class='modal-content'>
+			<div class='modal-header'>
+				<h5 class='modal-title' id='exampleModalLabel'>장소 정보 <small id="modal-sub"></small></h5>
+				<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+			</div>
+			<div class='modal-body'>
+				<table class='table table table-hover'>
+					<thead>
+						<tr>
+							<th scope='col'>항목</th>
+							<th scope='col'>정보</th>
+						</tr>
+					</thead>
+					<tbody id = 'placeRow'>
+					</tbody>
+				</table>
+				<div class='d-flex justify-content-center'>
+					<div class='spinner-border text-info' role='status' id='placeSpinner'>
+						<span class='visually-hidden'>Loading...</span>
+					</div>
+				</div>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!-- Weather Modal -->
+	<div class='modal fade' id='weather' tabindex='-1' aria-hidden='true'>
+		<div class='modal-dialog modal-dialog-scrollable modal-xl'>
+			<div class='modal-content'>
+			<div class='modal-header'>
+				<h5 class='modal-title' id='exampleModalLabel'>날씨 정보</h5>
+				<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+			</div>
+			<div class='modal-body'>
+				<table class='table table table-hover'>
+					<thead>
+						<tr>
+							<th scope='col'>예측시간</th>
+							<th scope='col'>일 최저기온</th>
+							<th scope='col'>일 최고기온</th>
+							<th scope='col'>시간 평균 온도</th>
+							<th scope='col'>하늘형태</th>
+							<th scope='col'>강수형태</th>
+							<th scope='col'>강수확률</th>
+							<th scope='col'>강수량</th>
+							<th scope='col'>강설량</th>
+						</tr>
+					</thead>
+					<tbody id = 'wheatherRow'>
+					</tbody>
+				</table>
+				<div class='d-flex justify-content-center'>
+					<div class='spinner-border text-info' role='status' id='wheatherSpinner'>
+						<span class='visually-hidden'>Loading...</span>
+					</div>
+				</div>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>
+			</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Modal -->
 	<div class="modal fade" id="deleteCheck" tabindex="-1" aria-labelledby="deleteCheckLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -165,13 +236,13 @@
 
 			<!-- 패스맵 제출 및 저장 -->
 			<div class="mt-auto d-flex flex-row justify-content-center">
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-75 radius_border"
 						style="width: 100%; justify-content: center;" onclick="updateUserSelectList()"
 						type="button">
 					<span class="fs-5 fw-semibold">수정</span>
 				</button>
 
-				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50"
+				<button class="d-flex align-items-center p-3 link-dark text-decoration-none border-bottom main_color bg-opacity-50 radius_border"
 						style="width: 100%; justify-content: center;"
 						type="button" data-bs-toggle="modal" data-bs-target="#deleteCheck">
 					<span class="fs-5 fw-semibold">삭제</span>
@@ -284,7 +355,7 @@
 			$.ajax({
 				url : "/api/pathmap/" + pathId,
 				type : "GET",
-				contentType: "application/json",
+				dataType:"json",
 				async:false,		// 비동기로
 			}).done(response => {
 				let title = response["title"]
@@ -399,7 +470,6 @@
 				url : "/api/tour/location",
 				type : "GET",
 				data : params,
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + response.length + "건의 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 검색되었습니다.", "green")
@@ -571,10 +641,10 @@
 							<p class='font-monospace' style='font-size:14px;'>" + info["tel"] + "</p> \
 							<div class = 'd-flex flex-row'> \
 								<div class='me-auto d-flex flex-row'> \
-									<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-									<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+									<button data-bs-toggle='modal' data-bs-target='#place' onclick='renewPlace(" + info["contentTypeId"] + ", " + info["contentId"] + ")' class = 'me-1 badge main_color_only'>장소</button> \
+									<button data-bs-toggle='modal' data-bs-target='#weather' onclick='renewWheather(" + info["posX"] + ", " + info["posY"] + ")' class = 'badge main_color_only'>날씨</button> \
 								</div> \
-								<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")'>추가</button> \
+								<button onclick='addUserSelectList(" + JSON.stringify(info).replace(/\'/gi, "") + ")' class='badge bg-light text-dark'>추가</button> \
 							</div> \
 						</div> \
 					</div> \
@@ -656,15 +726,17 @@
 				if (i > 0){
 
 					// 비동기 함수의 콜백값을 가져오려는 몸부림
-					let beforeWtmObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
-					let currentWtmObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
+					let beforeWCObject = await promiseTransWgs84ToWcongnamul(beforeInfo["posX"], beforeInfo["posY"])
+					let currentWCObject = await promiseTransWgs84ToWcongnamul(info["posX"], info["posY"])
 
-					console.log("beforeWtm : " + beforeWtmObject["wtmX"] + ", " + beforeWtmObject["wtmY"])
-					console.log("currentWtm : " + currentWtmObject["wtmX"] + ", " + currentWtmObject["wtmY"])
+					console.log("beforeWtm : " + beforeWCObject["wtmX"] + ", " + beforeWCObject["wtmY"])
+					console.log("currentWtm : " + currentWCObject["wtmX"] + ", " + currentWCObject["wtmY"])
 
-					if (beforeWtmObject !== null || currentWtmObject !== null){
+					// 길찾기 버튼
+					if (beforeWCObject !== null || currentWCObject !== null){
 						listTemplate += "\
-							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWtmObject["wtmX"] + "," + beforeWtmObject["wtmY"] + "," + currentWtmObject["wtmX"] + "," + currentWtmObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer main_color' aria-current='true'> \
+							<a href='https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt="+ beforeWCObject["wtmX"] + "," + beforeWCObject["wtmY"] + "," + currentWCObject["wtmX"] + "," + currentWCObject["wtmY"] + "&rt1=" + beforeInfo["title"] + "&rt2=" + info["title"] + "' target='_blank' rel='noopener noreferrer' \
+							class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer radius_border main_color' aria-current='true'> \
 								<div class='d-flex flex-column align-items-center'> \
 									<div> \
 										길찾기 \
@@ -677,7 +749,7 @@
 						"
 					} else {
 						listTemplate += " \
-							<div class='d-flex flex-column align-items-center'> \
+							<div class='list-group-item list-group-item-action py-3 lh-tight userSelectContainer radius_border main_color'> \
 								<div> \
 									길찾기 \
 								</div> \
@@ -714,19 +786,19 @@
 								\
 								<div class = 'd-flex flex-row'> \
 									<div class='me-auto d-flex flex-row'> \
-										<button onclick='window.open(\"" + detailUri + "\");'>정보</button> \
-										<button onclick='window.open(\"" + wheatherUri + "\");'>날씨</button> \
+										<button data-bs-toggle='modal' data-bs-target='#place' onclick='renewPlace(" + info["contentTypeId"] + ", " + info["contentId"] + ")' class = 'me-1 badge main_color_only'>장소</button> \
+										<button data-bs-toggle='modal' data-bs-target='#weather' onclick='renewWheather(" + info["posX"] + ", " + info["posY"] + ")' class = 'badge main_color_only'>날씨</button> \
 									</div> \
 								"
 
 				if (i < userSelectList.length - 1){
-					listTemplate += "<button onclick='downUserSelect(" + i + ")'>↓</button>"
+					listTemplate += "<button onclick='downUserSelect(" + i + ")' class = 'badge bg-light text-dark'>↓</button>"
 				}
 				if (i > 0){
-					listTemplate += "<button onclick='upUserSelect(" + i + ")'>↑</button>"
+					listTemplate += "<button onclick='upUserSelect(" + i + ")' class = 'badge bg-light text-dark'>↑</button>"
 				} 
 
-				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")'>삭제</button> \
+				listTemplate += " <button onclick='deleteUserSelectByIndex(" + i + ")' class = 'badge bg-light text-dark'>삭제</button> \
 								</div> \
 							</div> \
 						</div> \
@@ -822,7 +894,7 @@
 
 			let data = {
 				"title" : title,
-				"request" : JSON.stringify(userSelectList),
+				"markers" : JSON.stringify(userSelectList),
 				"pathId" : pathId
 			}
 
@@ -831,8 +903,9 @@
 			$.ajax({
 				url: "/api/pathmap",
 				type: 'PUT',
-				dataType: "json",
-				data : data
+				data : JSON.stringify(data),
+				contentType: "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -853,9 +926,10 @@
 
 			$.ajax({
 				url: "/api/pathmap",
-				type: "DELETE",
-				dataType: "json",
-				data : data
+				type: 'DELETE',
+				data : JSON.stringify(data),
+				contentType : "application/json",
+				dataType: "json"
 			})
 			.done(function(response) {
 				// { "response" : "OK" }
@@ -963,7 +1037,6 @@
 			$.ajax({
 				url : "/api/tour/area/code",
 				type : "GET",
-				contentType: "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response)
@@ -987,7 +1060,6 @@
 			$.ajax({
 				url : "/api/tour/area/code/" + largeCode,
 				type : "GET",
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				console.log(response);
@@ -1024,7 +1096,6 @@
 				url : "/api/tour/keyword",
 				type : "GET",
 				data : data,
-				contentType : "application/json",
 				dataType : "json"
 			}).done((response) => {
 				

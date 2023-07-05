@@ -13,24 +13,30 @@ import java.util.Map;
 @Mapper
 public interface PathMapMapper {
 
-    @Insert("INSERT INTO \"PATH\" p (path_id, user_id, path_title, create_date, update_date, path_views, path_recommends)\n" +
-            "VALUES (\n" +
+    @Insert("INSERT INTO \"PATH\" p (path_id, user_id, path_title, create_date, update_date, path_views, path_recommends, path_starting_area, path_destination_area)\n" +
+            "VALUES ( \n" +
             "${pathId}, \n" +
-            "(SELECT m.user_id FROM MEMBERUSER m WHERE m.user_name = #{username}),\n" +
-            "#{title},\n" +
-            "SYSDATE,\n" +
-            "SYSDATE,\n" +
-            "0,\n" +
-            "0\n" +
+            "(SELECT m.user_id FROM MEMBERUSER m WHERE m.user_name = #{username}), \n" +
+            "#{title}, \n" +
+            "SYSDATE, \n" +
+            "SYSDATE, \n" +
+            "0, \n" +
+            "0, \n" +
+            "#{startingArea}, \n" +
+            "#{destinationArea} \n" +
             ")")
-    void insertPathMap(@Param("pathId") Long pathId, @Param("username") String username, @Param("title") String title);
+    void insertPathMap(@Param("pathId") Long pathId, @Param("username") String username, @Param("title") String title,
+                       @Param("startingArea") String startingArea, @Param("destinationArea") String destinationArea);
 
     @Update("UPDATE PATH \n" +
             "SET\n" +
-            "PATH_TITLE = #{title},\n" +
-            "UPDATE_DATE = SYSDATE\n" +
+            "PATH_TITLE = #{title}, \n" +
+            "UPDATE_DATE = SYSDATE, \n" +
+            "PATH_Starting_area = #{startingArea}, \n" +
+            "PATH_Destination_area = #{destinationArea} \n" +
             "where PATH_ID = ${pathId}")
-    void updatePathMap(@Param("pathId") Long pathId, @Param("title") String title);
+    void updatePathMap(@Param("pathId") Long pathId, @Param("title") String title,
+                       @Param("startingArea") String startingArea, @Param("destinationArea") String destinationArea);
 
     @Update("UPDATE PATH \n" +
             "SET \n" +
@@ -52,7 +58,7 @@ public interface PathMapMapper {
     @Select("SELECT NVL(MAX(mark_id), 0) from Mark")
     Long getMarkCount();
 
-    @Select("SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS\n" +
+    @Select("SELECT p.PATH_ID, m.USER_NAME, p.CREATE_DATE, p.UPDATE_DATE, p.PATH_TITLE, p.PATH_VIEWS, p.PATH_RECOMMENDS, p.PATH_STARTING_AREA, p.PATH_DESTINATION_AREA \n" +
             "FROM PATH p JOIN MEMBERUSER m\n" +
             "ON p.USER_ID = m.USER_ID\n" +
             "Where p.PATH_ID = ${pathId}")
@@ -63,6 +69,12 @@ public interface PathMapMapper {
             "ON p.user_id = m.user_id \n" +
             "where p.PATH_ID = ${pathId}")
     List<CommentResponse> selectPathComment(Long pathId);
+
+    @Select("select m.user_name, p.content, p.create_date, p.update_date, p.comment_id, p.comment_group, p.comment_depth \n" +
+            "FROM PATH_COMMENT p JOIN MEMBERUSER m \n" +
+            "ON p.user_id = m.user_id \n" +
+            "where p.comment_id = ${commentId}")
+    CommentResponse selectComment(Long commentId);
 
     @Insert("insert into path_comment (comment_id, path_id, create_date, update_date, content, comment_group, comment_depth, user_id) \n" +
             "values ( \n" +

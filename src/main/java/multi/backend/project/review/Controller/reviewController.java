@@ -39,6 +39,7 @@ public class reviewController {
 
     //    게시글 insert
     @PostMapping("/write")
+
     public String insertReiew(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO review, @RequestParam("placeName")String contentName,
                               @RequestParam("mfilename")MultipartFile mf, HttpSession session
                              , @AuthenticationPrincipal UserContext ux){
@@ -75,6 +76,10 @@ public class reviewController {
 
 
         int n = service.insertReview(review, ux.getUsername(), contentName);
+
+
+
+
         String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
