@@ -201,7 +201,7 @@ function renewPlace(contentTypeId, contentId){
     }).done((response) => {
 
         console.log(response)
-        viewPlaceInfoDetail(response)
+        viewPlaceInfoDetail(response, contentId)
 
         document.getElementById("placeSpinner").style.display = 'none'
     }).fail((error) => {
@@ -215,7 +215,9 @@ function renewPlace(contentTypeId, contentId){
     })
 }
 
-function viewPlaceInfoDetail(response){
+function viewPlaceInfoDetail(response, contentId){
+    document.getElementById("modal-sub").innerHTML = "<a href = '/review/list?select=1&searchType=3&contentId=" + contentId + "' target='_blank' rel='noopener noreferrer' class='link-secondary'>리뷰 보러가기</a>"
+
     let listRow = document.getElementById("placeRow")
 
     let result = "";
