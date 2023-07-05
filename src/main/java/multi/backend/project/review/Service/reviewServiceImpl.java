@@ -24,13 +24,9 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
     @Transactional
     public int insertReview(reviewVO vo,String user_Name,String contentName) {
         vo.setUser_id(mapper.getUserId(user_Name));
-        int n = checkContentName(vo.getContentId());
-        if(n<=0){
-            int i = mapper.insertPlace(new PlaceVO(vo.getContentId(),contentName));
-        }
+        if(checkContentName(vo.getContentId())<=0){mapper.insertPlace(new PlaceVO(vo.getContentId(),contentName));}
         return mapper.insertReview(vo);
     }
-
     @Override
     @Transactional
     public int getUserId(String user_name) {
@@ -48,6 +44,11 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
     public String getPlaceName(int contentId) {
         return mapper.getPlaceName(contentId);
     }
+
+
+
+    // 리펙토링 완료
+
 
 
     @Override
