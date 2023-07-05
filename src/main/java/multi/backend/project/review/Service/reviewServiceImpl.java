@@ -45,29 +45,20 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
         return mapper.getPlaceName(contentId);
     }
 
-
-
-    // 리펙토링 완료
-
-
-
     @Override
     @Transactional
     public reviewVO selectReviewOne(int review_id,String rid) {
         if (rid.isEmpty() || rid.equals("0")) {
-                reviewVO vo = mapper.selectReviewOne(Integer.valueOf(review_id)); // 해당 게시글 찾기
-                mapper.updateReview_views(vo); // 조회수 증가
-            }
+            reviewVO vo = mapper.selectReviewOne(Integer.valueOf(review_id)); // 해당 게시글 찾기
+            mapper.updateReview_views(vo); // 조회수 증가
+        }
         return mapper.selectReviewOne(review_id);
     }
-
 
     @Override
     @Transactional
     public reviewVO updateReview(reviewVO vo,String ux) {
-        if((!ux.equals(vo.getUser_name()) || (getUserId(ux))!= 1)){
-            return vo;
-        }
+        if((!ux.equals(vo.getUser_name()) || (getUserId(ux))!= 1)){return vo;}
         mapper.updateReview(vo);
         reviewVO rvo = mapper.selectReviewOne(vo.getReview_id());
         return rvo;
@@ -82,6 +73,18 @@ public class reviewServiceImpl implements multi.backend.project.review.Service.r
         }
         return 0;
     }
+
+
+    //---------------------------------------------------------------------------------- 리펙토링 완료
+
+
+
+
+
+
+
+
+
 
     @Override
     @Transactional
