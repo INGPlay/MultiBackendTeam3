@@ -93,6 +93,9 @@
         .rerecom{
             width: 90%;
         }
+        .link:hover{
+
+        }
 
 
     </style>
@@ -344,8 +347,8 @@
         str+='<tr class="tableTr">';
             str+='<td colspan="4">';
             str+=`<div><b>댓글(\${response.totalCount})</b> &nbsp;`;
-            str+='<a class="link" onclick="init(1)">등록순</a> |&nbsp;';
-            str+='<a class="link" onclick="init(2)">최신순</a></div>';
+            str+='<a class="link" id="link1" onclick="init(1)">등록순</a> |&nbsp;';
+            str+='<a class="link" id="link2" onclick="init(2)">최신순</a></div>';
             str+='</td>';
         str+='</tr>';
 
