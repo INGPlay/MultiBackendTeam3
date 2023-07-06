@@ -1,9 +1,9 @@
-package multi.backend.project.review.Mapper;
+package multi.backend.project.review.mapper;
 
-import multi.backend.project.review.VO.PlaceVO;
-import multi.backend.project.review.VO.ResponseVO;
-import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.vo.PlaceVO;
+import multi.backend.project.review.vo.ResponseVO;
+import multi.backend.project.review.vo.Review_CommentVO;
+import multi.backend.project.review.vo.ReviewVO;
 import multi.backend.project.review.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface reviewMapper {
+public interface ReviewMapper {
 
-    List<reviewVO> selectReviewAll(Map<String,Integer> map);
+    List<ReviewVO> selectReviewAll(Map<String,Integer> map);
 
 
 
     //    1. insert ( 게시글 추가하기 )
-    int insertReview(reviewVO vo);
+    int insertReview(ReviewVO vo);
 
     //    1_1 insert를 위한 user_id 가져오기
     int getUserId(String user_name);
@@ -34,28 +34,28 @@ public interface reviewMapper {
     String getPlaceName(int contentId);
 
     //    2. Read (전체 게시판 목록 가져오기)
-    List<reviewVO> selectReviewAll();
+    List<ReviewVO> selectReviewAll();
 
     //    2_1. Read (특정 게시글 가져오기)
-    reviewVO selectReviewOne(int user_id);
+    ReviewVO selectReviewOne(int user_id);
 
     //    2_2. 페이징 적용한 게시판 목록 가져오기
-    List<reviewVO> getListWithPaging(@Param("cri") Criteria cri,@Param("searchType")String searchType,@Param("keyword") String keyword,@Param("contentId") List<String> contentId);
+    List<ReviewVO> getListWithPaging(@Param("cri") Criteria cri, @Param("searchType")String searchType, @Param("keyword") String keyword, @Param("contentId") List<String> contentId);
 
     //    3. Update (게시글 수정하기)
-    int updateReview(reviewVO vo);
+    int updateReview(ReviewVO vo);
 
     //    4. delete (게시글 삭제하기)
     int deleteReview(int id);
 
     //    5. 조회수 증가
-    int updateReview_views(reviewVO vo);
+    int updateReview_views(ReviewVO vo);
 
     //    6. 총 게시글 수
     int getTotalCount();
 
     //    7. 추천수 증가
-    int updateReview_recommends(reviewVO vo);
+    int updateReview_recommends(@Param("vo") ReviewVO vo, @Param("i") int i);
 
 
 // ========================================
@@ -89,5 +89,14 @@ public interface reviewMapper {
     // 제목 검색과 글쓴이 검색 총 결과 개수 가져오기
     int getSearchTotalCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
 
+
     int getSearchPlaceTotalCount(ResponseVO vo);
+
+    int getTotalRecomment(int reviewId);
+
+    int selectRecommentCheck(@Param("review_id") int review_id, @Param("user_id") int user_id);
+
+    int insert_Review_recommend(@Param("review_id") int review_id, @Param("user_id") int user_id);
+
+    int delete_Review_recommend(@Param("review_id") int review_id, @Param("user_id") int user_id);
 }

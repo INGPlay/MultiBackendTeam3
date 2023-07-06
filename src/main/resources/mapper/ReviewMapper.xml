@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="multi.backend.project.review.Mapper.reviewMapper">
+<mapper namespace="multi.backend.project.review.mapper.ReviewMapper">
 
     <!--  게시글 추가  -->
     <insert id="insertReview" parameterType="reviewVO">
@@ -111,7 +111,14 @@
 
     <!-- 추천 버튼 클릭시 추천수 증가-->
     <update id="updateReview_recommends" parameterType="reviewVO">
-        update review set review_recommends = #{review_recommends}+1 where review_id=#{review_id}
+        update review set
+        <if test="i==1">
+        review_recommends = #{vo.review_recommends}+1
+        </if>
+        <if test="i==2">
+        review_recommends = #{vo.review_recommends}-1
+        </if>
+        where review_id=#{vo.review_id}
 
     </update>
 
@@ -129,11 +136,12 @@
     <!-- 해당 게시글 댓글 조회   -->
     <select id="selectReviewComment" resultType="commentVO" parameterType="_int" >
         select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
-        from comment_vi where review_id = #{review_id}
+        from comment_vi where review_id = #{review_id} order by
         <if test="sort == 1">
-            order by comment_group asc, comment_depth asc
-        </if><if test="sort == 2">
-        order by comment_group desc, comment_depth desc
+            comment_group asc, comment_depth asc
+        </if>
+        <if test="sort == 2">
+            comment_group desc, comment_depth desc
     </if>
     </select>
 
@@ -200,6 +208,29 @@
                 #{i}
             </foreach>
     </select>
+
+    <select id="getTotalRecomment" resultType="_int" parameterType="_int">
+        select count(comment_id) from comment_vi where review_id = #{reviewId}
+    </select>
+
+    <!---->
+    <select id="selectRecommentCheck" parameterType="_int" resultType="_int">
+        select count(recommends) from review_recommends where review_id=#{review_id} and user_id = #{user_id}
+    </select>
+
+    <!---->
+    <insert id="insert_Review_recommend" parameterType="_int">
+        <selectKey keyProperty="recommend" resultType="_int" order="BEFORE">
+            select TO_NUMBER(recommend_id.nextval) from dual
+        </selectKey>
+        insert into review_recommends(recommends,review_id,user_id) values(#{recommend},#{review_id},#{user_id})
+    </insert>
+
+    <!---->
+
+    <delete id="delete_Review_recommend" parameterType="_int">
+        delete from review_recommends where review_id=#{review_id} and user_id = #{user_id}
+    </delete>
 </mapper>
 
 
