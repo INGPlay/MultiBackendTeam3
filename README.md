@@ -1,8 +1,213 @@
 # MultiBackendTeam3
 
+## 프로젝트 목적
+### → 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
+
+
+## 사용 기술
+> ### BackEnd
+- JDK 11
+- Spring Boot v2.7.12
+- Spring Security
+- Spring Validation
+- MyBatis
+- Json-simple
+
+> ### FrontEnd
+- JSP
+- JSTL
+- CSS
+- JavaScript
+- AJAX
+- jQuery
+- BootStrap 5
+
+
+> ### API
+- 카카오 지도 Web API
+- 한국관광공사 Tour API
+- 기상청 단기예보 API
+
+> ### Server
+- AWS EC2
+- Ubuntu 22.04
+
+> ### 참고
+- https://gist.github.com/fronteer-kr/14d7f779d52a21ac2f16#file-
+
+## 수행 도구
+> ### 개발도구
+- InteliJ IDEA
+- VS Code
+- SQL Developer 혹은 DBeaver
+
+> ### 빌드도구
+- Gradle
+
+> ### 형상관리
+- GitHub
+- Git
+- SourceTree
+
+> ### 테스트도구
+- JUnit
+- Postman
+
+
+## 프로젝트 사이트 기능
+
+### 1. 메인 페이지
+![main](images/main_draw.png)
+
+#### 1-1. 헤더 (1. 메인페이지 그림 1번)
+![header1](images/header_logout_draw.png)
+![header2](images/header_login_draw.png)
+![header3](images/header_login_admin_draw.png)
+
+- 1-1. 헤더 그림 1번은 각 메인 페이지, [지도 페이지](#2-지도-페이지), [리뷰 페이지](#3-리뷰-페이지), [팀 페이지](#4-팀-페이지)로 이동하는 링크를 나타낸다.
+- 1-1. 헤더 그림 2번과 같이 [로그인 페이지](#5-로그인-페이지) 및 [가입 페이지](#6-가입-페이지)로 이동하는 링크를 나타낸다.
+- 1-1. 헤더 그림 3번은 로그인 여부에 따라 [마이 페이지](#7-마이-페이지) 및 로그아웃 버튼을 나타냄을 보여준다.
+- 1-1. 헤더 그림 4번은 어드민 계정 로그인에 따라 [관리자 페이지](#8-관리자-페이지)로 이동하는 버튼을 추가적으로 나타냄을 보여준다.
+
+#### 1-2. 바디 (1. 메인페이지 그림 2번)
+![body1](images/body_button_logout_draw.png)
+![body2](images/body_button_login_draw.png)
+
+- 메인 페이지는 영상을 반복 재생된다.
+- 1-2. 바디 그림 1번과 같이 [로그인 페이지](#5-로그인-페이지) 및 [가입 페이지](#6-가입-페이지)로 이동하는 링크를 나타낸다.
+- 1-2. 바디 그림 2번은 로그인 여부에 따라 로그아웃 버튼이 나타냄을 보여준다.
+
+#### 1-3. 푸터 (1. 메인페이지 그림 3번)
+![footer](images/footer_draw.png)
+- 1-3. 푸터 그림 1번의 링크를 클릭하면 이 리포지토리 페이지로 이동한다.
+
+### 2. 지도 페이지
+![map](images/map_draw.png)
+
+#### 2-1. 지도 (2. 지도 페이지 그림 1번)
+- 선택된 지도의 이미지를 보여준다.
+- 마커를 클릭하여 인포 윈도우를 띄워 정보 모달창을 띄울 수 있다.
+  - [장소 정보 모달창](#9-1-장소-정보-모달창)
+  - [날씨 정보 모달창](#9-2-날씨-정보-모달창)
+
+#### 2-2. 조회 순서 드롭다운 (2. 지도 페이지 그림 2번)
+![map_select](images/map_select.png)
+- 2.지도 페이지 그림 4번의 게시글 조회순서 기준을 선택한다.
+  - 최신순 : 작성일 기준으로 조회한다.
+  - 조회순 : 조회수를 기준으로 조회한다.
+  - 추천순 : 추천수를 기준으로 조회한다.
+
+
+#### 2-3. 작성하기 버튼 (2. 지도 페이지 그림 3번)
+
+![map_buttons1](images/map_buttons_logout.png)
+- 로그아웃 상태인 경우 작성하기 버튼만 출력된다.
+- '작성하기' 버튼을 클릭할 경우 [로그인 페이지](#5-로그인-페이지)로 이동하게 된다.
+
+![map_buttons2](images/map_buttons_login.png)
+- 로그인 상태인 경우 추천한 게시글 버튼 또한 출력된다.
+- '추천한 게시글' 버튼을 클릭할 경우 그 계정으로 추천한 계시글만 게시판에 조회된다.
+- '작성하기' 버튼을 클릭할 경우 [맵 작성 페이지](#2-a-맵-작성-페이지)로 이동한다.
+
+#### 2-4. 게시판 (2. 지도 페이지 그림 4번)
+![map_thread](images/map_thread_draw.png)
+![map_thread_selected](images/map_thread_selected_draw.png)
+
+- 게시된 지도를 나열한다.
+- 2-4 게시판 그림 1번은 이 지도의 출발지역과 도착지역을 나타낸다. (출발지역 → 도착지역)
+- 2-4 게시판 그림 2번은 [지도 게시글 페이지](#2-b-지도-게시글-페이지)로 이동하는 버튼을 나타낸다.
+
+#### 2-5. 페이징바 (2. 지도 페이지 그림 5번)
+![map_paging1](images/map_paging_left.png)
+![map_paging2](images/map_paging_double.png)
+![map_paging3](images/map_paging_right.png)
+
+- 조회 상황에 위 그림과 같이 따라 페이징 바를 나타낸다.
+
+#### 2-6. 검색창 (2. 지도 페이지 그림 6번)
+![map_search](images/map_search_draw.png)
+- 2-6. 검색창 그림 1번은 검색할 카테고리를 선택한다.
+- 2-6. 검색창 그림 2번은 검색할 단어를 입력한다.
+- 검색 버튼을 누르면 게시판에 조건에 해당하는 게시글을 조회한다.
+
+
+### 2-a. 지도 작성 페이지
+
+#### 2-a-1. 경로 페이지
+![map_form](images/map_form_click_draw.png)
+- 지도 내에서 마우스로 클릭한 좌표 근처에 마커가 표시된다.
+- 위 그림의 1번의 버튼으로 검색할 카테고리를 선택할 수 있다.
+- 위 그림의 2번 UI로 지역과 장소의 제목으로 검색할 수 있다.
+- 위 그림의 3번은 마커를 클릭하면 나타나는 창이다.
+  - '장소' 버튼 : [장소 정보 모달창](#9-1-장소-정보-모달창)을 띄운다.
+  - '날씨' 버튼 : [날씨 정보 모달창](#9-2-날씨-정보-모달창)을 띄운다.
+  - '추가' 버튼 : 지도에 장소를 추가한다.
+- 위 그림의 4번은 검색된 장소를 나타내는 마커이다.
+
+![map_form_sequence](images/map_form_sequence_draw.png)
+- 위 그림의 1번은 선택된 장소가 숫자로 쓰인 마커로 표현되는 것을 보여준다.
+- 위 그림의 2번은 게시판으로 돌아가는 버튼과 제목 입력창을 나타낸다.
+- 위 그림의 3번은 선택된 장소와 그 순서를 나타낸다.
+  - '장소' 버튼 : [장소 정보 모달창](#9-1-장소-정보-모달창)을 띄운다.
+  - '날씨' 버튼 : [날씨 정보 모달창](#9-2-날씨-정보-모달창)을 띄운다.
+  - '↑' 버튼 : 이 장소의 순서를 위로 올린다.
+  - '↓' 버튼 : 이 장소의 순서를 아래로 내린다.
+  - '삭제' 버튼 : 선택된 장소를 해제한다.
+- 위 그림의 4번은 장소와 장소 사이의 길찾기 페이지를 새 탭으로 띄운다.
+  - 카카오 길찾기 맵이 사용되었다.
+
+### 2-b. 지도 게시글 페이지
+![map_post](images/map_post_draw.png)
+
+- 위 그림의 1번은 작성자에 따라 다르게 나타난다.
+  - 작성자가 아니라면 다음과 같이 출력한다.
+    ![map_post_top2](images/map_post_top_author_not.png)
+  - 로그인 된 계정이 작성자라면 수정 버튼이 추가된다.
+![map_post_top1](images/map_post_top_author.png)
+    - '수정' 버튼 : 이 게시글을 [수정할 수 있는 페이지](#2-a-1-경로-페이지)로 넘어간다.
+
+
+- 위 그림의 2번은 사용자가 로그인 되었는지에 따라 다르게 나타난다.
+  - 로그아웃이면 다음과 같이 출력한다.
+![map_post_down1](images/map_post_down_logout.png)
+  - 로그인 하였으면 다음과 같이 '추천'과 '복사' 버튼이 또한 출력된다.
+![map_post_down2](images/map_post_down_login.png)   
+    - '추천' 버튼 : 추천이 되었다면 다음과 같이 출력된다.     
+![map_post_recommend](images/map_post_recommend.png)   
+    - '지도 복제' 버튼 : 이 지도와 똑같은 게시글을 이 계정으로 작성한다.
+    - '댓글' 버튼 : 댓글을 작성한다. 자신이 작성한 댓글은 삭제할 수 있다.
+  ![map_post_comment](images/map_post_comment.png)
+
+### 3. 리뷰 페이지
+
+### 4. 팀 페이지
+
+### 5. 로그인 페이지
+
+### 6. 가입 페이지
+
+### 7. 마이 페이지
+
+### 8. 관리자 페이지
+
+
+### 9. 정보 전달 모달창
+
+#### 9-1. 장소 정보 모달창
+![place](images/map_form_inform_place.png)
+
+#### 9-2. 날씨 정보 모달창
+![wheather](images/map_form_inform_wheather.png)
+
+
+
+
 ## 초기화
 
 ### 프로젝트에 없는 파일 (.gitignore에 등록된 파일)
+
+<details>
+<summary><b>접기/펼치기</b></summary>
 
 - keys.properties
 ```properties
@@ -319,7 +524,4 @@ select m.*,p.contentName
 
 <br>
 
-## 경로
-ㄴ controller : Root 경로에서 테스트하기 위한 컨트롤러 하나 있음  
-ㄴ pathMap : 경로 맵 페이지 관련  
-ㄴ security : 로그인 및 관리자 페이지 관련  
+</details>
