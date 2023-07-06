@@ -1,7 +1,7 @@
 # MultiBackendTeam3
 
 ## 프로젝트 목적
-### → 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
+### 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
 
 
 ## 사용 기술
@@ -107,7 +107,7 @@
 ![map_buttons2](images/map_buttons_login.png)
 - 로그인 상태인 경우 추천한 게시글 버튼 또한 출력된다.
 - '추천한 게시글' 버튼을 클릭할 경우 그 계정으로 추천한 계시글만 게시판에 조회된다.
-- '작성하기' 버튼을 클릭할 경우 [맵 작성 페이지](#2-a-맵-작성-페이지)로 이동한다.
+- '작성하기' 버튼을 클릭할 경우 [맵 작성 페이지](#2-a-지도-작성-페이지)로 이동한다.
 
 #### 2-4. 게시판 (2. 지도 페이지 그림 4번)
 ![map_thread](images/map_thread_draw.png)
@@ -178,23 +178,49 @@
     - '댓글' 버튼 : 댓글을 작성한다. 자신이 작성한 댓글은 삭제할 수 있다.
   ![map_post_comment](images/map_post_comment.png)
 
+
 ### 3. 리뷰 페이지
 
+
 ### 4. 팀 페이지
+![team](images/team.png)
+- 팀 및 프로젝트 서비스를 소개하는 페이지
 
 ### 5. 로그인 페이지
+![login](images/login.png)
+- 서비스를 이용하기 위해 로그인을 하는 페이지이다.
+- 제출된 아이디와 비밀번호가 데이터베이스 내에 정보와 일지하지 않는다면 다음과 같은 검증 텍스트가 뜨게 된다.
+![login_fail](images/login_fail.png)
 
 ### 6. 가입 페이지
+![register](images/register.png)
+- 서비스를 이용하기 위한 계정을 만드는 페이지이다.
+- 제출된 양식이 허용되지 않거나, 데이터베이스 내의 정보와 중복되는 경우 다음과 같이 검증 텍스트를 출력한다.
+![register_fail](images/register_fail.png)
 
 ### 7. 마이 페이지
+![mypage](images/mypage.png)
+- 가입할 때 입력하였던 정보를 보여준다.
+- 또한 현재 비밀번호와 새 비밀번호를 입력하여 비밀번호를 수정할 수 있다.
 
 ### 8. 관리자 페이지
+![admin](images/admin_draw.png)
+- 위 그림 1번은 조회 순서 기준을 나타낸다.  
+![admin_order](images/admin_order.png)
 
+- 각 계정에 '삭제하기' 버튼(위 그림 2번)이 할당되어 있어 특정 계정을 삭제할 수 있다.
+  - '삭제하기 버튼'을 누를 경우 아래와 같은 모달창을 띄워 정말 삭제할 것인지 확인한다.
+![admin_delete](images/admin_delete_modal.png)
+
+- 검색창에서 검색할 수 있다. (위 그림 3번)
+  - 왼쪽 셀렉트 창을 통해 검색 기준을 바꿀 수 있다.  
+![admin_search_option](images/admin_search_option.png)
 
 ### 9. 정보 전달 모달창
 
 #### 9-1. 장소 정보 모달창
 ![place](images/map_form_inform_place.png)
+- 모달 제목 쪽에 있는 '리뷰 보러가기' 링크를 클릭하면 [리뷰 게시판](#3-리뷰-페이지)에 이 장소를 검색하여 새 탭에 띄운다.
 
 #### 9-2. 날씨 정보 모달창
 ![wheather](images/map_form_inform_wheather.png)
