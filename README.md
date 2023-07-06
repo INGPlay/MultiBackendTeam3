@@ -74,7 +74,7 @@ spring.mvc.view.suffix=.jsp
 spring.sql.init.mode=always
 
 
-spring.messages.basename=messages/keys
+spring.messages.basename=messages/keys, messages/errorMessages
 spring.messages.encoding=UTF-8
 ```
 
@@ -82,9 +82,239 @@ spring.messages.encoding=UTF-8
 
 - schema.sql
 ```sql
+CREATE TABLE testtable (
+    test_id NUMBER(10) NOT NULL,
+    test_name VARCHAR2(10) NOT NULL,
+    test_date DATE NOT NULL
+    );
 
--- ...
+CREATE TABLE AREA_LARGE (
+    large_id NUMBER,
+    large_code VARCHAR2(5) NOT NULL,
+    large_name VARCHAR2(30) NOT NULL,
+    CONSTRAINT area_large_pk PRIMARY KEY(large_id),
+    CONSTRAINT area_large_uniq UNIQUE(large_code, large_name)
+);
 
+CREATE TABLE AREA_SMALL(
+    small_id NUMBER,
+    small_code VARCHAR2(5) NOT NULL,
+    small_name VARCHAR2(30) NOT NULL,
+    large_id_fk NUMBER NOT NULL,
+    CONSTRAINT area_small_pk PRIMARY KEY (small_id),
+    CONSTRAINT area_small_fk FOREIGN KEY (large_id_fk) REFERENCES AREA_LARGE (large_id) ON DELETE CASCADE
+);
+
+
+-- Sequence 생성 및 삭제
+CREATE SEQUENCE large_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+
+---- Sequence 생성 및 삭제
+CREATE SEQUENCE small_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+
+ 본 페이지 관련!!!!--------------
+-- user => 예약어 MemberUser 로 대체
+create table MemberUser(
+    user_id Number primary key,
+    user_name VARCHAR2(50) not null,
+    user_pwd VARCHAR2(60) not null,
+    user_email varchar2(50) not null,
+    user_phone varchar2(50) not null,
+    user_role varchar2(50) not null,
+    constraint uniq_MemberUser UNIQUE(user_name, user_email, user_phone)
+);
+
+
+-- Review
+create table Review(
+    review_id Number primary key,
+    user_id Number not null,
+    review_title varchar2(50) not null,
+    review_content varchar2(1000) not null,
+    create_date Date not null,
+    update_date Date not null,
+    review_views Number not null,
+    review_recommends Number not null,
+    contentid Number not null,
+    filename varchar2(500),
+    originFilename varchar2(500),
+    filesize number(8),
+    CONSTRAINT fk_userid FOREIGN key(user_id) REFERENCES MemberUser(user_id) ON DELETE CASCADE
+ );
+ 
+
+create table Review(
+    review_id Number primary key,
+    user_id Number not null,
+    review_title varchar2(50) not null,
+    review_content varchar2(1000) not null,
+    create_date Date not null,
+    update_date Date not null,
+    review_views Number not null,
+    review_recommends Number not null,
+    contentid Number not null,
+    CONSTRAINT fk_userid FOREIGN key(user_id) REFERENCES MemberUser(user_id) ON DELETE CASCADE
+ );
+
+
+create table place(
+    contentId Number primary key,
+    contentName varchar2(150)
+);
+
+
+-- Review_comment
+create table Review_Comment(
+    comment_id Number primary key,
+    review_id Number not null,
+    create_date Date not null,
+    update_date Date not null,
+    content varchar2(300) not null,
+    comment_group Number not null,
+    comment_depth Number not null,
+    user_id int not null,
+    constraint fk_review_id foreign key(review_id) references Review(review_id) on DELETE CASCADE,
+    constraint fk_comment_user_id foreign key(user_id) references MemberUser(user_id) on DELETE CASCADE
+ );
+
+
+-- Path
+ create table Path(
+    path_id Number primary key,
+    user_id Number not null,
+    create_date Date not null,
+    update_date Date not null,
+    path_title Varchar2(50) not null,
+    path_views Number not null,
+    path_recommends Number not null,
+    path_starting_area varchar2(30) not null,
+    path_destination_area varchar2(30) not null,
+    constraint fk_path_user_id foreign key(user_id) references MemberUser(user_id) on DELETE CASCADE
+ );
+
+
+---- mark
+ create table Mark(
+    mark_id Number primary key,
+    path_id Number not null,
+    mark_title Varchar2(50),
+    mark_addr1 varchar2(200) not null,
+    mark_addr2 varchar2(50),
+    mark_contentId Number not null,
+    mark_contentType varchar2(30) not null,
+    mark_contentTypeId varchar2(30) not null,
+    mark_firstImageURI varchar2(500),
+    mark_firstImageURI2 varchar2(500),
+    mark_posX Number not null,
+    mark_posY Number not null,
+    mark_tel Varchar2(15),
+    mark_placeOrder Number not null,
+    mark_area varchar2(30) not null,
+    constraint fk_mark_path_id foreign key(path_id) references Path(path_id) on DELETE CASCADE
+ );
+
+---- path_comment
+  create table path_comment(
+     comment_id Number primary key,
+     path_id Number not null,
+     create_date Date not null,
+     update_date Date not null,
+     content Varchar2(500) not null,
+     comment_group Number not null,
+     comment_depth Number not null,
+     user_id Number not null,
+     constraint fk_PC_path_id foreign key(path_id) references Path(path_id) on DELETE CASCADE,
+     constraint fk_PC_user_id foreign key(user_id) references MemberUser(user_id) on DELETE CASCADE
+  );
+
+
+-- favorite
+create table Favorite(
+    favorite_id Number primary key,
+    user_id Number not null,
+    path_id Number not null,
+    constraint fk_favorite_user_id foreign key(user_id) references MemberUser(user_id) on DELETE CASCADE,
+    constraint fk_favorite_path_id foreign key(path_id) references Path(path_id) on DELETE CASCADE
+);
+
+
+create table review_recommends(
+    recommends Number primary key,
+    review_id Number,
+    user_id Number,
+    CONSTRAINT fk_recommend_review_id FOREIGN key(review_id) REFERENCES review(review_id) ON DELETE CASCADE,
+    CONSTRAINT fk_recommend_user_id FOREIGN key(user_id) REFERENCES MemberUser(user_id) ON DELETE CASCADE
+);
+
+ CREATE SEQUENCE recommend_id
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE MemberUser_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Review_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Review_Comment_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Path_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Mark_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Path_Comment_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+CREATE SEQUENCE Favorite_Sequence
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NOCYCLE;
+
+---- view 추가
+create view comment_vi as
+    select m.user_name,r.*
+        from MemberUser m join Review_Comment r
+            on m.user_id = r.user_id;
+
+create view review_vi as
+select m.*,p.contentName
+    from(select m.user_name,r.*
+            from MemberUser m join Review r
+            on m.user_id = r.user_id) m join place p on m.CONTENTID = p.CONTENTID;
 ```
 
 <br>
