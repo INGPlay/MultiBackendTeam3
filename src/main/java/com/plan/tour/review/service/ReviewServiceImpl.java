@@ -80,13 +80,26 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ReviewVO updateReview(ReviewVO vo, String ux,String upDir,MultipartFile mf) {
-        if((!ux.equals(vo.getUser_name()) || (getUserId(ux))!= 1)){return vo;}
-        File dir = new File(upDir);
-        String oldFile = vo.getFilename();
-        if(!dir.exists()){
-            dir.mkdirs();
+        if(getUserId(ux)!=1 && (!ux.equals(vo.getUser_name()))) {
+            return mapper.selectReviewOne(vo.getReview_id());
+        }
+        ReviewVO oldvo = selectReviewOne(vo.getReview_id(),"1");
+
+        File Fdir = new File(upDir);
+
+        int result = 0;
+
+        if(!Fdir.exists()){
+            Fdir.mkdirs();
         }
         if(!mf.isEmpty()){
+            result=1;
+            if(oldvo.getFilename()!=null) {
+                File dir = new File(upDir, oldvo.getFilename());
+                if (dir.isFile()) {
+                    dir.deleteOnExit();
+                }
+            }
             String fname = mf.getOriginalFilename();
             long fsize = mf.getSize();
             UUID uid = UUID.randomUUID();
@@ -100,10 +113,11 @@ public class ReviewServiceImpl implements ReviewService {
             }catch (IOException e){
                 return vo;
             }
+        }else{
+            result=0;
         }
-        mapper.updateReview(vo);
-        ReviewVO rvo = mapper.selectReviewOne(vo.getReview_id());
-        return rvo;
+        mapper.updateReview(vo,result);
+        return mapper.selectReviewOne(vo.getReview_id());
     }
 
     // =================================================================================================================
@@ -119,12 +133,6 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     //---------------------------------------------------------------------------------- 리펙토링 완료
-
-
-
-
-
-
 
 
 

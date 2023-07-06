@@ -46,7 +46,8 @@ public class ReviewController {
         // 파일 업로드 처리
         ServletContext app = session.getServletContext();
         String upDir = app.getRealPath("/resources/upload");
-        int n = service.insertReview(review, ux.getUsername(), contentName,upDir,mf);
+        int n= service.insertReview(review, ux.getUsername(), contentName, upDir, mf);
+
         String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
@@ -112,7 +113,7 @@ public class ReviewController {
     //    게시글 수정&삭제 폼 이동
     @PostMapping("/edit")
     public String editForm(Model m , @ModelAttribute ReviewVO vo){
-        m.addAttribute("vo",vo);
+        m.addAttribute("vo",service.selectReviewOne(vo.getReview_id(),"1"));
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
         return "review/Edit";
     }

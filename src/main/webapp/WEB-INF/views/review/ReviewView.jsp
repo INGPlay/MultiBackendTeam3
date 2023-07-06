@@ -149,285 +149,293 @@
 
                 <tr>
                     <td style="width:20%" class="center"><b>글내용</b></td>
-                    <td style="width:80%; border-bottom-style: hidden;text-align: center ">
+                    <td style="width:80%; border-bottom-style: hidden;text-align: left ">
+                        <div contenteditable="true">
                         <c:if test="${vo.filename ne null}">
-                            <img src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:65%; height: 150px">
-                        </c:if>
-                        <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control" readonly >${vo.review_content} </textarea>
+                                <img src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:30%; height: 150px"><br><br>
+                       </c:if>
+                            ${vo.review_content}
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                         <td colspan="2" style="border-bottom-style: hidden">
+                             <div onclick="com()"width="100px" height="100px"  class="div">
+                                 <img class="img" src="/image/re.png"/>
+                                 <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
+                                 <span id="resultRecommends">${vo.review_recommends} </span>
+                             </div>
+                         </td>
+                        <td>
+                            <input type="hidden" name="review_recommends" id="ConnectUserName" value="${ConnectUserName}" readonly />
+                        </td>
+
+                    </tr>
+                </table>
+            </form>
+    <div id="comment_list" align="center" id="b" class="container"></div>
+
+    </div><!-- .row end-->
+    <div class="container" style="color: #12bbad">
+
+        <form>
+            <table class="table table table-hover">
+                <tr id="commentInsert">
+                    <td width="90%" height="100px">
+                        <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
                     </td>
-                </tr>
-
-
-                <tr>
-                     <td colspan="2" style="border-bottom-style: hidden">
-                         <div onclick="com()"width="100px" height="100px"  class="div">
-                             <img class="img" src="/image/re.png"/>
-                             <input type="hidden" class="img_text" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
-                             <span id="resultRecommends">${vo.review_recommends} </span>
-                         </div>
-                     </td>
-                    <td>
-                        <input type="hidden" name="review_recommends" id="ConnectUserName" value="${ConnectUserName}" readonly />
+                    <td width="10%" class="center" style="vertical-align: middle"><div style="color: #12bbad;"><input type="button" onclick="insertComment()"  style="background-color: #12bbad;height: 100% " value="등록"/></div>
                     </td>
-
                 </tr>
             </table>
         </form>
-<div id="comment_list" align="center" id="b" class="container"></div>
 
-</div><!-- .row end-->
-<div class="container" style="color: #12bbad">
+    </div>
+        <form method="get" action="list" name="reset" id="reset"></form>
 
-    <form>
-        <table class="table table table-hover">
-            <tr id="commentInsert">
-                <td width="90%" height="100px">
-                    <textarea id="content" style="width: 100%; height: 100%;" name="content"></textarea>
-                </td>
-                <td width="10%" class="center" style="vertical-align: middle"><div style="color: #12bbad;"><input type="button" onclick="insertComment()"  style="background-color: #12bbad;height: 100% " value="등록"/></div>
-                </td>
-            </tr>
-        </table>
-    </form>
+    <!-- footer -->
+    <%@ include file="/WEB-INF/views/template/footer.jsp" %>
 
-</div>
-    <form method="get" action="list" name="reset" id="reset"></form>
+    </body>
+    <script>
+        const edit = function(){
+            bf.method='post';
+            bf.action='edit'
+            bf.submit();
+        }
 
-<!-- footer -->
-<%@ include file="/WEB-INF/views/template/footer.jsp" %>
+        const goList = function (){
+            reset.submit();
+        }
 
-</body>
-<script>
-    const edit = function(){
-        bf.method='post';
-        bf.action='edit'
-        bf.submit();
-    }
+        const com = function(){
+            const review_id = document.getElementById('review_id').value;
+            $.ajax({
+                type:'post',
+                url:'/review/view',
+                dataType:'json',
+                data:{"review_id":review_id},
+                cache:false
+            }).done((res)=>{
+                $("#resultRecommends").text(res.review_recommends);
+                if(res.result=="1"){
+                    alert("추천했습니다");
+                }else{
+                    alert("추천을 취소했습니다");
+                }
+            }).fail((err)=>{
+                alert(err.status);
+            })
+        }
 
-    const goList = function (){
-        reset.submit();
-    }
+        const deleteComment = function(id){
+            $.ajax({
+                type:'post',
+                url:'/review/deleteComment',
+                dataType:'text',
+                data:{"id":id},
+                cache:false,
+            }).done((res)=>{
+                alert("삭제되었습니다.")
+                init(1);
+            }).fail((err)=>{
+                alert(err.status)
+            })
+        }
 
-    const com = function(){
-        const review_id = document.getElementById('review_id').value;
-        $.ajax({
-            type:'post',
-            url:'/review/view',
-            dataType:'json',
-            data:{"review_id":review_id},
-            cache:false
-        }).done((res)=>{
-            $("#resultRecommends").text(res.review_recommends);
-            if(res.result=="1"){
-                alert("추천했습니다");
+
+        const insertComment = function(){
+            let rid=$('#review_id').val();
+            let con=$('#content').val();
+            let uid=$('#user_id').val();
+
+            if(con==""){
+                alert("내용을 넣어주세요");
+                return false;
+            }
+            let jsonData={
+                review_id:rid,
+                content:con,
+                user_id:uid
+            };
+
+            $.ajax({
+                type:'post',
+                url:'/review/insert',
+                dataType:'text',
+                contentType:'application/json; charset=UTF-8',
+                data:JSON.stringify(jsonData),
+                cache: false
+            }).done((res)=>{
+                alert("댓글을 작성했습니다");
+                document.getElementById("content").value='';
+                init(1);
+            }).fail((err)=>{
+                alert(err.status)
+            })
+
+        }
+
+        const recomment = function(id){
+            //alert(id);
+            var list= id.split('/');
+            var x = document.getElementsByClassName(list[0]+"div");
+            var y = document.getElementById(list[0]+"re"+list[1]);
+
+            var i;
+            for (i=0; i < x.length; i++) {
+            var obj=x[i];
+                if (obj.style.display == "none") {
+                    obj.style.display = "";
+                }
+                else {
+                    y.value="" ;
+                    obj.style.display = "none";
+                }
+            }
+        }
+
+        const CheckMessage = function(id){
+            var list= id.split('btn');
+            var total = list[0]+"re"+list[1];
+            var x = document.getElementById(total);
+            var reset = list[0]+"/"+list[1];
+            var message = x.value;
+
+            if(message.trim()!=0){
+                insertCommentRe(list[0],message);
             }else{
-                alert("추천을 취소했습니다");
-            }
-        }).fail((err)=>{
-            alert(err.status);
-        })
-    }
-
-    const deleteComment = function(id){
-        $.ajax({
-            type:'post',
-            url:'/review/deleteComment',
-            dataType:'text',
-            data:{"id":id},
-            cache:false,
-        }).done((res)=>{
-            alert("삭제되었습니다.")
-            init(1);
-        }).fail((err)=>{
-            alert(err.status)
-        })
-    }
-
-
-    const insertComment = function(){
-        let rid=$('#review_id').val();
-        let con=$('#content').val();
-        let uid=$('#user_id').val();
-
-        if(con==""){
-            alert("내용을 넣어주세요");
-            return false;
-        }
-        let jsonData={
-            review_id:rid,
-            content:con,
-            user_id:uid
-        };
-
-        $.ajax({
-            type:'post',
-            url:'/review/insert',
-            dataType:'text',
-            contentType:'application/json; charset=UTF-8',
-            data:JSON.stringify(jsonData),
-            cache: false
-        }).done((res)=>{
-            alert("댓글을 작성했습니다");
-            document.getElementById("content").value='';
-            init(1);
-        }).fail((err)=>{
-            alert(err.status)
-        })
-
-    }
-
-    const recomment = function(id){
-        //alert(id);
-        var list= id.split('/');
-        var x = document.getElementsByClassName(list[0]+"div");
-        var y = document.getElementById(list[0]+"re"+list[1]);
-
-        var i;
-        for (i=0; i < x.length; i++) {
-        var obj=x[i];
-            if (obj.style.display == "none") {
-                obj.style.display = "";
-            }
-            else {
-                y.value="" ;
-                obj.style.display = "none";
+                recomment(reset);
             }
         }
-    }
 
-    const CheckMessage = function(id){
-        var list= id.split('btn');
-        var total = list[0]+"re"+list[1];
-        var x = document.getElementById(total);
-        var reset = list[0]+"/"+list[1];
-        var message = x.value;
+        const insertCommentRe = function(list,message){
+            var main = document.getElementById('commentInsert');
+            let jsonData={
+                comment_id:list,
+                content:message
+            };
 
-        if(message.trim()!=0){
-            insertCommentRe(list[0],message);
-        }else{
-            recomment(reset);
+            $.ajax({
+                type:'post',
+                url:'/review/recomment',
+                dataType:'text',
+                contentType:'application/json; charset=UTF-8',
+                data:JSON.stringify(jsonData),
+                cache: false
+            }).done((res)=>{
+                alert("대댓글이 추가되었습니다.")
+                main.style.display='';
+                init(1);
+            }).fail((err)=>{
+                alert(err.status)
+            })
         }
-    }
-
-    const insertCommentRe = function(list,message){
-        var main = document.getElementById('commentInsert');
-        let jsonData={
-            comment_id:list,
-            content:message
-        };
-
-        $.ajax({
-            type:'post',
-            url:'/review/recomment',
-            dataType:'text',
-            contentType:'application/json; charset=UTF-8',
-            data:JSON.stringify(jsonData),
-            cache: false
-        }).done((res)=>{
-            alert("대댓글이 추가되었습니다.")
-            main.style.display='';
-            init(1);
-        }).fail((err)=>{
-            alert(err.status)
-        })
-    }
 
 
-    const showComment = function(response){
-        let CUS=$('#ConnectUserName').val();
-        let str = "<table id='table1' style='width: 100%;' >"
-        let res = response.commentList;
-        /* 1행 */
-        str+='<tr class="tableTr">';
-            str+='<td colspan="4">';
-            str+=`<div><b>댓글(\${response.totalCount})</b> &nbsp;`;
-            str+='<a class="link" id="link1" onclick="init(1)">등록순</a> |&nbsp;';
-            str+='<a class="link" id="link2" onclick="init(2)">최신순</a></div>';
-            str+='</td>';
-        str+='</tr>';
-
-        $.each(res,(i,vo)=>{
-            /* 2행 */
+        const showComment = function(response,i){
+            let CUS=$('#ConnectUserName').val();
+            let str = "<table id='table1' style='width: 100%;' >"
+            let res = response.commentList;
+            /* 1행 */
             str+='<tr class="tableTr">';
                 str+='<td colspan="4">';
-                str+='<hr style="color: #12bbad;">';
+                str+=`<div><b>댓글(\${response.totalCount})</b> &nbsp;&nbsp;`;
+                if(i==1){
+                    str+='<a class="link" id="link1" style="color: red" onclick="init(1)">등록순</a> |&nbsp;';
+                    str+='<a class="link" id="link2" style="color: black"onclick="init(2)">최신순</a></div>';
+                }else{
+                    str+='<a class="link" id="link1" style="color: black" onclick="init(1)">등록순</a> |&nbsp;';
+                    str+='<a class="link" id="link2" style="color: red" onclick="init(2)">최신순</a></div>';
+                }
+
                 str+='</td>';
             str+='</tr>';
 
-
-            /* 3행 */
-            str+='<tr style="margin-top: 10px;">';
-            str+='<td colspan="2"><span style="text-align: left">';
-            if(res[i].comment_depth!=0){
-            str+='<span class="fontRe">ㄴ</span> &nbsp;'
-            }
-            str+=res[i].user_name;
-            str+='</span><span class="date" style="text-align: left">&nbsp;&nbsp;(';
-            str+=res[i].create_date;
-            str+=')</span>';
-            str+='</td>';
-
-            str+='<td class="date">';
+            $.each(res,(i,vo)=>{
+                /* 2행 */
+                str+='<tr class="tableTr">';
+                    str+='<td colspan="4">';
+                    str+='<hr style="color: #12bbad;">';
+                    str+='</td>';
+                str+='</tr>';
 
 
-            if( res[i].user_id == CUS || CUS=="1"){
-                str+='<td colspan="2">';
-                str += '<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="' + res[i].comment_id + '"/></p>';
-                str+='</td>'
-            }
-            str+='</tr>';
+                /* 3행 */
+                str+='<tr style="margin-top: 10px;">';
+                str+='<td colspan="2"><span style="text-align: left">';
+                if(res[i].comment_depth!=0){
+                str+='<span class="fontRe">ㄴ</span> &nbsp;'
+                }
+                str+=res[i].user_name;
+                str+='</span><span class="date" style="text-align: left">&nbsp;&nbsp;(';
+                str+=res[i].create_date;
+                str+=')</span>';
+                str+='</td>';
 
-            /* 4행 */
-            str+='<tr>';
-            str+='<td colspan="4"><p>';
-            str+=res[i].content;
-            str+='</p></td>';
-
-            if(res[i].comment_depth==0) {
-                /* 5행 메인 댓글일 경우*/
-                str += '<tr class="tableTr">';
-                str += '<td colspan="4"><p style="text-align: left"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
-                str += '</tr>';
-                /* 6행 메인 댓글일 경우*/
-                str += '<tr class="tableTr">';
-                str += '<td colspan="3" class="rerecom"><div style="display: none; text-align: center" class="'+res[i].comment_group+'div">';
-                str += '<input id="' + res[i].comment_group + 're' +res[i].comment_depth+'" style="width: 100%;">';
-                str+='</div></td>';
-                str+='<td colspan="1"><div style="display: none;text-align: right" class="'+res[i].comment_group+'div">';
-                str+='<button onclick="CheckMessage(this.id)" id="' + res[i].comment_group + 'btn' + res[i].comment_depth + '"> 등록</input>';
-                str += '</div></td>';
-                str += '</tr><tfoot></tfoot>';
-            }
-        })
-        str+='</table>';
-
-        $('#comment_list').html(str);
-    }
-
-    const init = function(i){
-        let rid = $('#review_id').val();
-        //alert(rid);
-        $.ajax({
-            type:'get',
-            url:'/review/comment',
-            data:{"review_id":rid,
-                  "sort":i
-            },
-            dataType:'json',
-            cache:false
-        }).done((res)=>{
-            //alert('댓글 조회 확인');
-            //alert(JSON.stringify(res));
-            showComment(res);
-        }).fail((err)=>{
-            alert(err.status);
-        })
-    }
+                str+='<td class="date">';
 
 
-    $(()=>{
-        init(1);}
-    )
+                if( res[i].user_id == CUS || CUS=="1"){
+                    str+='<td colspan="2">';
+                    str += '<p style="text-align: right"><img  class = "del" src="/image/delete.png" onclick="deleteComment(this.id)" id="' + res[i].comment_id + '"/></p>';
+                    str+='</td>'
+                }
+                str+='</tr>';
 
-</script>
-</html>
+                /* 4행 */
+                str+='<tr>';
+                str+='<td colspan="4"><p>';
+                str+=res[i].content;
+                str+='</p></td>';
+
+                if(res[i].comment_depth==0) {
+                    /* 5행 메인 댓글일 경우*/
+                    str += '<tr class="tableTr">';
+                    str += '<td colspan="4"><p style="text-align: left"><button onclick="recomment(this.id)" id="' + res[i].comment_group + '/' + res[i].comment_depth + '"> 답글 </button></p></td>'
+                    str += '</tr>';
+                    /* 6행 메인 댓글일 경우*/
+                    str += '<tr class="tableTr">';
+                    str += '<td colspan="3" class="rerecom"><div style="display: none; text-align: center" class="'+res[i].comment_group+'div">';
+                    str += '<input id="' + res[i].comment_group + 're' +res[i].comment_depth+'" style="width: 100%;">';
+                    str+='</div></td>';
+                    str+='<td colspan="1"><div style="display: none;text-align: right" class="'+res[i].comment_group+'div">';
+                    str+='<button onclick="CheckMessage(this.id)" id="' + res[i].comment_group + 'btn' + res[i].comment_depth + '"> 등록</input>';
+                    str += '</div></td>';
+                    str += '</tr><tfoot></tfoot>';
+                }
+            })
+            str+='</table>';
+
+            $('#comment_list').html(str);
+        }
+
+        const init = function(i){
+            let rid = $('#review_id').val();
+            //alert(rid);
+            $.ajax({
+                type:'get',
+                url:'/review/comment',
+                data:{"review_id":rid,
+                      "sort":i
+                },
+                dataType:'json',
+                cache:false
+            }).done((res)=>{
+                //alert('댓글 조회 확인');
+                //alert(JSON.stringify(res));
+                showComment(res,i);
+            }).fail((err)=>{
+                alert(err.status);
+            })
+        }
+
+
+        $(()=>{
+            init(1);}
+        )
+
+    </script>
+    </html>

@@ -64,8 +64,11 @@
 
     <!-- 특정 게시글 수정하기-->
     <update id="updateReview" parameterType="com.plan.tour.review.vo.ReviewVO">
-        update review set REVIEW_TITLE=#{review_title}, REVIEW_CONTENT=#{review_content}, UPDATE_DATE = SYSDATE, FILENAME=#{filename},ORIGINFILENAME=#{originFilename},FILESIZE=#{filesize}
-        where REVIEW_ID=#{review_id}
+        update review set REVIEW_TITLE=#{vo.review_title}, REVIEW_CONTENT=#{vo.review_content}, UPDATE_DATE = SYSDATE
+        <if test="result==1">
+        , FILENAME=#{vo.filename},ORIGINFILENAME=#{vo.originFilename},FILESIZE=#{vo.filesize}
+        </if>
+        where REVIEW_ID=#{vo.review_id}
     </update>
 
     <select id="getListWithPaging" resultType="com.plan.tour.review.vo.ReviewVO">

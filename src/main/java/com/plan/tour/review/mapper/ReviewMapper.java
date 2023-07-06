@@ -43,7 +43,7 @@ public interface ReviewMapper {
     List<ReviewVO> getListWithPaging(@Param("cri") Criteria cri, @Param("searchType")String searchType, @Param("keyword") String keyword, @Param("contentId") List<String> contentId);
 
     //    3. Update (게시글 수정하기)
-    int updateReview(ReviewVO vo);
+    int updateReview(@Param("vo")ReviewVO vo,@Param("result")int n);
 
     //    4. delete (게시글 삭제하기)
     int deleteReview(int id);

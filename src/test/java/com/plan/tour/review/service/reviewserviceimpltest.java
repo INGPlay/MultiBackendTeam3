@@ -58,7 +58,7 @@ public class reviewserviceimpltest {
     @Test
     public void test_updateReview(){
         System.out.println("테스트4번 실행");
-        reviewVO rvo = service.selectReviewOne(21,"1");
+        ReviewVO rvo = service.selectReviewOne(21,"1");
         System.out.println(rvo);
     }
     }
