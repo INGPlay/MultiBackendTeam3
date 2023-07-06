@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="multi.backend.project.security.mapper.UserMapper">
+<mapper namespace="com.plan.tour.security.mapper.UserMapper">
 
     <!-- 동적쿼리 -->
     <select id="selectUserList"
-            parameterType="multi.backend.project.security.domain.UserInfoPageDto"
-            resultType="multi.backend.project.security.domain.UserInfoResponse">
+            parameterType="com.plan.tour.security.domain.UserInfoPageDto"
+            resultType="com.plan.tour.security.domain.UserInfoResponse">
 
         Select user_id, user_name, user_email, user_phone, user_role
         FROM MEMBERUSER m

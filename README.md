@@ -60,7 +60,7 @@ spring.datasource.password={유저비밀번호}
 mybatis.mapper-locations=classpath:/mapper/**/*.xml
 
 # Domain Aliases
-mybatis.type-aliases-package=multi.backend.project
+mybatis.type-aliases-package=com.plan.tour
 
 # JDBC null settings
 mybatis.configuration.jdbc-type-for-null=null
