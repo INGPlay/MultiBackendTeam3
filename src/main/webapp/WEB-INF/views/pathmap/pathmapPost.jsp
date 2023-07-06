@@ -186,7 +186,7 @@
 					<button class="d-flex align-items-center p-3 text-decoration-none border-bottom main_color radius_border"
 							style="width: 100%; justify-content: center;" onclick="copyUserSelectList()"
 							type="button">
-						<span class="fs-5 fw-semibold">복사</span>
+						<span class="fs-5 fw-semibold">지도 복제</span>
 					</button>
 				</sec:authorize>
 
