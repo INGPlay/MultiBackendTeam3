@@ -1,8 +1,9 @@
 # MultiBackendTeam3
 
 ## 프로젝트 목적
-### 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
+>### 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
 
+<br>
 
 # 사용 기술
 ## BackEnd
@@ -35,6 +36,8 @@
 ## 참고
 - https://gist.github.com/fronteer-kr/14d7f779d52a21ac2f16#file-
 
+<br>
+
 # 수행 도구
 ## 개발도구
 - InteliJ IDEA
@@ -53,6 +56,7 @@
 - JUnit
 - Postman
 
+<br>
 
 # 프로젝트 사이트 기능
 
@@ -226,7 +230,7 @@
 ![wheather](images/map_form_inform_wheather.png)
 
 
-
+<br>
 
 # 초기화
 
