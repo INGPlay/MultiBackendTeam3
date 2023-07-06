@@ -83,7 +83,7 @@ public class ReviewController {
     @GetMapping("/write")
     public String reviewEdit(@AuthenticationPrincipal UserContext ux, Model m){
         m.addAttribute("user_name",ux.getUsername());
-        return "review/write";
+        return "review/Write";
     }
 
     // 게시글 상세보기
@@ -95,8 +95,7 @@ public class ReviewController {
         m.addAttribute("result",result);
         m.addAttribute("ConnectUserName",service.getUserId(ux.getUsername()));
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
-
-        return "review/reviewView";
+        return "review/ReviewView";
     }
 
     @PostMapping(value="/view", produces="application/json")
@@ -142,7 +141,7 @@ public class ReviewController {
     public String editForm(Model m , @ModelAttribute ReviewVO vo){
         m.addAttribute("vo",vo);
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
-        return "review/edit";
+        return "review/Edit";
     }
 
     @PostMapping("/update")
@@ -151,7 +150,7 @@ public class ReviewController {
         m.addAttribute("vo",rvo);
         m.addAttribute("PlaceName",service.getPlaceName(rvo.getContentId()));
         m.addAttribute("result","yes");
-        return "review/reviewView";
+        return "review/ReviewView";
     }
 
     @PostMapping(value="/recomment",produces="application/json")
@@ -206,7 +205,7 @@ public class ReviewController {
         m.addAttribute("contentId",contentId);
         m.addAttribute("keyword",keyword);
 
-        return "review/review";
+        return "review/Review";
     }
 
 
