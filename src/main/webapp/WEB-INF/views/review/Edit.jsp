@@ -42,7 +42,7 @@
             <a href="#" onclick="back() ">이전 단계로</a>| <a href="list">글목록</a>
         <p>
 
-        <form name="bf" id="bf" role="form" method="post">
+        <form name="bf" id="bf" role="form" method="post" enctype="multipart/form-data">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
             <input type="hidden" name="pagingvo" value="${pageVO}">
@@ -79,8 +79,7 @@
                 <tr>
                     <td style="width:20%"><b>파일 업로드</b></td>
                     <td style="width:80%">
-                        <input type="file" name="filename" id="filename" class="form-control" value="<c:out value="${vo.filename}"/>">
-<%--                        <input type="hidden" name="old_filename" value="<c:out value="${vo.filename}"/>">--%>
+                        <input type="file" name="mfilename" id="filename" class="form-control" ">
                     </td>
                 </tr>
                 <tr>
