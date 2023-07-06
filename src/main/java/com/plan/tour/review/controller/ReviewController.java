@@ -56,7 +56,8 @@ public class ReviewController {
             String fname = mf.getOriginalFilename();
             long fsize = mf.getSize();
             UUID uid = UUID.randomUUID();
-            String filename = uid.toString()+""+fname;
+            //String filename = uid.toString()+""+fname;
+            String filename =fname;
             log.info("fname= "+fname+ "filename="+filename+", uuid= "+uid);
 
             review.setOriginFilename(fname);
@@ -147,6 +148,7 @@ public class ReviewController {
     @PostMapping("/update")
     public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux){
         ReviewVO rvo = service.updateReview(vo,ux.getUsername());
+
         m.addAttribute("vo",rvo);
         m.addAttribute("PlaceName",service.getPlaceName(rvo.getContentId()));
         m.addAttribute("result","yes");
