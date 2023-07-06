@@ -121,11 +121,11 @@
                         <button class="btn btn-outline-primary" onClick="toggleFavorites()">
                             <strong id="favoriteButtonText">추천한 게시글</strong>
                         </button>
-        
-                        <button class="btn main_color" onClick="location.href='/pathmap/mark'">
-                            <strong>작성하기</strong>
-                        </button>
                     </sec:authorize>
+
+                    <button class="btn main_color" onClick="location.href='/pathmap/mark'">
+                        <strong>작성하기</strong>
+                    </button>
                 </div>
     
                 <!-- 게시글 리스트 -->
