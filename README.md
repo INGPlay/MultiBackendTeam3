@@ -16,6 +16,38 @@ keys.tour.info.decode= {디코딩 된 tour api}
 
 <br>
 
+- errorMessages.properties
+```properties
+Size.registerForm.username=유저이름은 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.registerForm.password=비밀번호는 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.registerForm.passwordCheck=비밀번호 확인은 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.registerForm.email=이메일은 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.registerForm.phone=전화번호는 {2}자에서 {1}자 길이의 숫자로 이루어져야 합니다.
+
+NotNull.username=유저이름을 입력해주세요
+NotNull.password=비밀번호를 입력해주세요
+NotNull.passwrodCheck=비밀번호 확인란을 입력해주세요
+NotNull.email=이메일을 입력해주세요
+NotNull.phone=전화번호를 입력해주세요
+
+Pattern.username=유저이름은 영어 소문자와 숫자로만 이루어져야 합니다.
+Pattern.password=비밀번호는 영어와 숫자 특수문자(!, @, #, $, %)로만 이루어져야 합니다.
+Pattern.passwordCheck=비밀번호 확인은 영어와 숫자 특수문자(!, @, #, $, %)로만 이루어져야 합니다.
+Pattern.phone=전화번호를 다시 확인해주세요.
+
+Email.email=이메일 형식에 맞지 않습니다
+
+Size.updatePasswordForm.currentPassword=현재 비밀번호는 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.updatePasswordForm.newPassword=새 비밀번호는 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+Size.updatePasswordForm.newPasswordCheck=새 비밀번호 확인은 {2}자에서 {1}자 길이의 문자로 이루어져야 합니다.
+
+Pattern.currentPassword=비밀번호는 영어와 숫자 특수문자(!, @, #, $, %)로만 이루어져야 합니다.
+Pattern.newPassword=비밀번호는 영어와 숫자 특수문자(!, @, #, $, %)로만 이루어져야 합니다.
+Pattern.newPasswordCheck=비밀번호 확인은 영어와 숫자 특수문자(!, @, #, $, %)로만 이루어져야 합니다.
+```
+
+<br>
+
 - resources/application.properties
 ```properites
 # Oracle Connection Settings
@@ -44,18 +76,6 @@ spring.sql.init.mode=always
 
 spring.messages.basename=messages/keys
 spring.messages.encoding=UTF-8
-```
-
-<br>
-
-- data.sql
-```sql
-INSERT INTO testtable(test_id, test_name, test_date)
-    VALUES(100, 'hongildong', sysdate);
-
--- pathmap 테스트용 계정
-INSERT INTO memberuser(user_id, user_name, user_pwd, user_email, user_phone, user_role)
-    VALUES(memberuser_sequence.nextval, '나', '1234', 'abcd@abcd.com', '010-1111-1111', 'ROLE_USER');
 ```
 
 <br>
