@@ -43,5 +43,4 @@ out/
 # Init Query
 *.sql
 
-*.png
-*.PNG
+src/main/webapp/resources/upload/**
