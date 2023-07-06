@@ -1,0 +1,60 @@
+package com.plan.tour.pathMap.service;
+
+import lombok.extern.slf4j.Slf4j;
+import com.plan.tour.pathMap.domain.tour.ContentType;
+import com.plan.tour.pathMap.domain.tour.LocationBaseDto;
+import com.plan.tour.pathMap.domain.tour.PageDto;
+import com.plan.tour.pathMap.domain.tour.TourInfoResponse;
+import org.apache.ibatis.javassist.NotFoundException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.net.URI;
+import java.util.List;
+
+@Slf4j
+@SpringBootTest
+class TourInfoServiceTest {
+
+    @Autowired private TourInfoService tourInfoService;
+
+    @Test
+    void getTourInfoURI() {
+        log.info("{}", tourInfoService.getTourInfoURI());
+    }
+
+    @Test
+    void getTourInfoBasedLocationURI(){
+        LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
+        PageDto pageDto = new PageDto(10, 1);
+
+        log.info("{}", tourInfoService.getTourInfoURIBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT));
+    }
+
+    @Test
+    void requestTourInfoResponseLocationBased() throws NotFoundException {
+        LocationBaseDto locationBaseDto = new LocationBaseDto(126.981611, 37.568477, 1000);
+        PageDto pageDto = new PageDto(10, 1);
+
+        URI uri = tourInfoService.getTourInfoURIBasedLocation(locationBaseDto, pageDto, ContentType.RESTAURANT);
+
+        List<TourInfoResponse> tourInfoResponses = tourInfoService.requestTourInfo(uri);
+
+        tourInfoResponses.forEach(r -> {
+            log.info("이름 : {}, 주소1 : {}, 주소2 : {}, 거리 : {}, 아이디 : {}, 타입 : {}, 전화번호 : {}, X좌표 : {}, Y좌표 : {}, 이미지URI : {}, 이미지URI축소 : {}",
+                    r.getTitle(),
+                    r.getAddr1(),
+                    r.getAddr2(),
+                    r.getDist(),
+                    r.getContentId(),
+                    r.getContentType(),
+                    r.getTel(),
+                    r.getPosX(),
+                    r.getPosY(),
+                    r.getFirstImageURI(),
+                    r.getFirstImageURI2()
+            );
+        });
+    }
+}

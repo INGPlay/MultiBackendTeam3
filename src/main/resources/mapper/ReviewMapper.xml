@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="multi.backend.project.review.mapper.ReviewMapper">
+<mapper namespace="com.plan.tour.review.mapper.ReviewMapper">
 
     <!--  게시글 추가  -->
-    <insert id="insertReview" parameterType="reviewVO">
+    <insert id="insertReview" parameterType="com.plan.tour.review.vo.ReviewVO">
         <selectKey keyProperty="review_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Sequence.nextval) from dual
         </selectKey>
@@ -16,7 +16,7 @@
     </select>
 
     <!-- place 테이블 추가-->
-    <insert id="insertPlace" parameterType="PlaceVO">
+    <insert id="insertPlace" parameterType="com.plan.tour.review.vo.PlaceVO">
         insert into place(CONTENTID, CONTENTNAME) values(#{contentId},#{contentName})
     </insert>
 
@@ -43,13 +43,13 @@
     </select>
 
     <!-- 모든 게시글 가져오기   -->
-    <select id="selectReviewAll" resultType="reviewVO">
+    <select id="selectReviewAll" resultType="com.plan.tour.review.vo.ReviewVO">
         select review_id, user_id, review_title, review_content, create_date, update_date, review_views, review_recommends, contentName
         from review_vi
     </select>
 
     <!-- 특정 게시글 가져오기   -->
-    <select id="selectReviewOne" resultType="reviewVO" parameterType="_int">
+    <select id="selectReviewOne" resultType="com.plan.tour.review.vo.ReviewVO" parameterType="_int">
         select m.user_name, r.review_id, r.user_id, r.review_title, r.review_content, r.create_date, r.update_date, r.review_views, r.review_recommends, r.contentId, r.filename, r.originFilename, r.filesize
         from review r
         join memberuser m
@@ -63,12 +63,12 @@
     </delete>
 
     <!-- 특정 게시글 수정하기-->
-    <update id="updateReview" parameterType="reviewVO">
+    <update id="updateReview" parameterType="com.plan.tour.review.vo.ReviewVO">
         update review set REVIEW_TITLE=#{review_title}, REVIEW_CONTENT=#{review_content}, UPDATE_DATE = SYSDATE
         where REVIEW_ID=#{review_id}
     </update>
 
-    <select id="getListWithPaging" resultType="reviewVO">
+    <select id="getListWithPaging" resultType="com.plan.tour.review.vo.ReviewVO">
         select review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends, contentName
         from (select rownum rn, review_id,user_id,user_name, review_title, review_content, create_date, update_date, review_views,review_recommends, contentName
         from (select * from review_vi where 1=1
@@ -105,12 +105,12 @@
     </select>
 
     <!-- 게시글 클릭시 조회수 증가-->
-    <update id="updateReview_views" parameterType="reviewVO">
+    <update id="updateReview_views" parameterType="com.plan.tour.review.vo.ReviewVO">
         update review set review_views = #{review_views}+1 where REVIEW_ID=#{review_id}
     </update>
 
     <!-- 추천 버튼 클릭시 추천수 증가-->
-    <update id="updateReview_recommends" parameterType="reviewVO">
+    <update id="updateReview_recommends" parameterType="com.plan.tour.review.vo.ReviewVO">
         update review set
         <if test="i==1">
         review_recommends = #{vo.review_recommends}+1
@@ -124,7 +124,7 @@
 
 
     <!-- 댓글 추가 -->
-    <insert id="insert_recommends" parameterType="commentVO">
+    <insert id="insert_recommends" parameterType="com.plan.tour.review.vo.Review_CommentVO">
         <selectKey keyProperty="comment_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Comment_Sequence.nextval) from dual
         </selectKey>
@@ -134,7 +134,7 @@
 
 
     <!-- 해당 게시글 댓글 조회   -->
-    <select id="selectReviewComment" resultType="commentVO" parameterType="_int" >
+    <select id="selectReviewComment" resultType="com.plan.tour.review.vo.Review_CommentVO" parameterType="_int" >
         select comment_id, review_id, create_date, update_date, content, comment_group, comment_depth, user_id, user_name
         from comment_vi where review_id = #{review_id} order by
         <if test="sort == 1">
@@ -151,14 +151,14 @@
     </delete>
 
     <!-- 특정 댓글 찾기-->
-    <select id="findReComment" parameterType="_int" resultType="commentVO">
+    <select id="findReComment" parameterType="_int" resultType="com.plan.tour.review.vo.Review_CommentVO">
         select * from review_comment where comment_id=#{id}
 
     </select>
 
     <!-- 대댓글 추가하기 -->
 
-    <insert id="insertRerecomment" parameterType="commentVO">
+    <insert id="insertRerecomment" parameterType="com.plan.tour.review.vo.Review_CommentVO">
         <selectKey keyProperty="comment_id" resultType="_int" order="BEFORE">
             select TO_NUMBER(Review_Comment_Sequence.nextval) from dual
         </selectKey>
@@ -168,7 +168,7 @@
 
     <!-- 원본 댓글 깊이 증가-->
 
-    <update id="update_comment_group" parameterType="commentVO">
+    <update id="update_comment_group" parameterType="com.plan.tour.review.vo.Review_CommentVO">
         update Review_Comment set COMMENT_DEPTH = COMMENT_DEPTH+1 where comment_group=#{comment_group}
     </update>
 
@@ -182,7 +182,7 @@
     </select>
 
     <!-- 장소 id 가져오기 확인-->
-    <select id="getPlaceId" parameterType="String" resultType="PlaceVO">
+    <select id="getPlaceId" parameterType="String" resultType="com.plan.tour.review.vo.PlaceVO">
         select distinct CONTENTID, contentName from place where CONTENTNAME like '%'||#{contentName}||'%'
     </select>
 
@@ -201,7 +201,7 @@
     </select>
 
 
-    <select id="getSearchPlaceTotalCount" parameterType="ResponseVO" resultType="_int">
+    <select id="getSearchPlaceTotalCount" parameterType="com.plan.tour.review.vo.ResponseVO" resultType="_int">
         select count(review_id) from review_vi
             where CONTENTID in
             <foreach collection="contentId" item="i" separator="," open="(" close=")">
