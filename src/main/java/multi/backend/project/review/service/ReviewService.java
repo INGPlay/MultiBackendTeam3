@@ -1,17 +1,18 @@
-package multi.backend.project.review.Service;
+package multi.backend.project.review.service;
 
-import multi.backend.project.review.VO.PlaceVO;
-import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.vo.PlaceVO;
+import multi.backend.project.review.vo.Review_CommentVO;
+import multi.backend.project.review.vo.ReviewVO;
 import multi.backend.project.review.paging.Criteria;
 
 import java.util.List;
+import java.util.Map;
 
 
-public interface reviewService {
+public interface ReviewService {
 
     //    1. Create
-    int insertReview(reviewVO vo,String User_id,String contentName);
+    int insertReview(ReviewVO vo, String User_id, String contentName);
 
 
     //  1_1 . insert 하기 위해 유저 id 가져오기
@@ -25,29 +26,30 @@ public interface reviewService {
 
 
     //    2_1. Read (특정 게시글 가져오기)
-    reviewVO selectReviewOne(int review_id,String rid);
+    ReviewVO selectReviewOne(int review_id, String rid);
 
     //    2_2. 페이징 적용한 게시판 목록 가져오기
-    List<reviewVO> getListWithPaging(Criteria cri,String searchType,List<String> contentId, String keyword);
+    List<ReviewVO> getListWithPaging(Criteria cri, String searchType, List<String> contentId, String keyword);
 
     //    3. Update
-    reviewVO updateReview(reviewVO vo,String name);
+    ReviewVO updateReview(ReviewVO vo, String name);
 
     //    4. delete
     int deleteReview(int id,String userName);
 
     //    5. 조회수 증가
-    int updateReview_views(reviewVO boardVO);
+    int updateReview_views(ReviewVO boardVO);
 
     //    6. 총 게시글 수
     int getTotalCount();
 
     //  7. 추천수 증가
-    int updateReview_recommends(reviewVO vo);
-
+    Map<String,Integer> updateReview_recommends(ReviewVO vo, int user_id);
 
 
 // ================================================================================
+
+
 
     //     1. 댓글 추가
     int insert_recommends(Review_CommentVO vo);
@@ -78,4 +80,7 @@ public interface reviewService {
 
     int getSearchTotalCount(String searchType, String keyword);
     int getSearchPlaceTotalCount(String searchType, List<String> keyword);
+
+
+    int getTotalRecoment(int review_id);
 }

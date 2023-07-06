@@ -1,4 +1,4 @@
-package multi.backend.project.review.VO;
+package multi.backend.project.review.vo;
 
 
 import lombok.Data;

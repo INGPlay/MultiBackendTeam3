@@ -1,14 +1,14 @@
-package multi.backend.project.review.Controller;
+package multi.backend.project.review.controller;
 
 
 import lombok.extern.log4j.Log4j2;
-import multi.backend.project.review.Service.reviewServiceImpl;
-import multi.backend.project.review.VO.PlaceVO;
-import multi.backend.project.review.VO.Review_CommentVO;
-import multi.backend.project.review.VO.reviewVO;
+import multi.backend.project.review.service.ReviewServiceImpl;
+import multi.backend.project.review.vo.PlaceVO;
+import multi.backend.project.review.vo.Review_CommentVO;
+import multi.backend.project.review.vo.ReviewVO;
 import multi.backend.project.review.commonUtil.CommonUtil;
 import multi.backend.project.review.paging.Criteria;
-import multi.backend.project.review.paging.pagingVO;
+import multi.backend.project.review.paging.PagingVO;
 import multi.backend.project.security.domain.context.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,10 +29,10 @@ import java.util.*;
 @RequestMapping("/review")
 @Log4j2
 @org.springframework.stereotype.Controller
-public class reviewController {
+public class ReviewController {
 
     @Resource(name = "reviewService")
-    private reviewServiceImpl service;
+    private ReviewServiceImpl service;
 
     @Autowired
     private CommonUtil util;
@@ -40,7 +40,7 @@ public class reviewController {
     //    게시글 insert
     @PostMapping("/write")
 
-    public String insertReiew(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO review, @RequestParam("placeName")String contentName,
+    public String insertReiew(Model m, @ModelAttribute ReviewVO review, @RequestParam("placeName")String contentName,
                               @RequestParam("mfilename")MultipartFile mf, HttpSession session
                              , @AuthenticationPrincipal UserContext ux){
         // 파일 업로드 처리
@@ -72,14 +72,7 @@ public class reviewController {
             }
 
         }
-
-
-
         int n = service.insertReview(review, ux.getUsername(), contentName);
-
-
-
-
         String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
@@ -90,40 +83,39 @@ public class reviewController {
     @GetMapping("/write")
     public String reviewEdit(@AuthenticationPrincipal UserContext ux, Model m){
         m.addAttribute("user_name",ux.getUsername());
-        return "review/write";
+        return "review/Write";
     }
 
     // 게시글 상세보기
     @GetMapping("/view")
     public String reviewForm(Model m, HttpServletRequest seq,@RequestParam(value = "redirect_id",required = false,defaultValue ="0") String rid,@AuthenticationPrincipal UserContext ux){
-
-        reviewVO vo= service.selectReviewOne(Integer.parseInt(seq.getParameter("review_id")),rid);
-        log.info("{}",vo);
+        ReviewVO vo= service.selectReviewOne(Integer.parseInt(seq.getParameter("review_id")),rid);
         String result = (vo.getUser_name().equals(ux.getUsername())|| service.getUserId(ux.getUsername())==1)? "yes":"no";
         m.addAttribute("vo", vo);
         m.addAttribute("result",result);
         m.addAttribute("ConnectUserName",service.getUserId(ux.getUsername()));
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
-
-        log.info(vo.getFilename());
-        return "review/review_view";
+        return "review/ReviewView";
     }
 
     @PostMapping(value="/view", produces="application/json")
     @ResponseBody
-    public String updateReview_view(@RequestParam("review_id") int review_id){
-        reviewVO vo = service.selectReviewOne(review_id,"1");
-        int n = service.updateReview_recommends(vo);
-        return String.valueOf(n);
+    public Map<String,Integer> updateReview_view(@RequestParam("review_id") int review_id,@AuthenticationPrincipal UserContext ux){
+        ReviewVO vo = service.selectReviewOne(review_id,"1");
+        Map<String,Integer> map= service.updateReview_recommends(vo, service.getUserId(ux.getUsername()));
+        return map;
     }
 
     /* 댓글 조회 */
     @GetMapping(value="/comment", produces="application/json")
     @ResponseBody
-    public List<Review_CommentVO> selectComment(Model m,@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort,@AuthenticationPrincipal UserContext ux){
+    public Map<String,Object> selectComment(Model m,@RequestParam("review_id") String review_id,@RequestParam(value = "sort",defaultValue = "1")String sort,@AuthenticationPrincipal UserContext ux){
         m.addAttribute("connectUserName",ux.getUsername());
         List<Review_CommentVO> commentList = service.selectReviewComment(Integer.parseInt(review_id),Integer.parseInt(sort));
-        return commentList;
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentList",commentList);
+        map.put("totalCount",service.getTotalRecoment(Integer.parseInt(review_id)));
+        return map;
     }
 
 
@@ -146,19 +138,19 @@ public class reviewController {
 
     //    게시글 수정&삭제 폼 이동
     @PostMapping("/edit")
-    public String editForm(Model m , @ModelAttribute multi.backend.project.review.VO.reviewVO vo){
+    public String editForm(Model m , @ModelAttribute ReviewVO vo){
         m.addAttribute("vo",vo);
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
-        return "review/edit";
+        return "review/Edit";
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute multi.backend.project.review.VO.reviewVO vo,@AuthenticationPrincipal UserContext ux){
-        reviewVO rvo = service.updateReview(vo,ux.getUsername());
+    public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux){
+        ReviewVO rvo = service.updateReview(vo,ux.getUsername());
         m.addAttribute("vo",rvo);
         m.addAttribute("PlaceName",service.getPlaceName(rvo.getContentId()));
         m.addAttribute("result","yes");
-        return "review/review_view";
+        return "review/ReviewView";
     }
 
     @PostMapping(value="/recomment",produces="application/json")
@@ -204,7 +196,7 @@ public class reviewController {
         }
         cri.setSort(Integer.parseInt(select));
 
-        pagingVO vo=new pagingVO(cri,totalCount);
+        PagingVO vo=new PagingVO(cri,totalCount);
 
         m.addAttribute("list",service.getListWithPaging(cri,searchType,contentId,keyword));
         m.addAttribute("pageMaker", vo);
@@ -213,7 +205,7 @@ public class reviewController {
         m.addAttribute("contentId",contentId);
         m.addAttribute("keyword",keyword);
 
-        return "review/review";
+        return "review/Review";
     }
 
 
