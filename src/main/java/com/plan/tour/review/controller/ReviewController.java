@@ -46,37 +46,11 @@ public class ReviewController {
         // 파일 업로드 처리
         ServletContext app = session.getServletContext();
         String upDir = app.getRealPath("/resources/upload");
-        File dir = new File(upDir);
+        int n= service.insertReview(review, ux.getUsername(), contentName, upDir, mf);
 
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
-        //파일명 파일크기 알아내기
-        if(!mf.isEmpty()){
-            String fname = mf.getOriginalFilename();
-            long fsize = mf.getSize();
-            UUID uid = UUID.randomUUID();
-            String filename = uid.toString()+""+fname;
-            log.info("fname= "+fname+ "filename="+filename+", uuid= "+uid);
-
-            review.setOriginFilename(fname);
-            review.setFilename(filename);
-            review.setFilesize(fsize);
-
-            //업로드처리
-            try{
-                mf.transferTo(new File(upDir, filename));
-                log.info("upDir : "+upDir);
-            }catch (IOException e){
-                log.error("파일 업로드 에러"+e);
-            }
-
-        }
-        int n = service.insertReview(review, ux.getUsername(), contentName);
         String str= (n>0)? "게시글이 등록되었습니다":"게시글 등록 실패하였습니다";
         String loc = (n>0)? "/review/list":"javascript:history.back()";
         return util.addMsgLoc(m,str,loc);
-
     }
 
     //  게시글 삽입 폼 이동
@@ -139,14 +113,17 @@ public class ReviewController {
     //    게시글 수정&삭제 폼 이동
     @PostMapping("/edit")
     public String editForm(Model m , @ModelAttribute ReviewVO vo){
-        m.addAttribute("vo",vo);
+        m.addAttribute("vo",service.selectReviewOne(vo.getReview_id(),"1"));
         m.addAttribute("PlaceName",service.getPlaceName(vo.getContentId()));
         return "review/Edit";
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux){
-        ReviewVO rvo = service.updateReview(vo,ux.getUsername());
+    public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux, HttpSession session,@RequestParam("mfilename")MultipartFile mf){
+        ServletContext app = session.getServletContext();
+        String upDir = app.getRealPath("/resources/upload");
+        System.out.println(upDir);
+        ReviewVO rvo = service.updateReview(vo,ux.getUsername(),upDir,mf);
         m.addAttribute("vo",rvo);
         m.addAttribute("PlaceName",service.getPlaceName(rvo.getContentId()));
         m.addAttribute("result","yes");

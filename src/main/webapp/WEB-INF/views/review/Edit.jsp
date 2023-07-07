@@ -42,11 +42,12 @@
             <a href="#" onclick="back() ">이전 단계로</a>| <a href="list">글목록</a>
         <p>
 
-        <form name="bf" id="bf" role="form" method="post">
+        <form name="bf" id="bf" role="form" method="post" enctype="multipart/form-data">
             <!-- hidden data---------------------------------  -->
             <input type="hidden" name="review_id" id ="review_id" value="${vo.review_id}"/>
             <input type="hidden" name="pagingvo" value="${pageVO}">
             <input type="hidden" name="review_recommends" id="review_recommends" value="${vo.review_recommends}" readonly />
+
             <!-- 원본글쓰기: mode=> write
                  답변글쓰기: mode=> rewrite
                   글수정  : mode=> edit
@@ -76,8 +77,17 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="width:20%"><b>파일 업로드</b></td>
+                    <td style="width:80%">
+                        <input type="file" name="mfilename" id="filename" class="form-control">
+                    </td>
+                </tr>
+                <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
+                        <c:if test="${vo.filename ne null}">
+                            <img  src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:65%; height: 150px">
+                        </c:if>
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control">${vo.review_content}</textarea>
                     </td>
                 </tr>
