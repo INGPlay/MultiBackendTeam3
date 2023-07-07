@@ -484,7 +484,7 @@
 				if (error["status"] === 404){
 					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "가 없습니다.", "red")
 				} else {
-					resultAlert("API 에러입니다.")
+					resultAlert("API 에러입니다.", "red")
 				}
 			})
 
@@ -1123,7 +1123,7 @@
 				if (error["status"] === 404){
 					resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
 				} else {
-					resultAlert("API 에러입니다.")
+					resultAlert("API 에러입니다.", "red")
 				}
 			})
 		}
