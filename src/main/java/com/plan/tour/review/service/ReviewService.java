@@ -4,6 +4,7 @@ import com.plan.tour.review.vo.PlaceVO;
 import com.plan.tour.review.vo.Review_CommentVO;
 import com.plan.tour.review.vo.ReviewVO;
 import com.plan.tour.review.paging.Criteria;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,7 @@ import java.util.Map;
 public interface ReviewService {
 
     //    1. Create
-    int insertReview(ReviewVO vo, String User_id, String contentName);
-
-
+    int insertReview(ReviewVO vo, String User_id, String contentName, String upDir, MultipartFile mf);
     //  1_1 . insert 하기 위해 유저 id 가져오기
     int getUserId(String user_name);
 
@@ -32,7 +31,7 @@ public interface ReviewService {
     List<ReviewVO> getListWithPaging(Criteria cri, String searchType, List<String> contentId, String keyword);
 
     //    3. Update
-    ReviewVO updateReview(ReviewVO vo, String name);
+    ReviewVO updateReview(ReviewVO vo, String name,String upDir,MultipartFile mf);
 
     //    4. delete
     int deleteReview(int id,String userName);

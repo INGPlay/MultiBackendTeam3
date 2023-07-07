@@ -9,7 +9,10 @@ import com.plan.tour.review.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -22,8 +25,27 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public int insertReview(ReviewVO vo, String user_Name, String contentName) {
+    public int insertReview(ReviewVO vo, String user_Name, String contentName, String upDir, MultipartFile mf) {
         vo.setUser_id(mapper.getUserId(user_Name));
+        File dir = new File(upDir);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        //파일명 파일크기 알아내기
+        if(!mf.isEmpty()){
+            String fname = mf.getOriginalFilename();
+            long fsize = mf.getSize();
+            UUID uid = UUID.randomUUID();
+            String filename = uid.toString()+""+fname;
+            vo.setOriginFilename(fname);
+            vo.setFilename(filename);
+            vo.setFilesize(fsize);
+            //업로드처리
+            try{
+                mf.transferTo(new File(upDir, filename));
+            }catch (IOException e){
+            }
+        }
         if(checkContentName(vo.getContentId())<=0){mapper.insertPlace(new PlaceVO(vo.getContentId(),contentName));}
         return mapper.insertReview(vo);
     }
@@ -57,13 +79,48 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewVO updateReview(ReviewVO vo, String ux) {
-        if((!ux.equals(vo.getUser_name()) || (getUserId(ux))!= 1)){return vo;}
-        mapper.updateReview(vo);
-        ReviewVO rvo = mapper.selectReviewOne(vo.getReview_id());
-        return rvo;
+    public ReviewVO updateReview(ReviewVO vo, String ux,String upDir,MultipartFile mf) {
+        if(getUserId(ux)!=1 && (!ux.equals(vo.getUser_name()))) {
+            return mapper.selectReviewOne(vo.getReview_id());
+        }
+        ReviewVO oldvo = selectReviewOne(vo.getReview_id(),"1");
+
+        File Fdir = new File(upDir);
+
+        int result = 0;
+
+        if(!Fdir.exists()){
+            Fdir.mkdirs();
+        }
+        if(!mf.isEmpty()){
+            result=1;
+            if(oldvo.getFilename()!=null) {
+                File dir = new File(upDir, oldvo.getFilename());
+                if (dir.isFile()) {
+                    dir.deleteOnExit();
+                }
+            }
+            String fname = mf.getOriginalFilename();
+            long fsize = mf.getSize();
+            UUID uid = UUID.randomUUID();
+            String filename = uid.toString()+""+fname;
+            vo.setOriginFilename(fname);
+            vo.setFilename(filename);
+            vo.setFilesize(fsize);
+            //업로드처리
+            try{
+                mf.transferTo(new File(upDir, filename));
+            }catch (IOException e){
+                return vo;
+            }
+        }else{
+            result=0;
+        }
+        mapper.updateReview(vo,result);
+        return mapper.selectReviewOne(vo.getReview_id());
     }
 
+    // =================================================================================================================
     @Override
     @Transactional
     public int deleteReview(int id,String userName) {
@@ -76,12 +133,6 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     //---------------------------------------------------------------------------------- 리펙토링 완료
-
-
-
-
-
-
 
 
 
