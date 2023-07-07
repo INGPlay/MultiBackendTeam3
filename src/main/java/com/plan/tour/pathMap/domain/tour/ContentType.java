@@ -22,7 +22,8 @@ public enum ContentType {
     LEPORTS("레포츠", "28"),
     ACCOMODATION("숙박", "32"),
     SHOPPING("쇼핑", "38"),
-    RESTAURANT("식당", "39");
+    RESTAURANT("식당", "39"),
+    All("전체", "0");
 
     private String name;
     private String code;
