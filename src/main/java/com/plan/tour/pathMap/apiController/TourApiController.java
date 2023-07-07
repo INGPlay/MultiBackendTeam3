@@ -127,6 +127,8 @@ public class TourApiController {
             return ContentType.SHOPPING;
         } else if (code.equals(ContentType.RESTAURANT.getCode())){
             return ContentType.RESTAURANT;
+        } else if (code.equals(ContentType.All.getCode())){
+            return ContentType.All;
         } else {
             assert false: "적절하지 않은 콘텐츠 코드입니다.";
         }

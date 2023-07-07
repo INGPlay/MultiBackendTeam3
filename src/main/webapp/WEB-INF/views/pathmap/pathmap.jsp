@@ -29,7 +29,7 @@
 		.custom_oneshot {position:absolute;bottom:10px;right:10px;overflow:hidden;width:115px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_oneshot span {display:block;width:115px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 
-		.custom_contentType {position:absolute;top:10px;left:10px;width:520px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_contentType {position:absolute;top:10px;left:10px;width:584px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_contentType span {display:block;width:64px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 
 		.custom_searchBar {position:absolute;top:55px;left:10px;overflow:hidden;width:350px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
@@ -143,6 +143,7 @@
 
 			<!-- 카테고리 선택 -->
 			<div class="custom_contentType radius_border badge text-wrap main_color_only"> 
+				<span id="all" class="badge text-wrap" onclick="setMarkContentType('0')">전체</span>
 				<span id="tourSpot" class="badge text-wrap" onclick="setMarkContentType('12')">관광지</span>
 				<span id="curtureSite" class="badge text-wrap" onclick="setMarkContentType('14')">문화시설</span>
 				<!-- 행사/공연/축제 -->
@@ -263,8 +264,9 @@
 		let markInfoMap = new Map();
 
 		// 선택된 컨텐츠 타입
-		let markContentTypeCode = "12";
+		let markContentTypeCode = "0";
 		const contentTypeCssIdMap = new Map([
+			["0", "all"],
 			["12", "tourSpot"],
 			["14", "curtureSite"],
 			["15", "festival"],
@@ -276,6 +278,7 @@
 		])
 
 		const contentTypeNameMap = new Map([
+			["0", "장소"],
 			["12", "관광지"],
 			["14", "문화시설"],
 			["15", "페스티벌"],
@@ -415,6 +418,8 @@
 				console.log(error["responseJSON"]["message"])
 				if (error["status"] === 404){
 					resultAlert(changeMToKm(getRadius(map.getLevel())) + "km 안에 " + contentTypeNameMap.get(markContentTypeCode) + "이/가 없습니다.", "red")
+				} else {
+					resultAlert("API 에러입니다.")
 				}
 			})
 
@@ -999,6 +1004,8 @@
 				console.log(error["responseJSON"]["message"])
 				if (error["status"] === 404){
 					resultAlert("조건에 만족하는 결과를 찾지 못하였습니다.", "red")
+				} else {
+					resultAlert("API 에러입니다.")
 				}
 			})
 		}

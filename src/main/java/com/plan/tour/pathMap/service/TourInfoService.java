@@ -81,7 +81,7 @@ public class TourInfoService {
     }
 
     public URI getTourInfoURIBasedLocation(LocationBaseDto locationBaseDto, PageDto pageDto, ContentType contentType){
-        URI uri = UriComponentsBuilder
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr")
                 .path("/B551011/KorService1/locationBasedList1")
                 .queryParam("serviceKey", getTourKey())
@@ -93,12 +93,16 @@ public class TourInfoService {
                 .queryParam("arrange", "S")
                 .queryParam("mapX", locationBaseDto.getPosX())
                 .queryParam("mapY", locationBaseDto.getPosY())
-                .queryParam("radius", locationBaseDto.getRadius())
-                .queryParam("contentTypeId", contentType.getCode())
+                .queryParam("radius", locationBaseDto.getRadius());
+
+        if (!contentType.equals(ContentType.All)){
+            uriBuilder = uriBuilder.queryParam("contentTypeId", contentType.getCode());
+        }
+
+
+        return uriBuilder
                 .encode(StandardCharsets.UTF_8)
                 .build(true).toUri();
-
-        return uri;
     }
 
     public URI getTourInfoURIBasedKeyword(KeywordDto keywordDto, PageDto pageDto, ContentType contentType){
@@ -111,9 +115,12 @@ public class TourInfoService {
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "TestApp")
                 .queryParam("_type", "json")
-                .queryParam("arrange", "R")     // O - 제목순, Q - 수정일순, R - 생성일순
-                .queryParam("contentTypeId", contentType.getCode())
+                .queryParam("arrange", "R")     // O - 제목순, Q - 수정일순, R - 생성일
                 .queryParam("keyword", URLEncoder.encode(keywordDto.getKeyword(), StandardCharsets.UTF_8));
+
+        if (!contentType.equals(ContentType.All)){
+            uriBuilder = uriBuilder.queryParam("contentTypeId", contentType.getCode());
+        }
 
         if (StringUtils.hasText(keywordDto.getLargeCode())){
             uriBuilder = uriBuilder.queryParam("areaCode", keywordDto.getLargeCode());
