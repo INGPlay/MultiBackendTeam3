@@ -6,7 +6,9 @@
 3. [수행 도구](#수행-도구)
 4. [설계](#설계)
 5. [프로젝트 사이트 기능](#프로젝트-사이트-기능)
-6. [초기설정](#초기설정)
+6. [테스트](#테스트)
+7. [서버](#서버)
+8. [초기설정](#초기설정)
 
 ## 프로젝트 목적
 >### 국내 여행을 계획하고 있는 관광객들을 위한 일정 관리 도구 제공
@@ -351,20 +353,6 @@
   ![main](images/review/4-e.png)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 4. 팀 페이지
 ![team](images/team.png)
 - 팀 및 프로젝트 서비스를 소개하는 페이지
@@ -408,6 +396,29 @@
 ### 9-2. 날씨 정보 모달창
 ![wheather](images/map_form_inform_wheather.png)
 
+
+<br>
+
+# 테스트
+- 단위 테스트에 Junit과 Postman을 사용하였다.
+
+
+## Junit
+![junit](images/test_junit.png)
+- Junit을 사용하여 서비스 코드를 테스트하였다.
+
+## Postman
+![postman](images/test_postman.png)
+- Postman을 활용하여 API 테스트를 진행하였다.
+
+<br>
+
+# 서버
+![server](images/server.png)
+
+- AWS EC2 서비스를 이용하여 서버를 구성하였다.
+- Ubuntu 내에서 Oracle, Spring Boot, Tomcat, Gradle이 작동한다.
+- SSL 인증을 통해 HTTPS 로 통신할 수 있도록 하였다.
 
 <br>
 
