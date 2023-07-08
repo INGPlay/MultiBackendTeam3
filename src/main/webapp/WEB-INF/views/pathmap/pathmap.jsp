@@ -32,8 +32,8 @@
 		.custom_contentType {position:absolute;top:10px;left:10px;width:584px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
 		.custom_contentType span {display:block;width:64px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 
-		.custom_searchBar {position:absolute;top:55px;left:10px;overflow:hidden;width:350px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
-		.custom_searchBar span {display:block;width:350px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+		.custom_searchBar {position:absolute;top:55px;left:10px;overflow:hidden;width:400px;height:40px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+		.custom_searchBar span {display:block;width:400px;height:40px;float:left;text-align:center;line-height:30px;cursor:pointer;}
 		.select {width: 80px;}
 
 		.custom_alert {position:absolute;top:95px;left:10px;overflow:hidden;width:520px;height:20px;margin:0;padding:0;z-index:1;font-size:15px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;pointer-events: none;}
@@ -184,6 +184,12 @@
 						</script>
 						
 						<button onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
+
+						<div class='d-flex justify-content-center'>
+							<div class='spinner-border text-info' role='status' id='searchSpinner' style="visibility: hidden;">
+								<span class='visually-hidden'>Loading...</span>
+							</div>
+						</div>
 					</div>
 				</span>
 			</div>
@@ -356,6 +362,7 @@
 		// 맵을 클릭한다면
 		kakao.maps.event.addListener(map, "click", function(mouseEvent){
 
+			
 			// 위치 갱신
 			let pos = mouseEvent.latLng;
 			let params = {
@@ -398,6 +405,8 @@
 		// 위치에 따른 마킹
 		function markBasedLocation(params, markInfoMap){
 
+			document.getElementById("searchSpinner").style.visibility = "visible";
+
 			// 콘텐트 타입이 없는 경우 빈 경우
 			if (params["contentType"] === ""){
 				return;
@@ -421,6 +430,8 @@
 				} else {
 					resultAlert("API 에러입니다.", "red")
 				}
+			}).always(() => {
+				document.getElementById("searchSpinner").style.visibility = "hidden";
 			})
 
 		}
@@ -970,6 +981,8 @@
 			areaLargeSelect = document.getElementById("areaLargeSelect")
 			areaSmallSelect = document.getElementById("areaSmallSelect")
 
+			document.getElementById("searchSpinner").style.visibility = "visible";
+
 			let data = {
 				"keyword" : keyword,
 				"areaLargeCode" : areaLargeSelect.value,
@@ -999,6 +1012,7 @@
 				
 				updateMarkingInMapByResponse(response, true)
 
+
 			}).fail((error) => {
 				console.log(error)
 				console.log(error["responseJSON"]["message"])
@@ -1007,7 +1021,13 @@
 				} else {
 					resultAlert("API 에러입니다.", "red")
 				}
+
+				
+			}).always(() => {
+				document.getElementById("searchSpinner").style.visibility = "hidden";
 			})
+
+			
 		}
 
 		function resultAlert(message, color){
