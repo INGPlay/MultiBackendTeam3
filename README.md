@@ -25,6 +25,7 @@
 - Spring Security
 - Spring Validation
 - MyBatis
+- RestTemplate
 - Json-simple
 
 ## FrontEnd
