@@ -515,7 +515,7 @@ CREATE TABLE testtable (
     test_name VARCHAR2(10) NOT NULL,
     test_date DATE NOT NULL
     );
-
+--
 CREATE TABLE AREA_LARGE (
     large_id NUMBER,
     large_code VARCHAR2(5) NOT NULL,
@@ -535,6 +535,8 @@ CREATE TABLE AREA_SMALL(
 
 
 -- Sequence 생성 및 삭제
+
+
 CREATE SEQUENCE large_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -543,6 +545,8 @@ CREATE SEQUENCE large_id_seq
 
 
 ---- Sequence 생성 및 삭제
+
+
 CREATE SEQUENCE small_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -550,7 +554,11 @@ CREATE SEQUENCE small_id_seq
     NOCYCLE;
 
 
+
+
  본 페이지 관련!!!!--------------
+
+
 -- user => 예약어 MemberUser 로 대체
 create table MemberUser(
     user_id Number primary key,
@@ -562,8 +570,8 @@ create table MemberUser(
     constraint uniq_MemberUser UNIQUE(user_name, user_email, user_phone)
 );
 
-
 -- Review
+
 create table Review(
     review_id Number primary key,
     user_id Number not null,
@@ -579,27 +587,12 @@ create table Review(
     filesize number(8),
     CONSTRAINT fk_userid FOREIGN key(user_id) REFERENCES MemberUser(user_id) ON DELETE CASCADE
  );
- 
-
-create table Review(
-    review_id Number primary key,
-    user_id Number not null,
-    review_title varchar2(50) not null,
-    review_content varchar2(1000) not null,
-    create_date Date not null,
-    update_date Date not null,
-    review_views Number not null,
-    review_recommends Number not null,
-    contentid Number not null,
-    CONSTRAINT fk_userid FOREIGN key(user_id) REFERENCES MemberUser(user_id) ON DELETE CASCADE
- );
 
 
 create table place(
     contentId Number primary key,
     contentName varchar2(150)
 );
-
 
 -- Review_comment
 create table Review_Comment(
@@ -617,16 +610,17 @@ create table Review_Comment(
 
 
 -- Path
+
  create table Path(
     path_id Number primary key,
     user_id Number not null,
     create_date Date not null,
     update_date Date not null,
-    path_title Varchar2(50) not null,
+    path_title Varchar2(60) not null,
     path_views Number not null,
     path_recommends Number not null,
-    path_starting_area varchar2(30) not null,
-    path_destination_area varchar2(30) not null,
+    path_starting_area varchar2(100) not null,
+    path_destination_area varchar2(100) not null,
     constraint fk_path_user_id foreign key(user_id) references MemberUser(user_id) on DELETE CASCADE
  );
 
@@ -635,9 +629,9 @@ create table Review_Comment(
  create table Mark(
     mark_id Number primary key,
     path_id Number not null,
-    mark_title Varchar2(50),
+    mark_title Varchar2(100),
     mark_addr1 varchar2(200) not null,
-    mark_addr2 varchar2(50),
+    mark_addr2 varchar2(100),
     mark_contentId Number not null,
     mark_contentType varchar2(30) not null,
     mark_contentTypeId varchar2(30) not null,
@@ -647,7 +641,7 @@ create table Review_Comment(
     mark_posY Number not null,
     mark_tel Varchar2(15),
     mark_placeOrder Number not null,
-    mark_area varchar2(30) not null,
+    mark_area varchar2(50) not null,
     constraint fk_mark_path_id foreign key(path_id) references Path(path_id) on DELETE CASCADE
  );
 
@@ -739,10 +733,10 @@ create view comment_vi as
             on m.user_id = r.user_id;
 
 create view review_vi as
-select m.*,p.contentName
-    from(select m.user_name,r.*
-            from MemberUser m join Review r
-            on m.user_id = r.user_id) m join place p on m.CONTENTID = p.CONTENTID;
+  select m.*,p.contentName
+      from(select m.user_name,r.*
+              from MemberUser m join Review r
+              on m.user_id = r.user_id) m join place p on m.CONTENTID = p.CONTENTID;
 ```
 
 <br>
