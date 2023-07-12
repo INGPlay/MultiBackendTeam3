@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: githubinaction
+  AWS_S3_BUCKET: githubinacton
   AWS_CODE_DEPLOY_APPLICATION: CICD_TEST_TOUR
   AWS_CODE_DEPLOY_GROUP: tour
   
