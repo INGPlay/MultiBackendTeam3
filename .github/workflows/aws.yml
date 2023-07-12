@@ -27,7 +27,14 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-        
+
+    - name: AWS Credential
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: 설정 파일 가져오기
       run: aws s3 sync s3://githubinacton/tour_resources src/main/resources
         
@@ -48,13 +55,7 @@ jobs:
       
     - name: list 확인
       run : ls
-      
-    - name: AWS Credential
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+    
         
     - name: S3에 업로드
       run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
