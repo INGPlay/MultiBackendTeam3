@@ -28,6 +28,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         
+    - name: 설정 파일 가져오기
+      run: aws s3 sync s3://githubinacton/tour_resources src/main/resources
+        
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
       with:
