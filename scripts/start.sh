@@ -10,7 +10,7 @@ START_LOG="$ROOT_PATH/start.log"
 NOW=$(date +%c)
 
 echo "[$NOW] $JAR 복사" >> $START_LOG
-cp $ROOT_PATH/build/libs/springboot-1.0.0-snapshot.war $JAR
+cp $ROOT_PATH/build/libs/springboot-1.0.0-SNAPSHOT.war $JAR
 
 echo "[$NOW] > $JAR 실행" >> $START_LOG
 nohup java -jar $JAR --spring.profiles.active=server > $APP_LOG 2> $ERROR_LOG &
