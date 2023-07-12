@@ -31,8 +31,11 @@ jobs:
     - name: gradlew 권한
       run: chmod +x ./gradlew
 
+    - name: clean
+      run: ./gradlew clean
+      
     - name: build
-      run: ./gradlew clean bootwar
+      run : ./gradlew bootwar
       
     - name: AWS Credential
       uses: aws-actions/configure-aws-credentials@v2
