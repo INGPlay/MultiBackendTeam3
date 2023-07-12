@@ -44,7 +44,7 @@ jobs:
         gradle-version: 7.0.2
         arguments: wrapper
     
-    - name: gradlew 권한
+    - name: gradlew 실행 권한
       run: chmod +x ./gradlew
 
     - name: clean
