@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ROOT_PATH="/home/ubuntu/MultiBackendTeam3"
-JAR="$ROOT_PATH/application.jar"
+WAR="$ROOT_PATH/application.war"
 STOP_LOG="$ROOT_PATH/stop.log"
-SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
+SERVICE_PID=$(pgrep -f $WAR) # 실행중인 Spring 서버의 PID
 
 if [ -z "$SERVICE_PID" ]; then
   echo "서비스 NouFound" >> $STOP_LOG
