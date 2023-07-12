@@ -43,6 +43,9 @@ jobs:
     - name: build
       run : ./gradlew bootwar
       
+    - name: list 확인
+      run : ls
+      
     - name: AWS Credential
       uses: aws-actions/configure-aws-credentials@v2
       with:
