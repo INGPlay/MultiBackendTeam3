@@ -32,7 +32,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 7.0.2
-        arguments: build -x test
+        arguments: wrapper
     
     - name: gradlew 권한
       run: chmod +x ./gradlew
