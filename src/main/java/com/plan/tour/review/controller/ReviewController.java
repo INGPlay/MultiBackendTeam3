@@ -1,15 +1,15 @@
 package com.plan.tour.review.controller;
 
 
-import lombok.extern.log4j.Log4j2;
-import com.plan.tour.review.service.ReviewServiceImpl;
-import com.plan.tour.review.vo.PlaceVO;
-import com.plan.tour.review.vo.Review_CommentVO;
-import com.plan.tour.review.vo.ReviewVO;
 import com.plan.tour.review.commonUtil.CommonUtil;
 import com.plan.tour.review.paging.Criteria;
 import com.plan.tour.review.paging.PagingVO;
+import com.plan.tour.review.service.ReviewServiceImpl;
+import com.plan.tour.review.vo.PlaceVO;
+import com.plan.tour.review.vo.ReviewVO;
+import com.plan.tour.review.vo.Review_CommentVO;
 import com.plan.tour.security.domain.context.UserContext;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -20,10 +20,9 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RequestMapping("/review")
@@ -41,7 +40,7 @@ public class ReviewController {
     @PostMapping("/write")
 
     public String insertReiew(Model m, @ModelAttribute ReviewVO review, @RequestParam("placeName")String contentName,
-                              @RequestParam("mfilename")MultipartFile mf, HttpSession session
+                              @RequestParam(name = "mfilename", required = false, value = "")MultipartFile mf, HttpSession session
                              , @AuthenticationPrincipal UserContext ux){
         // 파일 업로드 처리
         ServletContext app = session.getServletContext();
@@ -119,7 +118,8 @@ public class ReviewController {
     }
 
     @PostMapping("/update")
-    public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux, HttpSession session,@RequestParam("mfilename")MultipartFile mf){
+    public String updateReview(Model m, @ModelAttribute ReviewVO vo, @AuthenticationPrincipal UserContext ux, HttpSession session,
+                               @RequestParam(name = "mfilename", required = false, value = "")MultipartFile mf){
         ServletContext app = session.getServletContext();
         String upDir = app.getRealPath("/resources/upload");
         System.out.println(upDir);

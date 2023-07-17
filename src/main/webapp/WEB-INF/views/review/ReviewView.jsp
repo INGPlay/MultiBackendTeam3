@@ -151,9 +151,9 @@
                     <td style="width:20%" class="center"><b>글내용</b></td>
                     <td style="width:80%; border-bottom-style: hidden;text-align: left ">
                         <div contenteditable="true">
-                        <c:if test="${vo.filename ne null}">
+                        <!-- <c:if test="${vo.filename ne null}">
                                 <img src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:30%; height: 150px"><br><br>
-                       </c:if>
+                       </c:if> -->
                             ${vo.review_content}
                             </div>
                         </td>

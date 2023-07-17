@@ -76,18 +76,18 @@
                         <input  type="hidden" name="contentId" id="contentId" value="${vo.contentId}"/>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td style="width:20%"><b>파일 업로드</b></td>
                     <td style="width:80%">
                         <input type="file" name="mfilename" id="filename" class="form-control">
                     </td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
-                        <c:if test="${vo.filename ne null}">
+                        <!-- <c:if test="${vo.filename ne null}">
                             <img  src="/resources/upload/<c:out value="${vo.filename}"/>" style="width:65%; height: 150px">
-                        </c:if>
+                        </c:if> -->
                         <textarea name="review_content" id="review_content" rows="10" cols="50" class="form-control">${vo.review_content}</textarea>
                     </td>
                 </tr>

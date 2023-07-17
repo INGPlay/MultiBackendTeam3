@@ -64,12 +64,12 @@
                         <button style="text-align: right" type="button" onclick="searchTourInfoKeyword(document.getElementById('keywordSearch').value)">→</button>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                 <td style="width:20%"><b>파일 업로드</b></td>
                 <td>
                     <input type="file" name="mfilename" id="filename" class="form-control">
                 </td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td style="width:20%"><b>글내용</b></td>
                     <td style="width:80%">
