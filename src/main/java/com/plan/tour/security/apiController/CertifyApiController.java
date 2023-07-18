@@ -2,6 +2,7 @@ package com.plan.tour.security.apiController;
 
 import com.plan.tour.security.domain.certify.CertifyEmailDto;
 import com.plan.tour.security.domain.certify.CertifySessionDto;
+import com.plan.tour.security.domain.certify.CertifyStatus;
 import com.plan.tour.security.domain.certify.RequestEmailDto;
 import com.plan.tour.security.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -60,8 +61,15 @@ public class CertifyApiController {
 
         CertifySessionDto certifySessionDto = (CertifySessionDto) certifyInform;
 
+        // 인증을 3번 실패한 경우
+        if (certifySessionDto.getCertifyStatus().equals(CertifyStatus.BANNED)){
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("response", "금지된 요청입니다");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+
         // 이미 인증된 경우
-        if (certifySessionDto.isCertified()){
+        if (certifySessionDto.getCertifyStatus().equals(CertifyStatus.CERTIFIED)){
             HashMap<String, Object> response = new HashMap<>();
             response.put("response", "이전에 인증이 완료된 요청입니다");
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
@@ -70,12 +78,15 @@ public class CertifyApiController {
         // 세션의 인증정보와 일치하지 않는 경우
         if (!certifyEmailDto.getKey().equals(certifySessionDto.getKey())){
             HashMap<String, Object> response = new HashMap<>();
+            
+            certifySessionDto.plusRepeat();
+
             response.put("response", false);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         certifySessionDto.setKey("");
-        certifySessionDto.setCertified(true);
+        certifySessionDto.setCertifyStatus(CertifyStatus.CERTIFIED);
         session.setAttribute(certifyEmailDto.getUuid(), certifySessionDto);
         session.setMaxInactiveInterval(5 * 60);
 
