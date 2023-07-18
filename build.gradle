@@ -52,10 +52,6 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 
 
-	implementation 'commons-fileupload:commons-fileupload:1.4'
-	implementation 'commons-io:commons-io:2.6'
-
-
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 }
