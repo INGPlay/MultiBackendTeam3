@@ -126,8 +126,8 @@
 
 					<div class="form-group"> 
 
-						<label for="form18">당신의&nbsp; 이메일&nbsp;</label> 
-						<input type="email" class="form-control border" id="form18" placeholder="abcd@gmail.com" required="required"
+						<label for="form18">이메일&nbsp;</label> 
+						<input type="email" class="form-control border" id="form18" placeholder="이메일을 입력해주세요" required="required"
 								path="email" name="email" />
 
 						<small class="form-text validText" style="color: red;">
