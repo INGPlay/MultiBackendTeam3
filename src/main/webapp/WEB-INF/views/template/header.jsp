@@ -28,7 +28,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-DD0XCTP2XP');
+      gtag('config', 'G-DD0XCTP2XP', { 'debug_mode':true });
     </script>
 
 </head>
