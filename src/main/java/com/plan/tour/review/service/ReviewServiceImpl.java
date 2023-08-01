@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +27,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public int insertReview(ReviewVO vo, String user_Name, String contentName, String upDir, MultipartFile mf) {
         vo.setUser_id(mapper.getUserId(user_Name));
-        File dir = new File(upDir);
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
+//        File dir = new File(upDir);
+//        if(!dir.exists()){
+//            dir.mkdirs();
+//        }
         if(checkContentName(vo.getContentId())<=0){mapper.insertPlace(new PlaceVO(vo.getContentId(),contentName));}
         return mapper.insertReview(vo);
     }
