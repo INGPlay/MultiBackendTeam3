@@ -29,6 +29,7 @@
       gtag('js', new Date());
 
       gtag('config', 'G-DD0XCTP2XP', { 'debug_mode':true });
+      gtag('event', '제외 트래픽', { 'traffic_type': 'internal' });
     </script>
 
 </head>
