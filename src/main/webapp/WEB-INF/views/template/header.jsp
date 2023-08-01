@@ -21,6 +21,16 @@
     type="text/css">
     <link rel="stylesheet" href="/resources/colorful.css">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DD0XCTP2XP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-DD0XCTP2XP');
+    </script>
+
 </head>
 
 <body>
