@@ -462,10 +462,10 @@ Pattern.newPasswordCheck=비밀번호 확인은 영어와 숫자 특수문자(!,
 
 <br>
 
-- resources/application.properties
-```properites
+- resources/application-local.properties
+```properties
 # Oracle Connection Settings
-spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.datasource.url=jdbc:oracle:thin:@localhost:1521:{SID} 
 spring.datasource.username={유저이름}
 spring.datasource.password={유저비밀번호}
@@ -474,22 +474,60 @@ spring.datasource.password={유저비밀번호}
 mybatis.mapper-locations=classpath:/mapper/**/*.xml
 
 # Domain Aliases
-mybatis.type-aliases-package=com.plan.tour
+mybatis.type-aliases-package=multi.backend.project
 
 # JDBC null settings
 mybatis.configuration.jdbc-type-for-null=null
 
 
-# JSP
+# JSP ??
 spring.mvc.view.prefix=/WEB-INF/views/
 spring.mvc.view.suffix=.jsp
 
-# SQL 
+# SQL ???
 spring.sql.init.mode=always
+
 
 
 spring.messages.basename=messages/keys, messages/errorMessages
 spring.messages.encoding=UTF-8
+```
+
+- resources/application-server.properties
+```properties
+# Oracle Connection Settings
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:{SID} 
+spring.datasource.username={유저이름}
+spring.datasource.password={유저비밀번호}
+
+# Mapper Location
+mybatis.mapper-locations=classpath:/mapper/**/*.xml
+
+# Domain Aliases
+mybatis.type-aliases-package=multi.backend.project
+
+# JDBC null settings
+mybatis.configuration.jdbc-type-for-null=null
+
+
+# JSP ??
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+# SQL ???
+spring.sql.init.mode=always
+
+
+
+spring.messages.basename=messages/keys, messages/errorMessages
+spring.messages.encoding=UTF-8
+
+# SSL
+server.ssl.key-store: classpath:keystore.p12
+server.ssl.key-store-password: {ssl비밀번호}
+server.ssl.key-store-type: PKCS12
+
 ```
 
 <br>
